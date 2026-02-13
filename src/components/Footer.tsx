@@ -45,8 +45,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-secondary-foreground/10 mt-8 pt-6 text-center text-sm text-secondary-foreground/50">
-          © {new Date().getFullYear()} {HOSTAL.name}. Todos los derechos reservados.
+        <div className="border-t border-secondary-foreground/10 mt-8 pt-6 flex items-center justify-between text-sm text-secondary-foreground/50">
+          <span>© {new Date().getFullYear()} {HOSTAL.name}. Todos los derechos reservados.</span>
+          <Link to="/login" className="hover:text-secondary-foreground/70 transition-colors">
+            Admin
+          </Link>
         </div>
       </div>
     </footer>
