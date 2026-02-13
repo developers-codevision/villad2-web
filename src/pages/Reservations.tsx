@@ -1,25 +1,23 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { format, differenceInDays } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarIcon, CreditCard, Smartphone, DollarSign, CheckCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CreditCard, Smartphone, DollarSign, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ROOMS } from "@/data/hostal";
+import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
   const preselected = searchParams.get("room") || "";
 
-  const [checkIn, setCheckIn] = useState<Date>();
-  const [checkOut, setCheckOut] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [roomId, setRoomId] = useState(preselected);
   const [guests, setGuests] = useState("1");
   const [name, setName] = useState("");
@@ -27,6 +25,8 @@ export default function Reservations() {
   const [phone, setPhone] = useState("");
   const [confirmed, setConfirmed] = useState(false);
 
+  const checkIn = dateRange?.from;
+  const checkOut = dateRange?.to;
   const selectedRoom = ROOMS.find((r) => r.id === roomId);
   const nights = checkIn && checkOut ? Math.max(differenceInDays(checkOut, checkIn), 0) : 0;
   const total = selectedRoom ? nights * selectedRoom.price : 0;
@@ -82,47 +82,25 @@ export default function Reservations() {
             {/* Form */}
             <div className="lg:col-span-3 space-y-6">
               {/* Dates */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Check-in</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !checkIn && "text-muted-foreground")}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkIn ? format(checkIn, "dd MMM yyyy", { locale: es }) : "Seleccionar fecha"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={checkIn}
-                        onSelect={setCheckIn}
-                        disabled={(d) => d < new Date()}
-                        className="p-3 pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
+              {/* Date range calendar */}
+              <div className="space-y-2">
+                <Label>Fechas de estancia</Label>
+                <div className="border border-border rounded-lg p-3 flex justify-center">
+                  <Calendar
+                    mode="range"
+                    selected={dateRange}
+                    onSelect={setDateRange}
+                    numberOfMonths={2}
+                    disabled={(d) => d < new Date()}
+                    locale={es}
+                    className="pointer-events-auto"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label>Check-out</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !checkOut && "text-muted-foreground")}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {checkOut ? format(checkOut, "dd MMM yyyy", { locale: es }) : "Seleccionar fecha"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={checkOut}
-                        onSelect={setCheckOut}
-                        disabled={(d) => d < (checkIn || new Date())}
-                        className="p-3 pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                {checkIn && checkOut && (
+                  <p className="text-sm text-muted-foreground text-center">
+                    {format(checkIn, "dd MMM yyyy", { locale: es })} — {format(checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+                  </p>
+                )}
               </div>
 
               {/* Room + guests */}
