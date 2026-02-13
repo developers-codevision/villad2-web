@@ -78,30 +78,30 @@ export default function Reservations() {
             Selecciona tus fechas, elige la habitación y completa tus datos.
           </p>
 
+          {/* Date range calendar - full width */}
+          <div className="space-y-2 mb-8">
+            <Label className="text-base">Fechas de estancia</Label>
+            <div className="border border-border rounded-lg p-6 flex justify-center">
+              <Calendar
+                mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
+                numberOfMonths={2}
+                disabled={(d) => d < new Date()}
+                locale={es}
+                className="pointer-events-auto"
+              />
+            </div>
+            {checkIn && checkOut && (
+              <p className="text-sm text-muted-foreground text-center">
+                {format(checkIn, "dd MMM yyyy", { locale: es })} — {format(checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+              </p>
+            )}
+          </div>
+
           <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Form */}
             <div className="lg:col-span-3 space-y-6">
-              {/* Dates */}
-              {/* Date range calendar */}
-              <div className="space-y-2">
-                <Label>Fechas de estancia</Label>
-                <div className="border border-border rounded-lg p-3 flex justify-center">
-                  <Calendar
-                    mode="range"
-                    selected={dateRange}
-                    onSelect={setDateRange}
-                    numberOfMonths={2}
-                    disabled={(d) => d < new Date()}
-                    locale={es}
-                    className="pointer-events-auto"
-                  />
-                </div>
-                {checkIn && checkOut && (
-                  <p className="text-sm text-muted-foreground text-center">
-                    {format(checkIn, "dd MMM yyyy", { locale: es })} — {format(checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
-                  </p>
-                )}
-              </div>
 
               {/* Room + guests */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
