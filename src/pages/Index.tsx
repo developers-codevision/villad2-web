@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -88,6 +88,41 @@ const Index = () => {
                 Ver Todos los Servicios
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+            Lo que dicen nuestros <span className="text-primary">Huéspedes</span>
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+            Experiencias reales de quienes ya nos visitaron.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: "María González", country: "España", rating: 5, text: "Una estancia maravillosa. El personal fue increíblemente amable y la habitación estaba impecable. ¡Volveremos seguro!" },
+              { name: "Carlos Méndez", country: "México", rating: 4, text: "Excelente relación calidad-precio. La ubicación es perfecta para explorar la ciudad. El desayuno muy completo." },
+              { name: "Ana Rodríguez", country: "Argentina", rating: 5, text: "El mejor hostal en el que me he hospedado. Las habitaciones son cómodas y el ambiente es muy acogedor." },
+              { name: "Pierre Dupont", country: "Francia", rating: 5, text: "Magnifique! Un lugar encantador con un servicio excepcional. Las excursiones organizadas fueron fantásticas." },
+              { name: "Laura Fernández", country: "Colombia", rating: 4, text: "Muy buena experiencia. Habitación limpia, buena ubicación y el equipo siempre dispuesto a ayudar." },
+              { name: "James Wilson", country: "Estados Unidos", rating: 5, text: "Amazing place! The staff went above and beyond to make our stay special. Highly recommended!" },
+            ].map((r, i) => (
+              <div key={i} className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div className="flex items-center gap-1 mb-3">
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <Star key={s} className={`h-4 w-4 ${s < r.rating ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground italic flex-1 mb-4">"{r.text}"</p>
+                <div>
+                  <p className="font-semibold text-sm">{r.name}</p>
+                  <p className="text-xs text-muted-foreground">{r.country}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
