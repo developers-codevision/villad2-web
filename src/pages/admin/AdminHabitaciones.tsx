@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BedDouble, Plus, Pencil, Trash2, X, ImagePlus } from "lucide-react";
+import { BedDouble, Plus, Pencil, Trash2 } from "lucide-react";
+import ImageUploader from "@/components/ImageUploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,8 +73,6 @@ export default function AdminHabitaciones() {
   // Temp inputs for comma-separated fields
   const [amenityInput, setAmenityInput] = useState("");
   const [amenityBannoInput, setAmenityBannoInput] = useState("");
-  const [fotoPrincipalInput, setFotoPrincipalInput] = useState("");
-  const [fotosAdicionalesInput, setFotosAdicionalesInput] = useState("");
 
   const nextId = habitaciones.length > 0 ? Math.max(...habitaciones.map(h => h.id)) + 1 : 1;
 
@@ -82,8 +81,6 @@ export default function AdminHabitaciones() {
     setForm(EMPTY);
     setAmenityInput("");
     setAmenityBannoInput("");
-    setFotoPrincipalInput("");
-    setFotosAdicionalesInput("");
     setOpen(true);
   }
 
@@ -93,8 +90,6 @@ export default function AdminHabitaciones() {
     setForm(rest);
     setAmenityInput(h.amenities_habitacion.join(", "));
     setAmenityBannoInput(h.amenities_banno.join(", "));
-    setFotoPrincipalInput(h.foto_principal.join(", "));
-    setFotosAdicionalesInput(h.fotos_adicionales.join(", "));
     setOpen(true);
   }
 
@@ -116,8 +111,8 @@ export default function AdminHabitaciones() {
       nombre: form.nombre.trim(),
       amenities_habitacion: amenityInput.split(",").map(s => s.trim()).filter(Boolean),
       amenities_banno: amenityBannoInput.split(",").map(s => s.trim()).filter(Boolean),
-      foto_principal: fotoPrincipalInput.split(",").map(s => s.trim()).filter(Boolean),
-      fotos_adicionales: fotosAdicionalesInput.split(",").map(s => s.trim()).filter(Boolean),
+      foto_principal: form.foto_principal,
+      fotos_adicionales: form.fotos_adicionales,
     };
 
     if (editing) {
@@ -272,16 +267,20 @@ export default function AdminHabitaciones() {
             </div>
 
             {/* Foto principal */}
-            <div className="space-y-2">
-              <Label>Foto principal <span className="text-muted-foreground text-xs">(URLs separadas por coma)</span></Label>
-              <Input placeholder="https://..." value={fotoPrincipalInput} onChange={e => setFotoPrincipalInput(e.target.value)} />
-            </div>
+            <ImageUploader
+              label="Foto principal"
+              images={form.foto_principal}
+              onChange={(imgs) => setForm(f => ({ ...f, foto_principal: imgs }))}
+              maxImages={1}
+            />
 
             {/* Fotos adicionales */}
-            <div className="space-y-2">
-              <Label>Fotos adicionales <span className="text-muted-foreground text-xs">(URLs separadas por coma)</span></Label>
-              <Input placeholder="https://..., https://..." value={fotosAdicionalesInput} onChange={e => setFotosAdicionalesInput(e.target.value)} />
-            </div>
+            <ImageUploader
+              label="Fotos adicionales"
+              images={form.fotos_adicionales}
+              onChange={(imgs) => setForm(f => ({ ...f, fotos_adicionales: imgs }))}
+              maxImages={10}
+            />
 
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
