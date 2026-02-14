@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RoomCard from "@/components/RoomCard";
@@ -101,29 +108,35 @@ const Index = () => {
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
             Experiencias reales de quienes ya nos visitaron.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { name: "María González", country: "España", rating: 5, text: "Una estancia maravillosa. El personal fue increíblemente amable y la habitación estaba impecable. ¡Volveremos seguro!" },
-              { name: "Carlos Méndez", country: "México", rating: 4, text: "Excelente relación calidad-precio. La ubicación es perfecta para explorar la ciudad. El desayuno muy completo." },
-              { name: "Ana Rodríguez", country: "Argentina", rating: 5, text: "El mejor hostal en el que me he hospedado. Las habitaciones son cómodas y el ambiente es muy acogedor." },
-              { name: "Pierre Dupont", country: "Francia", rating: 5, text: "Magnifique! Un lugar encantador con un servicio excepcional. Las excursiones organizadas fueron fantásticas." },
-              { name: "Laura Fernández", country: "Colombia", rating: 4, text: "Muy buena experiencia. Habitación limpia, buena ubicación y el equipo siempre dispuesto a ayudar." },
-              { name: "James Wilson", country: "Estados Unidos", rating: 5, text: "Amazing place! The staff went above and beyond to make our stay special. Highly recommended!" },
-            ].map((r, i) => (
-              <div key={i} className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                <div className="flex items-center gap-1 mb-3">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <Star key={s} className={`h-4 w-4 ${s < r.rating ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground italic flex-1 mb-4">"{r.text}"</p>
-                <div>
-                  <p className="font-semibold text-sm">{r.name}</p>
-                  <p className="text-xs text-muted-foreground">{r.country}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
+            <CarouselContent className="-ml-4">
+              {[
+                { name: "María González", country: "España", rating: 5, text: "Una estancia maravillosa. El personal fue increíblemente amable y la habitación estaba impecable. ¡Volveremos seguro!" },
+                { name: "Carlos Méndez", country: "México", rating: 4, text: "Excelente relación calidad-precio. La ubicación es perfecta para explorar la ciudad. El desayuno muy completo." },
+                { name: "Ana Rodríguez", country: "Argentina", rating: 5, text: "El mejor hostal en el que me he hospedado. Las habitaciones son cómodas y el ambiente es muy acogedor." },
+                { name: "Pierre Dupont", country: "Francia", rating: 5, text: "Magnifique! Un lugar encantador con un servicio excepcional. Las excursiones organizadas fueron fantásticas." },
+                { name: "Laura Fernández", country: "Colombia", rating: 4, text: "Muy buena experiencia. Habitación limpia, buena ubicación y el equipo siempre dispuesto a ayudar." },
+                { name: "James Wilson", country: "Estados Unidos", rating: 5, text: "Amazing place! The staff went above and beyond to make our stay special. Highly recommended!" },
+              ].map((r, i) => (
+                <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                    <div className="flex items-center gap-1 mb-3">
+                      {Array.from({ length: 5 }).map((_, s) => (
+                        <Star key={s} className={`h-4 w-4 ${s < r.rating ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground italic flex-1 mb-4">"{r.text}"</p>
+                    <div>
+                      <p className="font-semibold text-sm">{r.name}</p>
+                      <p className="text-xs text-muted-foreground">{r.country}</p>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </section>
 
