@@ -35,11 +35,18 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
             ))}
           </div>
         )}
-        <Link to={`/reservas?room=${room.id}`}>
-          <Button className="w-full font-semibold" size="sm">
-            Reservar
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to={`/habitaciones/${room.id}`} className="flex-1">
+            <Button variant="outline" className="w-full font-semibold" size="sm">
+              Ver más
+            </Button>
+          </Link>
+          <Link to={`/reservas?room=${room.id}`} className="flex-1">
+            <Button className="w-full font-semibold" size="sm">
+              Reservar
+            </Button>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );

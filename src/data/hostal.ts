@@ -23,7 +23,9 @@ export interface Room {
   capacity: number;
   price: number;
   amenities: string[];
+  bathroomAmenities: string[];
   image: string;
+  gallery: string[];
 }
 
 export const ROOMS: Room[] = [
@@ -35,7 +37,15 @@ export const ROOMS: Room[] = [
     capacity: 1,
     price: 35,
     amenities: ["WiFi", "Baño privado", "TV", "Escritorio"],
+    bathroomAmenities: ["Ducha", "Toallas", "Secador de pelo", "Gel y champú"],
     image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "doble",
@@ -45,7 +55,15 @@ export const ROOMS: Room[] = [
     capacity: 2,
     price: 55,
     amenities: ["WiFi", "Baño privado", "TV", "Minibar", "Vistas"],
+    bathroomAmenities: ["Ducha con mampara", "Toallas premium", "Secador de pelo", "Amenities de cortesía", "Albornoz"],
     image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1590490360182-c33d955fd166?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "twin",
@@ -55,7 +73,15 @@ export const ROOMS: Room[] = [
     capacity: 2,
     price: 50,
     amenities: ["WiFi", "Baño privado", "TV", "Armario"],
+    bathroomAmenities: ["Ducha", "Toallas", "Secador de pelo", "Gel y champú"],
     image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "suite",
@@ -65,7 +91,15 @@ export const ROOMS: Room[] = [
     capacity: 2,
     price: 90,
     amenities: ["WiFi", "Baño premium", "TV 50\"", "Minibar", "Terraza", "Bata y zapatillas"],
+    bathroomAmenities: ["Bañera y ducha", "Toallas premium", "Secador profesional", "Set de amenities premium", "Albornoz y zapatillas", "Espejo de aumento"],
     image: "https://images.unsplash.com/photo-1590490360182-c33d955fd166?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1590490360182-c33d955fd166?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "familiar",
@@ -75,7 +109,15 @@ export const ROOMS: Room[] = [
     capacity: 4,
     price: 80,
     amenities: ["WiFi", "Baño privado", "TV", "Cuna disponible", "Espacio extra"],
+    bathroomAmenities: ["Ducha amplia", "Toallas", "Secador de pelo", "Gel y champú", "Bañera infantil disponible"],
     image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "dormitorio-4",
@@ -85,7 +127,15 @@ export const ROOMS: Room[] = [
     capacity: 1,
     price: 18,
     amenities: ["WiFi", "Taquilla", "Baño compartido", "Ropa de cama"],
+    bathroomAmenities: ["Duchas compartidas", "Toallas incluidas", "Secador disponible"],
     image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
   {
     id: "dormitorio-8",
@@ -95,7 +145,15 @@ export const ROOMS: Room[] = [
     capacity: 1,
     price: 14,
     amenities: ["WiFi", "Taquilla", "Baño compartido", "Ropa de cama"],
+    bathroomAmenities: ["Duchas compartidas", "Toallas incluidas", "Secador disponible"],
     image: "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?w=600&h=400&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop",
+    ],
   },
 ];
 
