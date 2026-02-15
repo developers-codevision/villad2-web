@@ -1,7 +1,7 @@
 import { Wifi, Coffee, Car, Sparkles, Map, Bike, Plane, Mountain, UtensilsCrossed, ShieldCheck, Clock, Waves } from "lucide-react";
 
 export const HOSTAL = {
-  name: "Hostal Sol & Luna",
+  name: "Villa D2",
   tagline: "Tu hogar lejos de casa",
   description: "Ubicado en el corazón de la ciudad, nuestro hostal combina confort moderno con la calidez de un hogar. Disfruta de habitaciones acogedoras, servicios de primera y la mejor ubicación para explorar la zona.",
   phone: "+34 612 345 678",

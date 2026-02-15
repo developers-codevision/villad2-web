@@ -20,7 +20,7 @@ export default function Navbar() {
       <nav className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-bold text-secondary">
-            <span className="text-primary">Sol</span> & Luna
+            <span className="text-primary">Villa</span> D2
           </span>
         </Link>
 

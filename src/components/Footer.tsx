@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4">
-              <span className="text-primary">Sol</span> & Luna
+              <span className="text-primary">Villa</span> D2
             </h3>
             <p className="text-secondary-foreground/70 text-sm leading-relaxed">
               {HOSTAL.description}
