@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { HOSTAL } from "@/data/hostal";
+import logo from "@/assets/logo.png";
 
 export default function Footer() {
   return (
@@ -8,9 +9,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">
-              <span className="text-primary">Villa</span> D2
-            </h3>
+            <img src={logo} alt="Villa D2" className="h-12 w-auto mb-2" />
             <p className="text-secondary-foreground/70 text-sm leading-relaxed">
               {HOSTAL.description}
             </p>
