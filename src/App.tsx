@@ -1,20 +1,11 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/modules/shared/components/ui/toaster";
+import { Toaster as Sonner } from "@/modules/shared/components/ui/sonner";
+import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Rooms from "./pages/Rooms";
-import RoomDetail from "./pages/RoomDetail";
-import Services from "./pages/Services";
-import Reservations from "./pages/Reservations";
-import Login from "./pages/Login";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminReservas from "./pages/admin/AdminReservas";
-import AdminHabitaciones from "./pages/admin/AdminHabitaciones";
-import AdminPromociones from "./pages/admin/AdminPromociones";
-import AdminResenas from "./pages/admin/AdminResenas";
-import NotFound from "./pages/NotFound";
+import { Index, Rooms, RoomDetail, Services, Reservations, Login } from "@/modules/client/pages";
+import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas } from "@/modules/admin/pages";
+import { NotFound } from "@/modules/shared/components";
 
 const queryClient = new QueryClient();
 
