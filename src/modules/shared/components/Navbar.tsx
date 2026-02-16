@@ -10,6 +10,7 @@ const links = [
   { to: "/habitaciones", label: "Habitaciones" },
   { to: "/servicios", label: "Servicios" },
   { to: "/reservas", label: "Reservas" },
+  { to: "/resenas", label: "Reseñas" },
 ];
 
 export default function Navbar() {
