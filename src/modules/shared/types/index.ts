@@ -24,17 +24,25 @@ export interface Reservation {
 
 export interface Hostal {
   name: string;
-}
+  tagline: string;
   description: string;
-  name: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-export interface Service {
-
-}
+  phone: string;
+  email: string;
   whatsapp: string;
   address: string;
-  email: string;
-  phone: string;
-  description: string;
-  tagline: string;
+}
 
+export interface Service {
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+}
+
+export interface Review {
+  id: string;
+  name: string;
+  country: string;
+  rating: number;
+  text: string;
+  createdAt: string;
+}

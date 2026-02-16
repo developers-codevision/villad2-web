@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/modules/shared/components/ui/sonner";
 import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Index, Rooms, RoomDetail, Services, Reservations, Login } from "@/modules/client/pages";
+import { Index, Rooms, RoomDetail, Services, Reservations, Reviews, Login } from "@/modules/client/pages";
 import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas } from "@/modules/admin/pages";
 import { NotFound } from "@/modules/shared/components";
 
@@ -21,6 +21,7 @@ const App = () => (
           <Route path="/habitaciones/:id" element={<RoomDetail />} />
           <Route path="/servicios" element={<Services />} />
           <Route path="/reservas" element={<Reservations />} />
+          <Route path="/resenas" element={<Reviews />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminReservas />} />
