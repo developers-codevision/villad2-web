@@ -23,10 +23,10 @@ const Index = () => {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&h=1080&fit=crop')",
+            backgroundImage: "url('/Foto-portada-no1-editada-scaled.jpg')",
           }}
         />
-        <div className="absolute inset-0 bg-secondary/60" />
+        <div className="absolute inset-0 bg-secondary/80" />
         <div className="relative z-10 text-center px-4 max-w-3xl">
           <h1 className="text-4xl md:text-6xl font-extrabold text-secondary-foreground mb-4 leading-tight">
             Bienvenido a{" "}
