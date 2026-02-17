@@ -1,6 +1,6 @@
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
-import { SERVICES_BASIC, SERVICES_TOURIST } from "@/modules/shared/data/hostal";
+import { SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
 
 export default function Services() {
   return (
@@ -16,9 +16,9 @@ export default function Services() {
           </p>
 
           {/* Basic */}
-          <h2 className="text-2xl font-bold mb-6">Servicios del Hostal</h2>
+          <h2 className="text-2xl font-bold mb-6">Seguridad del Hostal</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {SERVICES_BASIC.map((s) => (
+            {SERVICES_SECURITY.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
                 <div className="bg-primary/10 rounded-full p-3 shrink-0">
                   <s.icon size={24} className="text-primary" />
@@ -31,10 +31,26 @@ export default function Services() {
             ))}
           </div>
 
-          {/* Tourist */}
-          <h2 className="text-2xl font-bold mb-6">Actividades <span className="text-primary">Turísticas</span></h2>
+          {/* Included */}
+          <h2 className="text-2xl font-bold mb-6">Servicios Incluidos</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {SERVICES_INCLUDED.map((s) => (
+              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
+                <div className="bg-primary/10 rounded-full p-3 shrink-0">
+                  <s.icon size={24} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">{s.name}</h3>
+                  <p className="text-muted-foreground text-sm">{s.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Additional */}
+          <h2 className="text-2xl font-bold mb-6">Servicios Adicionales</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES_TOURIST.map((s) => (
+            {SERVICES_ADDITIONAL.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
                 <div className="bg-primary/10 rounded-full p-3 shrink-0">
                   <s.icon size={24} className="text-primary" />

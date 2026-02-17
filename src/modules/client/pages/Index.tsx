@@ -11,7 +11,7 @@ import {
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import RoomCard from "@/modules/client/components/RoomCard";
-import { HOSTAL, ROOMS, SERVICES_BASIC, SERVICES_TOURIST } from "@/modules/shared/data/hostal";
+import { HOSTAL, ROOMS, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
 
 const Index = () => {
   return (
@@ -74,22 +74,10 @@ const Index = () => {
             Nuestros <span className="text-primary">Servicios</span>
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Todo lo que necesitas para una estancia perfecta.
+            Desde seguridad 24/7 hasta servicios premium, tenemos todo lo que necesitas para una estancia perfecta.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...SERVICES_BASIC.slice(0, 3), ...SERVICES_TOURIST.slice(0, 3)].map((s) => (
-              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="bg-primary/10 rounded-full p-3">
-                  <s.icon size={24} className="text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{s.name}</h3>
-                  <p className="text-muted-foreground text-sm">{s.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
+
+          <div className="text-center">
             <Link to="/servicios">
               <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 Ver Todos los Servicios

@@ -1,4 +1,4 @@
-import { Wifi, Coffee, Car, Sparkles, Map, Bike, Plane, Mountain, UtensilsCrossed, ShieldCheck, Clock, Waves } from "lucide-react";
+import { Wifi, Coffee, Car, Shield, Flame, Camera, Lightbulb, MapPin, Luggage, Heart, Zap, Lock, Plane, Clock, Wine, Shirt, Beer, Gift, Scissors } from "lucide-react";
 
 export const HOSTAL = {
   name: "Villa D2",
@@ -157,20 +157,36 @@ export const ROOMS: Room[] = [
   },
 ];
 
-export const SERVICES_BASIC = [
-  { icon: Wifi, name: "WiFi Gratuito", description: "Conexión de alta velocidad en todas las áreas del hostal." },
-  { icon: Coffee, name: "Desayuno Incluido", description: "Desayuno continental cada mañana de 7:00 a 10:30." },
-  { icon: Car, name: "Parking Privado", description: "Plaza de garaje disponible bajo reserva (10€/día)." },
-  { icon: Sparkles, name: "Limpieza Diaria", description: "Servicio de limpieza y cambio de sábanas incluido." },
-  { icon: ShieldCheck, name: "Recepción 24h", description: "Atención al cliente las 24 horas del día." },
-  { icon: UtensilsCrossed, name: "Cocina Compartida", description: "Cocina totalmente equipada para uso de los huéspedes." },
+export const SERVICES_SECURITY = [
+  { icon: Camera, name: "Cámaras de Video-vigilancia", description: "Sistema completo de video-vigilancia en todas las áreas comunes para su seguridad." },
+  { icon: Flame, name: "Extintores de Incendio", description: "Extintores estratégicamente ubicados y certificados en todas las áreas." },
+  { icon: Shield, name: "Sensores de Alarma contra Intrusos", description: "Sistema de alarmas conectado a centrales de seguridad 24/7." },
+  { icon: Lightbulb, name: "Adecuada Iluminación", description: "Iluminación completa en todas las áreas comunes y exteriores." },
+  { icon: MapPin, name: "Señalética Completa", description: "Señalización clara de todas las áreas, salidas de emergencia y servicios." },
 ];
 
-export const SERVICES_TOURIST = [
-  { icon: Map, name: "Tours Guiados", description: "Recorridos por la ciudad con guías locales expertos. Diarios a las 10:00 y 16:00." },
-  { icon: Bike, name: "Alquiler de Bicicletas", description: "Explora la ciudad sobre dos ruedas. Desde 8€/día." },
-  { icon: Plane, name: "Traslados Aeropuerto", description: "Servicio de recogida y traslado al aeropuerto. Reserva con 24h de antelación." },
-  { icon: Mountain, name: "Excursiones", description: "Excursiones a la sierra y pueblos cercanos cada fin de semana." },
-  { icon: Clock, name: "Late Check-out", description: "Extiende tu estancia hasta las 14:00 por solo 15€." },
-  { icon: Waves, name: "Actividades Acuáticas", description: "Kayak, paddle surf y más en los ríos cercanos (temporada de verano)." },
+export const SERVICES_INCLUDED = [
+  { icon: Wifi, name: "WIFI Gratuita", description: "Conexión WIFI gratuita en todos los puntos de la Villa." },
+  { icon: Car, name: "Parking Vigilado", description: "Área amplia exterior frente a la Villa, permanentemente vigilada." },
+  { icon: Luggage, name: "Servicio de Botones", description: "Personal especializado para facilitar movimientos del equipaje de los huéspedes." },
+  { icon: Heart, name: "Botiquín y Primeros Auxilios", description: "Botiquín completo y personal entrenado. Servicios médicos cercanos disponibles." },
+  { icon: Zap, name: "Plantas Eléctricas Auxiliares", description: "Sistema de respaldo eléctrico para emergencias." },
+  { icon: Lock, name: "Caja de Seguridad", description: "Cajas de seguridad individuales en cada habitación." },
 ];
+
+export const SERVICES_ADDITIONAL = [
+  { icon: Plane, name: "Recogida en Aeropuerto", description: "Servicio de recogida en el aeropuerto y retorno al finalizar la estancia." },
+  { icon: Car, name: "Traslados por la Ciudad", description: "Traslados a cualquier punto de la ciudad según sus necesidades." },
+  { icon: Clock, name: "Servicio de Habitaciones 24h", description: "Servicio de habitaciones disponible las 24 horas del día." },
+  { icon: Wine, name: "Servicio de Minibar", description: "Minibar en habitaciones con selección de bebidas y snacks." },
+  { icon: Shirt, name: "Lavado y Planchado Personalizado", description: "Servicio profesional de lavandería y planchado." },
+  { icon: Beer, name: "Terraza-Bar", description: "Terraza-Bar con bebidas y comidas ligeras, ambientación y juegos de mesa." },
+  { icon: Coffee, name: "Servicio de Desayuno", description: "Desayuno completo con variedad de opciones." },
+  { icon: Gift, name: "Venta de Souvenirs", description: "Souvenirs y artículos identificativos de la Villa." },
+  { icon: Scissors, name: "Servicios de Belleza", description: "Peluquería, barbería, peinados y servicios de belleza en general." },
+];
+
+// Mantener compatibilidad con el código existente
+export const SERVICES_BASIC = SERVICES_INCLUDED;
+export const SERVICES_TOURIST = SERVICES_ADDITIONAL;
+
