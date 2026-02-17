@@ -139,7 +139,7 @@ const Index = () => {
               <div className="flex items-center gap-4">
                 <div className="bg-primary/10 rounded-full p-3"><Phone className="text-primary" /></div>
                 <div>
-                  <p className="font-semibold">Teléfono</p>
+                  <p className="font-semibold">Teléfonos</p>
                   <p className="text-muted-foreground">{HOSTAL.phone}</p>
                 </div>
               </div>
