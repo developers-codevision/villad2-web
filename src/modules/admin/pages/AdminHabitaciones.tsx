@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BedDouble, Plus, Pencil, Trash2 } from "lucide-react";
 import ImageUploader from "@/modules/client/components/ImageUploader";
 import { Button } from "@/modules/shared/components/ui/button";
@@ -10,125 +10,214 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/modules/shar
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/modules/shared/components/ui/select";
 import { Badge } from "@/modules/shared/components/ui/badge";
 import { toast } from "sonner";
+import { roomsService } from "@/modules/shared/services/rooms.service";
+import { Room, RoomType, RoomStatus } from "@/modules/shared/types/api.types";
 
-interface Habitacion {
-  id: number;
+
+interface FormData {
   numero: string;
   nombre: string;
   descripcion: string;
   precio_por_noche: number;
   capacidad_personas: number;
-  tipo_habitacion: string;
+  tipo_habitacion: RoomType;
   amenities_habitacion: string[];
   amenities_banno: string[];
-  estado: "disponible" | "ocupada" | "mantenimiento";
+  estado: RoomStatus;
   foto_principal: string[];
   fotos_adicionales: string[];
 }
 
-const TIPOS = ["individual", "doble", "twin", "suite", "familiar", "compartido"];
-const ESTADOS: Habitacion["estado"][] = ["disponible", "ocupada", "mantenimiento"];
+const TIPOS: RoomType[] = [
+  RoomType.INDIVIDUAL,
+  RoomType.DOUBLE,
+  RoomType.SUITE,
+  RoomType.FAMILY,
+  RoomType.PRESIDENTIAL,
+];
 
-const EMPTY: Omit<Habitacion, "id"> = {
+const ESTADOS: RoomStatus[] = [
+  RoomStatus.AVAILABLE,
+  RoomStatus.OCCUPIED,
+  RoomStatus.MAINTENANCE,
+];
+
+const EMPTY_FORM: FormData = {
   numero: "",
   nombre: "",
   descripcion: "",
   precio_por_noche: 0,
   capacidad_personas: 1,
-  tipo_habitacion: "individual",
+  tipo_habitacion: RoomType.INDIVIDUAL,
   amenities_habitacion: [],
   amenities_banno: [],
-  estado: "disponible",
+  estado: RoomStatus.AVAILABLE,
   foto_principal: [],
   fotos_adicionales: [],
 };
 
-const INITIAL_DATA: Habitacion[] = [
-  {
-    id: 1, numero: "101", nombre: "Habitación Individual", descripcion: "Perfecta para viajeros solitarios.",
-    precio_por_noche: 35, capacidad_personas: 1, tipo_habitacion: "individual",
-    amenities_habitacion: ["WiFi", "TV", "Escritorio"], amenities_banno: ["Ducha", "Toallas", "Secador"],
-    estado: "disponible", foto_principal: ["https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop"], fotos_adicionales: [],
-  },
-  {
-    id: 2, numero: "201", nombre: "Suite Premium", descripcion: "Nuestra habitación más exclusiva.",
-    precio_por_noche: 90, capacidad_personas: 2, tipo_habitacion: "suite",
-    amenities_habitacion: ["WiFi", "TV 50\"", "Minibar", "Terraza"], amenities_banno: ["Bañera", "Ducha", "Toallas premium", "Albornoz"],
-    estado: "disponible", foto_principal: ["https://images.unsplash.com/photo-1590490360182-c33d955fd166?w=600&h=400&fit=crop"], fotos_adicionales: [],
-  },
-];
-
-function estadoBadge(estado: Habitacion["estado"]) {
-  const map = { disponible: "default", ocupada: "destructive", mantenimiento: "secondary" } as const;
-  return <Badge variant={map[estado]}>{estado.charAt(0).toUpperCase() + estado.slice(1)}</Badge>;
+function estadoBadge(estado: RoomStatus) {
+  const map = {
+    [RoomStatus.AVAILABLE]: "default",
+    [RoomStatus.OCCUPIED]: "destructive",
+    [RoomStatus.MAINTENANCE]: "secondary"
+  } as const;
+  const labels = {
+    [RoomStatus.AVAILABLE]: "Disponible",
+    [RoomStatus.OCCUPIED]: "Ocupada",
+    [RoomStatus.MAINTENANCE]: "Mantenimiento"
+  };
+  return <Badge variant={map[estado]}>{labels[estado]}</Badge>;
 }
 
 export default function AdminHabitaciones() {
-  const [habitaciones, setHabitaciones] = useState<Habitacion[]>(INITIAL_DATA);
+  const [habitaciones, setHabitaciones] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Habitacion | null>(null);
-  const [form, setForm] = useState<Omit<Habitacion, "id">>(EMPTY);
+  const [editing, setEditing] = useState<Room | null>(null);
+  const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
 
   // Temp inputs for comma-separated fields
   const [amenityInput, setAmenityInput] = useState("");
   const [amenityBannoInput, setAmenityBannoInput] = useState("");
 
-  const nextId = habitaciones.length > 0 ? Math.max(...habitaciones.map(h => h.id)) + 1 : 1;
+  // Photo files for upload
+  const [mainPhotoFile, setMainPhotoFile] = useState<File | null>(null);
+  const [additionalPhotoFiles, setAdditionalPhotoFiles] = useState<File[]>([]);
+
+  // Load rooms on mount
+  useEffect(() => {
+    loadRooms();
+  }, []);
+
+  async function loadRooms() {
+    try {
+      setLoading(true);
+      const rooms = await roomsService.getAll();
+      setHabitaciones(rooms);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error al cargar habitaciones";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function openCreate() {
     setEditing(null);
-    setForm(EMPTY);
+    setForm(EMPTY_FORM);
     setAmenityInput("");
     setAmenityBannoInput("");
+    setMainPhotoFile(null);
+    setAdditionalPhotoFiles([]);
     setOpen(true);
   }
 
-  function openEdit(h: Habitacion) {
-    setEditing(h);
-    const { id, ...rest } = h;
-    setForm(rest);
-    setAmenityInput(h.amenities_habitacion.join(", "));
-    setAmenityBannoInput(h.amenities_banno.join(", "));
+  function openEdit(room: Room) {
+    setEditing(room);
+    setForm({
+      numero: room.number,
+      nombre: room.name,
+      descripcion: room.description,
+      precio_por_noche: room.pricePerNight,
+      capacidad_personas: room.capacity,
+      tipo_habitacion: room.roomType,
+      amenities_habitacion: room.roomAmenities || [],
+      amenities_banno: room.bathroomAmenities || [],
+      estado: room.status,
+      foto_principal: room.mainPhoto || [],
+      fotos_adicionales: room.additionalPhotos || [],
+    });
+    setAmenityInput((room.roomAmenities || []).join(", "));
+    setAmenityBannoInput((room.bathroomAmenities || []).join(", "));
+    setMainPhotoFile(null);
+    setAdditionalPhotoFiles([]);
     setOpen(true);
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!form.numero.trim() || !form.nombre.trim()) {
       toast.error("Número y nombre son obligatorios.");
       return;
     }
-    // Check unique numero
-    const dup = habitaciones.find(h => h.numero === form.numero.trim() && h.id !== editing?.id);
-    if (dup) {
-      toast.error(`Ya existe una habitación con el número "${form.numero}".`);
-      return;
-    }
 
-    const data: Omit<Habitacion, "id"> = {
-      ...form,
-      numero: form.numero.trim(),
-      nombre: form.nombre.trim(),
-      amenities_habitacion: amenityInput.split(",").map(s => s.trim()).filter(Boolean),
-      amenities_banno: amenityBannoInput.split(",").map(s => s.trim()).filter(Boolean),
-      foto_principal: form.foto_principal,
-      fotos_adicionales: form.fotos_adicionales,
-    };
+    setSaving(true);
 
-    if (editing) {
-      setHabitaciones(prev => prev.map(h => h.id === editing.id ? { ...data, id: editing.id } : h));
-      toast.success("Habitación actualizada.");
-    } else {
-      setHabitaciones(prev => [...prev, { ...data, id: nextId }]);
-      toast.success("Habitación creada.");
+    try {
+      const amenities = amenityInput.split(",").map(s => s.trim()).filter(Boolean);
+      const amenitiesBanno = amenityBannoInput.split(",").map(s => s.trim()).filter(Boolean);
+
+      if (editing) {
+        // Update existing room
+        const updatedRoom = await roomsService.update(
+          editing.id,
+          {
+            number: form.numero.trim(),
+            name: form.nombre.trim(),
+            description: form.descripcion.trim(),
+            pricePerNight: form.precio_por_noche,
+            capacity: form.capacidad_personas,
+            roomType: form.tipo_habitacion,
+            roomAmenities: amenities,
+            bathroomAmenities: amenitiesBanno,
+            status: form.estado,
+          },
+          mainPhotoFile || undefined,
+          additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined
+        );
+
+        setHabitaciones(prev => prev.map(h => h.id === editing.id ? updatedRoom : h));
+        toast.success("Habitación actualizada correctamente");
+      } else {
+        // Create new room
+        const newRoom = await roomsService.create(
+          {
+            number: form.numero.trim(),
+            name: form.nombre.trim(),
+            description: form.descripcion.trim(),
+            pricePerNight: form.precio_por_noche,
+            capacity: form.capacidad_personas,
+            roomType: form.tipo_habitacion,
+            roomAmenities: amenities,
+            bathroomAmenities: amenitiesBanno,
+            status: form.estado,
+          },
+          mainPhotoFile || undefined,
+          additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined
+        );
+
+        setHabitaciones(prev => [...prev, newRoom]);
+        toast.success("Habitación creada correctamente");
+      }
+
+      setOpen(false);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error al guardar habitación";
+      toast.error(message);
+    } finally {
+      setSaving(false);
     }
-    setOpen(false);
   }
 
-  function handleDelete(id: number) {
-    setHabitaciones(prev => prev.filter(h => h.id !== id));
-    setDeleteConfirm(null);
-    toast.success("Habitación eliminada.");
+  async function handleDelete(id: number) {
+    try {
+      await roomsService.delete(id);
+      setHabitaciones(prev => prev.filter(h => h.id !== id));
+      setDeleteConfirm(null);
+      toast.success("Habitación eliminada correctamente");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error al eliminar habitación";
+      toast.error(message);
+    }
+  }
+
+  function getImageUrl(path: string): string {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    return roomsService.getMediaUrl(path);
   }
 
   return (
@@ -141,7 +230,11 @@ export default function AdminHabitaciones() {
         <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" />Nueva Habitación</Button>
       </div>
 
-      {habitaciones.length === 0 ? (
+      {loading ? (
+        <div className="border border-dashed border-border rounded-lg p-12 flex flex-col items-center justify-center text-muted-foreground">
+          <p className="font-medium">Cargando habitaciones...</p>
+        </div>
+      ) : habitaciones.length === 0 ? (
         <div className="border border-dashed border-border rounded-lg p-12 flex flex-col items-center justify-center text-muted-foreground">
           <BedDouble size={48} className="mb-4 opacity-30" />
           <p className="font-medium">No hay habitaciones registradas</p>
@@ -164,19 +257,19 @@ export default function AdminHabitaciones() {
             <TableBody>
               {habitaciones.map(h => (
                 <TableRow key={h.id}>
-                  <TableCell className="font-mono font-semibold">{h.numero}</TableCell>
+                  <TableCell className="font-mono font-semibold">{h.number}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {h.foto_principal[0] && (
-                        <img src={h.foto_principal[0]} alt={h.nombre} className="w-10 h-10 rounded object-cover" />
+                      {h.mainPhoto && h.mainPhoto[0] && (
+                        <img src={getImageUrl(h.mainPhoto[0])} alt={h.name} className="w-10 h-10 rounded object-cover" />
                       )}
-                      <span className="font-medium">{h.nombre}</span>
+                      <span className="font-medium">{h.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="capitalize">{h.tipo_habitacion}</TableCell>
-                  <TableCell className="text-right">{h.precio_por_noche}€</TableCell>
-                  <TableCell className="text-center">{h.capacidad_personas}</TableCell>
-                  <TableCell>{estadoBadge(h.estado)}</TableCell>
+                  <TableCell className="capitalize">{h.roomType}</TableCell>
+                  <TableCell className="text-right">{h.pricePerNight}€</TableCell>
+                  <TableCell className="text-center">{h.capacity}</TableCell>
+                  <TableCell>{estadoBadge(h.status)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Button variant="ghost" size="icon" onClick={() => openEdit(h)}><Pencil className="h-4 w-4" /></Button>
@@ -246,7 +339,7 @@ export default function AdminHabitaciones() {
             {/* Estado */}
             <div className="space-y-2">
               <Label>Estado</Label>
-              <Select value={form.estado} onValueChange={v => setForm(f => ({ ...f, estado: v as Habitacion["estado"] }))}>
+              <Select value={form.estado} onValueChange={v => setForm(f => ({ ...f, estado: v as RoomStatus }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {ESTADOS.map(e => <SelectItem key={e} value={e} className="capitalize">{e}</SelectItem>)}
@@ -271,6 +364,7 @@ export default function AdminHabitaciones() {
               label="Foto principal"
               images={form.foto_principal}
               onChange={(imgs) => setForm(f => ({ ...f, foto_principal: imgs }))}
+              onFilesChange={(files) => setMainPhotoFile(files[0] || null)}
               maxImages={1}
             />
 
@@ -279,12 +373,15 @@ export default function AdminHabitaciones() {
               label="Fotos adicionales"
               images={form.fotos_adicionales}
               onChange={(imgs) => setForm(f => ({ ...f, fotos_adicionales: imgs }))}
+              onFilesChange={(files) => setAdditionalPhotoFiles(files)}
               maxImages={10}
             />
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-              <Button onClick={handleSave}>{editing ? "Guardar Cambios" : "Crear Habitación"}</Button>
+              <Button variant="outline" onClick={() => setOpen(false)} disabled={saving}>Cancelar</Button>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? "Guardando..." : (editing ? "Guardar Cambios" : "Crear Habitación")}
+              </Button>
             </div>
           </div>
         </DialogContent>

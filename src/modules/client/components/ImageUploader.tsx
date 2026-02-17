@@ -1,25 +1,44 @@
 import { useCallback, useRef, useState } from "react";
-import { ImagePlus, X, GripVertical } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 import { cn } from "@/modules/shared/lib/utils";
 
 interface ImageUploaderProps {
   images: string[];
   onChange: (images: string[]) => void;
+  onFilesChange?: (files: File[]) => void; // Nueva prop para manejar archivos
   maxImages?: number;
   label?: string;
   className?: string;
 }
 
-export default function ImageUploader({ images, onChange, maxImages = 10, label, className }: ImageUploaderProps) {
+export default function ImageUploader({
+  images,
+  onChange,
+  onFilesChange,
+  maxImages = 10,
+  label,
+  className
+}: ImageUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = useCallback(
-    (files: FileList | null) => {
-      if (!files) return;
+    (fileList: FileList | null) => {
+      if (!fileList) return;
       const remaining = maxImages - images.length;
-      const selected = Array.from(files).slice(0, remaining);
+      const selected = Array.from(fileList).slice(0, remaining);
 
+      // Store actual File objects
+      const newFiles = [...files, ...selected];
+      setFiles(newFiles);
+
+      // Call the files callback if provided
+      if (onFilesChange) {
+        onFilesChange(newFiles);
+      }
+
+      // Create preview URLs
       const readers = selected.map(
         (file) =>
           new Promise<string>((resolve) => {
@@ -33,7 +52,7 @@ export default function ImageUploader({ images, onChange, maxImages = 10, label,
         onChange([...images, ...results]);
       });
     },
-    [images, maxImages, onChange]
+    [images, files, maxImages, onChange, onFilesChange]
   );
 
   const onDrop = useCallback(
@@ -53,7 +72,15 @@ export default function ImageUploader({ images, onChange, maxImages = 10, label,
   const onDragLeave = () => setIsDragging(false);
 
   const removeImage = (index: number) => {
-    onChange(images.filter((_, i) => i !== index));
+    const newImages = images.filter((_, i) => i !== index);
+    const newFiles = files.filter((_, i) => i !== index);
+
+    onChange(newImages);
+    setFiles(newFiles);
+
+    if (onFilesChange) {
+      onFilesChange(newFiles);
+    }
   };
 
   return (

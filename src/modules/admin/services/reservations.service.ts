@@ -1,13 +1,13 @@
 // Admin reservations service
-import { adminApiClient } from './api';
+import { authenticatedApiClient } from '@/modules/shared/services/api';
 import type { Reservation } from '@/modules/client/services/reservations.service';
 
 export const adminReservationsService = {
-  getAll: () => adminApiClient.get<Reservation[]>('/admin/reservations'),
+  getAll: () => authenticatedApiClient.get<Reservation[]>('/admin/reservations'),
 
   updateStatus: (id: string, status: 'pending' | 'confirmed' | 'cancelled') =>
-    adminApiClient.put(`/admin/reservations/${id}`, { status }),
+    authenticatedApiClient.put(`/admin/reservations/${id}`, { status }),
 
-  delete: (id: string) => adminApiClient.delete(`/admin/reservations/${id}`),
+  delete: (id: string) => authenticatedApiClient.delete(`/admin/reservations/${id}`),
 };
 

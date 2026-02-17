@@ -5,20 +5,42 @@ import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/components/ui/card";
 import { Lock } from "lucide-react";
+import { useAuth } from "@/modules/shared/context";
+import { toast } from "sonner";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      localStorage.setItem("backoffice_auth", "true");
-      navigate("/admin");
-    } else {
-      setError("Introduce correo y contraseña");
+
+    if (!username.trim() || !password.trim()) {
+      toast.error("Introduce usuario y contraseña");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await login({ username, password });
+
+      toast.success(`Bienvenido, ${response.user.fullName || response.user.username}!`);
+
+      // Redirect based on user role
+      if (response.user.roles && response.user.roles.includes('admin')) {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error al iniciar sesión";
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,15 +56,32 @@ export default function Login() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@hostal.com" />
+              <Label htmlFor="username">Usuario</Label>
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin"
+                disabled={loading}
+                autoComplete="username"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                disabled={loading}
+                autoComplete="current-password"
+              />
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">Iniciar sesión</Button>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+            </Button>
           </form>
         </CardContent>
       </Card>

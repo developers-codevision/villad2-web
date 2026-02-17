@@ -1,8 +1,8 @@
-import { useEffect } from "react";
 import { Outlet, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { CalendarCheck, BedDouble, Tag, Star, LogOut } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { cn } from "@/modules/shared/lib/utils";
+import { useAuth } from "@/modules/shared/context";
 
 const navItems = [
   { label: "Reservas Pendientes", to: "/admin", icon: CalendarCheck },
@@ -14,16 +14,11 @@ const navItems = [
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout, user } = useAuth();
 
-  useEffect(() => {
-    if (!localStorage.getItem("backoffice_auth")) {
-      navigate("/login");
-    }
-  }, [navigate]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("backoffice_auth");
-    navigate("/");
+  const handleLogout = async () => {
+    await logout();
+    navigate("/", { replace: true });
   };
 
   return (
@@ -35,6 +30,11 @@ export default function AdminLayout() {
             <span className="text-primary">Villa</span> D2
           </h2>
           <p className="text-xs text-secondary-foreground/50 mt-1">Panel de Administración</p>
+          {user && (
+            <p className="text-xs text-secondary-foreground/70 mt-2 font-medium">
+              {user.fullName || user.username}
+            </p>
+          )}
         </div>
 
         <nav className="flex-1 p-3 space-y-1">
