@@ -32,7 +32,7 @@ export default function AdminLayout() {
       <aside className="w-64 bg-secondary text-secondary-foreground flex flex-col shrink-0">
         <div className="p-5 border-b border-secondary-foreground/10">
           <h2 className="font-bold text-lg">
-            <span className="text-primary">Sol</span> & Luna
+            <span className="text-primary">Villa</span> D2
           </h2>
           <p className="text-xs text-secondary-foreground/50 mt-1">Panel de Administración</p>
         </div>
