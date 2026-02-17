@@ -2,8 +2,8 @@ import { Wifi, Coffee, Car, Sparkles, Map, Bike, Plane, Mountain, UtensilsCrosse
 
 export const HOSTAL = {
   name: "Villa D2",
-  tagline: "Tu hogar lejos de casa",
-  description: "Ubicado en el corazón de la ciudad, nuestro hostal combina confort moderno con la calidez de un hogar. Disfruta de habitaciones acogedoras, servicios de primera y la mejor ubicación para explorar la zona.",
+  tagline: "Un viaje por la historia de Cuba",
+  description: "Nuestras 7 habitaciones llevan los nombres de las antiguas provincias (hasta 1976) e Isla de Pinos, contando la evolución territorial del país hasta la actualidad. La Terraza-Bar, inspirada en los emblemáticos cayos cubanos, rinde homenaje a los archipiélagos de Jardines del Rey, Jardines de la Reina, Canarreos y Colorados.\n",
   phone: "+34 612 345 678",
   email: "info@hostalsolyluna.com",
   whatsapp: "+34 612 345 678",
