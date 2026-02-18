@@ -12,6 +12,7 @@ import { Badge } from "@/modules/shared/components/ui/badge";
 import { toast } from "sonner";
 import { roomsService } from "@/modules/shared/services/rooms.service";
 import { Room, RoomType, RoomStatus } from "@/modules/shared/types/api.types";
+import { parsePhotos } from "@/modules/client/utils/roomHelpers";
 
 
 interface FormData {
@@ -184,9 +185,11 @@ export default function AdminHabitaciones() {
             bathroomAmenities: amenitiesBanno,
             status: form.estado,
           },
+
           mainPhotoFile || undefined,
           additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined
         );
+        console.log(newRoom)
 
         setHabitaciones(prev => [...prev, newRoom]);
         toast.success("Habitación creada correctamente");
@@ -255,36 +258,39 @@ export default function AdminHabitaciones() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {habitaciones.map(h => (
-                <TableRow key={h.id}>
-                  <TableCell className="font-mono font-semibold">{h.number}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {h.mainPhoto && h.mainPhoto[0] && (
-                        <img src={getImageUrl(h.mainPhoto[0])} alt={h.name} className="w-10 h-10 rounded object-cover" />
-                      )}
-                      <span className="font-medium">{h.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="capitalize">{h.roomType}</TableCell>
-                  <TableCell className="text-right">{h.pricePerNight}€</TableCell>
-                  <TableCell className="text-center">{h.capacity}</TableCell>
-                  <TableCell>{estadoBadge(h.status)}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon" onClick={() => openEdit(h)}><Pencil className="h-4 w-4" /></Button>
-                      {deleteConfirm === h.id ? (
-                        <div className="flex items-center gap-1">
-                          <Button variant="destructive" size="sm" onClick={() => handleDelete(h.id)}>Sí</Button>
-                          <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(null)}>No</Button>
-                        </div>
-                      ) : (
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteConfirm(h.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {habitaciones.map(h => {
+                const mainPhotoArray = parsePhotos(h.mainPhoto);
+                return (
+                  <TableRow key={h.id}>
+                    <TableCell className="font-mono font-semibold">{h.number}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        {mainPhotoArray.length > 0 && (
+                          <img src={getImageUrl(mainPhotoArray[0])} alt={h.name} className="w-10 h-10 rounded object-cover" />
+                        )}
+                        <span className="font-medium">{h.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="capitalize">{h.roomType}</TableCell>
+                    <TableCell className="text-right">{h.pricePerNight}€</TableCell>
+                    <TableCell className="text-center">{h.capacity}</TableCell>
+                    <TableCell>{estadoBadge(h.status)}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button variant="ghost" size="icon" onClick={() => openEdit(h)}><Pencil className="h-4 w-4" /></Button>
+                        {deleteConfirm === h.id ? (
+                          <div className="flex items-center gap-1">
+                            <Button variant="destructive" size="sm" onClick={() => handleDelete(h.id)}>Sí</Button>
+                            <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(null)}>No</Button>
+                          </div>
+                        ) : (
+                          <Button variant="ghost" size="icon" onClick={() => setDeleteConfirm(h.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

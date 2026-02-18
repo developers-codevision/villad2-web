@@ -11,9 +11,12 @@ import {
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import RoomCard from "@/modules/client/components/RoomCard";
-import { HOSTAL, ROOMS, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
+import { HOSTAL, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
+import { useRooms } from "@/modules/client/hooks/useRooms";
 
 const Index = () => {
+  const { rooms, loading } = useRooms();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -52,18 +55,27 @@ const Index = () => {
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
             Desde acogedoras individuales hasta suites premium, tenemos la opción perfecta para ti.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ROOMS.slice(0, 6).map((room) => (
-              <RoomCard key={room.id} room={room} compact />
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link to="/habitaciones">
-              <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                Ver Todas las Habitaciones
-              </Button>
-            </Link>
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+              <p className="mt-4 text-muted-foreground">Cargando habitaciones...</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {rooms.slice(0, 6).map((room) => (
+                  <RoomCard key={room.id} room={room} compact />
+                ))}
+              </div>
+              <div className="text-center mt-10">
+                <Link to="/habitaciones">
+                  <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                    Ver Todas las Habitaciones
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

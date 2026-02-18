@@ -10,12 +10,13 @@ import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
-import { ROOMS } from "@/modules/shared/data/hostal";
+import { useRooms } from "@/modules/client/hooks/useRooms";
 import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
   const preselected = searchParams.get("room") || "";
+  const { rooms, loading } = useRooms();
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [roomId, setRoomId] = useState(preselected);
@@ -27,9 +28,9 @@ export default function Reservations() {
 
   const checkIn = dateRange?.from;
   const checkOut = dateRange?.to;
-  const selectedRoom = ROOMS.find((r) => r.id === roomId);
+  const selectedRoom = rooms.find((r) => r.id.toString() === roomId);
   const nights = checkIn && checkOut ? Math.max(differenceInDays(checkOut, checkIn), 0) : 0;
-  const total = selectedRoom ? nights * selectedRoom.price : 0;
+  const total = selectedRoom ? nights * selectedRoom.pricePerNight : 0;
 
   const canSubmit = checkIn && checkOut && nights > 0 && roomId && name && email && phone;
 
@@ -107,12 +108,12 @@ export default function Reservations() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Habitación</Label>
-                  <Select value={roomId} onValueChange={setRoomId}>
-                    <SelectTrigger><SelectValue placeholder="Seleccionar habitación" /></SelectTrigger>
+                  <Select value={roomId} onValueChange={setRoomId} disabled={loading}>
+                    <SelectTrigger><SelectValue placeholder={loading ? "Cargando..." : "Seleccionar habitación"} /></SelectTrigger>
                     <SelectContent>
-                      {ROOMS.map((r) => (
-                        <SelectItem key={r.id} value={r.id}>
-                          {r.name} — {r.price}€/noche
+                      {rooms.map((r) => (
+                        <SelectItem key={r.id} value={r.id.toString()}>
+                          {r.name} — {r.pricePerNight}€/noche
                         </SelectItem>
                       ))}
                     </SelectContent>
