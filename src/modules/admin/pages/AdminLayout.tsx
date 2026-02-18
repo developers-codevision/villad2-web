@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, NavLink, useLocation } from "react-router-dom";
-import { CalendarCheck, BedDouble, Tag, Star, LogOut } from "lucide-react";
+import { CalendarCheck, BedDouble, Tag, Star, LogOut, ArrowLeft } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { cn } from "@/modules/shared/lib/utils";
 import { useAuth } from "@/modules/shared/context";
@@ -61,8 +61,20 @@ export default function AdminLayout() {
           })}
         </nav>
 
-        <div className="p-3 border-t border-secondary-foreground/10">
-          <Button variant="ghost" onClick={handleLogout} className="w-full justify-start text-secondary-foreground/70 hover:text-secondary-foreground">
+        <div className="p-3 border-t border-secondary-foreground/10 space-y-1">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/admin-selector")}
+            className="w-full justify-start text-secondary-foreground/70 hover:text-secondary-foreground"
+          >
+            <ArrowLeft size={18} className="mr-2" />
+            Volver al Selector
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className="w-full justify-start text-secondary-foreground/70 hover:text-secondary-foreground"
+          >
             <LogOut size={18} className="mr-2" />
             Cerrar sesión
           </Button>
