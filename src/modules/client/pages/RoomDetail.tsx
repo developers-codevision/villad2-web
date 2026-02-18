@@ -42,9 +42,11 @@ export default function RoomDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="pt-24 pb-20 px-4 text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-          <p className="mt-4 text-muted-foreground">Cargando habitación...</p>
+        <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
+          <div>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+            <p className="mt-4 text-muted-foreground">Cargando habitación...</p>
+          </div>
         </main>
         <Footer />
       </div>
@@ -55,9 +57,11 @@ export default function RoomDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="pt-24 pb-20 px-4 text-center">
-          <h1 className="text-2xl font-bold mb-4">{error || "Habitación no encontrada"}</h1>
-          <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones</Button>
+        <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
+          <div>
+            <h1 className="text-2xl font-bold mb-4">{error || "Habitación no encontrada"}</h1>
+            <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones</Button>
+          </div>
         </main>
         <Footer />
       </div>
@@ -77,7 +81,7 @@ export default function RoomDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="pt-24 pb-20 px-4 flex items-center justify-center min-h-[70vh]">
+        <main className="pb-20 px-4 flex items-center justify-center min-h-[70vh] pt-24">
           <div className="text-center max-w-md">
             <CheckCircle size={64} className="text-primary mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-3">¡Reserva Confirmada!</h1>
@@ -104,9 +108,9 @@ export default function RoomDetail() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 pb-20">
+      <main className="pb-20">
         {/* Hero */}
-        <section className="relative h-[50vh] md:h-[60vh] overflow-hidden">
+        <section className="relative h-[70vh] md:h-[80vh] overflow-hidden mt-16">
           <img
             src={mainImage}
             alt={room.name}
