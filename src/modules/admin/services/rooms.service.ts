@@ -1,5 +1,5 @@
 // Admin rooms service
-import { adminApiClient } from './api';
+import { authenticatedApiClient as adminApiClient } from '@/modules/shared/services/api';
 import type { Room } from '@/modules/client/services/rooms.service';
 
 export const adminRoomsService = {

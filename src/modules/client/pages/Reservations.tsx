@@ -187,9 +187,9 @@ export default function Reservations() {
                 <h3 className="font-bold text-lg mb-4">Resumen de Reserva</h3>
                 {selectedRoom ? (
                   <>
-                    <img src={selectedRoom.image} alt={selectedRoom.name} className="rounded-lg w-full h-40 object-cover mb-4" loading="lazy" />
+                    <img src={selectedRoom.mainPhoto?.[0] || '/placeholder.svg'} alt={selectedRoom.name} className="rounded-lg w-full h-40 object-cover mb-4" loading="lazy" />
                     <p className="font-semibold">{selectedRoom.name}</p>
-                    <p className="text-sm text-muted-foreground mb-4">{selectedRoom.type} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{selectedRoom.roomType} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}</p>
                   </>
                 ) : (
                   <p className="text-muted-foreground text-sm mb-4">Selecciona una habitación</p>
@@ -215,7 +215,7 @@ export default function Reservations() {
                   {selectedRoom && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Precio/noche</span>
-                      <span>{selectedRoom.price}€</span>
+                      <span>{selectedRoom.pricePerNight}€</span>
                     </div>
                   )}
                 </div>
