@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { format, differenceInDays } from "date-fns";
 import { es } from "date-fns/locale";
-import { Users, Wifi, Bath, CheckCircle, ArrowRight, ChevronLeft } from "lucide-react";
+import { Users, BedDouble, Bath, CheckCircle, ArrowRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Calendar } from "@/modules/shared/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/modules/shared/components/ui/select";
@@ -147,7 +147,7 @@ export default function RoomDetail() {
               return roomAmenities.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <Wifi size={22} className="text-primary" /> Amenities de la Habitación
+                    <BedDouble size={22} className="text-primary" /> Amenities de la Habitación
                   </h2>
                   <div className="grid grid-cols-2 gap-3">
                     {roomAmenities.map((a, index) => (
