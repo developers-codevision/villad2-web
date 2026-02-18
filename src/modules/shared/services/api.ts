@@ -84,7 +84,14 @@ export const apiClient = {
       await parseError(response);
     }
 
-    return response.json();
+    // Check if response has content before parsing JSON
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    }
+
+    // Return empty object for void responses
+    return undefined as T;
   },
 };
 
@@ -177,7 +184,14 @@ export const authenticatedApiClient = {
       await parseError(response);
     }
 
-    return response.json();
+    // Check if response has content before parsing JSON
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    }
+
+    // Return empty object for void responses
+    return undefined as T;
   },
 
   /**
