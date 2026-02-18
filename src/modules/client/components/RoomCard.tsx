@@ -25,9 +25,6 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
-        <span className="absolute top-3 right-3 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-bold">
-          {room.pricePerNight}€/noche
-        </span>
       </div>
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-2">
@@ -37,15 +34,6 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
           </span>
         </div>
         <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{room.description}</p>
-        {!compact && amenities && amenities.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {amenities.map((a, index) => (
-              <span key={index} className="text-xs bg-accent text-accent-foreground px-2 py-0.5 rounded-full">
-                {a}
-              </span>
-            ))}
-          </div>
-        )}
         <div className="flex gap-2">
           <Link to={`/habitaciones/${room.id}`} className="flex-1">
             <Button variant="outline" className="w-full font-semibold" size="sm">
