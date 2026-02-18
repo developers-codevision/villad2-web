@@ -14,12 +14,12 @@ export default function AdminSelector() {
   };
 
   return (
-    <div className="min-h-screen bg-secondary flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-foreground">
-          Bienvenido, {user?.fullName || user?.username}
+        <h1 className="text-3xl font-bold text-foreground">
+          Bienvenido, <span className="text-primary">{user?.fullName || user?.username}</span>
         </h1>
-        <p className="text-muted-foreground mt-1">Selecciona a dónde deseas ir</p>
+        <p className="text-muted-foreground mt-2">Selecciona a dónde deseas ir</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
