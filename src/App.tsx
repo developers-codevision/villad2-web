@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Index, Rooms, RoomDetail, Services, Reservations, Reviews, Login } from "@/modules/client/pages";
-import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas } from "@/modules/admin/pages";
+import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas, AdminSelector, GestionHome } from "@/modules/admin/pages";
 import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
 
@@ -25,6 +25,8 @@ const App = () => (
             <Route path="/reservas" element={<Reservations />} />
             <Route path="/resenas" element={<Reviews />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin-selector" element={<ProtectedRoute requireAdmin><AdminSelector /></ProtectedRoute>} />
+            <Route path="/gestion" element={<ProtectedRoute requireAdmin><GestionHome /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
               <Route index element={<AdminReservas />} />
               <Route path="habitaciones" element={<AdminHabitaciones />} />
