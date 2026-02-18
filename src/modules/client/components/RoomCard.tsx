@@ -4,12 +4,13 @@ import { Button } from "@/modules/shared/components/ui/button";
 import { Card, CardContent } from "@/modules/shared/components/ui/card";
 import type { Room } from "@/modules/client/services/rooms.service";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
+import { roomsService } from "@/modules/shared/services/rooms.service";
 
 export default function RoomCard({ room, compact }: { room: Room; compact?: boolean }) {
   // Get the main image from mainPhoto array or use a placeholder
   const mainPhotoArray = parsePhotos(room.mainPhoto);
   const mainImage = mainPhotoArray.length > 0
-    ? mainPhotoArray[0]
+    ? roomsService.getMediaUrl(mainPhotoArray[0])
     : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop';
 
   // Ensure roomAmenities is always an array

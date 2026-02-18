@@ -12,6 +12,7 @@ import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { useRoom } from "@/modules/client/hooks/useRooms";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
+import { roomsService } from "@/modules/shared/services/rooms.service";
 import type { DateRange } from "react-day-picker";
 
 export default function RoomDetail() {
@@ -66,11 +67,11 @@ export default function RoomDetail() {
   // Get the main image from mainPhoto array or use a placeholder
   const mainPhotoArray = parsePhotos(room.mainPhoto);
   const mainImage = mainPhotoArray.length > 0
-    ? mainPhotoArray[0]
+    ? roomsService.getMediaUrl(mainPhotoArray[0])
     : 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop';
 
-  // Parse additional photos
-  const additionalPhotos = parsePhotos(room.additionalPhotos);
+  // Parse additional photos and convert to full URLs
+  const additionalPhotos = parsePhotos(room.additionalPhotos).map(photo => roomsService.getMediaUrl(photo));
 
   if (confirmed) {
     return (
