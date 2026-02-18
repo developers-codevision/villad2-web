@@ -32,7 +32,7 @@ export default function Login() {
 
       // Redirect based on user role
       if (response.user.roles && response.user.roles.includes('admin')) {
-        navigate("/admin", { replace: true });
+        navigate("/admin-selector", { replace: true });
       } else {
         navigate("/", { replace: true });
       }
