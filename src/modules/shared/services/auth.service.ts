@@ -1,9 +1,10 @@
 // Authentication Service with secure token management
 
-import { AuthResponse, LoginDto, RegisterDto, User } from '../types/api.types';
+import { AuthResponse, LoginDto, RegisterDto, User, RefreshTokenResponse } from '../types/api.types';
+import { apiPost, apiGet } from '../lib/api-client';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const TOKEN_KEY = 'villad2_auth_token';
+const REFRESH_TOKEN_KEY = 'villad2_refresh_token';
 const USER_KEY = 'villad2_user';
 
 class AuthService {
@@ -12,6 +13,13 @@ class AuthService {
    */
   getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY);
+  }
+
+  /**
+   * Get the stored refresh token
+   */
+  getRefreshToken(): string | null {
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
   }
 
   /**
@@ -45,9 +53,12 @@ class AuthService {
   /**
    * Store authentication data securely
    */
-  private storeAuth(token: string, user: User): void {
+  private storeAuth(token: string, user: User, refreshToken?: string): void {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
+    if (refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    }
   }
 
   /**
@@ -55,6 +66,7 @@ class AuthService {
    */
   private clearAuth(): void {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   }
 
@@ -62,48 +74,26 @@ class AuthService {
    * Login user
    */
   async login(credentials: LoginDto): Promise<AuthResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        message: 'Error al iniciar sesión',
-      }));
-      throw new Error(Array.isArray(error.message) ? error.message[0] : error.message);
+    try {
+      const data = await apiPost<AuthResponse>('/auth/login', credentials, { skipAuth: true });
+      this.storeAuth(data.access_token, data.user, data.refresh_token);
+      return data;
+    } catch (error) {
+      throw error;
     }
-
-    const data: AuthResponse = await response.json();
-    this.storeAuth(data.access_token, data.user);
-    return data;
   }
 
   /**
    * Register new user
    */
   async register(userData: RegisterDto): Promise<AuthResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({
-        message: 'Error al registrar usuario',
-      }));
-      throw new Error(Array.isArray(error.message) ? error.message[0] : error.message);
+    try {
+      const data = await apiPost<AuthResponse>('/auth/register', userData, { skipAuth: true });
+      this.storeAuth(data.access_token, data.user, data.refresh_token);
+      return data;
+    } catch (error) {
+      throw error;
     }
-
-    const data: AuthResponse = await response.json();
-    this.storeAuth(data.access_token, data.user);
-    return data;
   }
 
   /**
@@ -118,17 +108,41 @@ class AuthService {
     // Try to notify server, but don't fail if it doesn't work
     if (token) {
       try {
-        await fetch(`${API_BASE_URL}/auth/logout`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        await apiPost<void>('/auth/logout', {});
       } catch (error) {
         // Silently fail - local logout already done
         console.warn('Error notifying server of logout:', error);
       }
+    }
+  }
+
+  /**
+   * Refresh access token using refresh token
+   */
+  async refreshToken(): Promise<string> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.clearAuth();
+      throw new Error('No refresh token available');
+    }
+
+    try {
+      const data = await apiPost<RefreshTokenResponse>(
+        '/auth/refresh',
+        { refresh_token: refreshToken },
+        { skipAuth: true }
+      );
+
+      // Update tokens
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      if (data.refresh_token) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+      }
+
+      return data.access_token;
+    } catch (error) {
+      this.clearAuth();
+      throw error;
     }
   }
 
@@ -141,23 +155,14 @@ class AuthService {
       throw new Error('No hay sesión activa');
     }
 
-    const response = await fetch(`${API_BASE_URL}/users/profile`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        this.clearAuth();
-        throw new Error('Sesión expirada');
-      }
-      throw new Error('Error al obtener perfil de usuario');
+    try {
+      const user = await apiGet<User>('/auth/profile');
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      return user;
+    } catch (error) {
+      this.clearAuth();
+      throw error;
     }
-
-    const user: User = await response.json();
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-    return user;
   }
 }
 

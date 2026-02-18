@@ -84,7 +84,13 @@ export interface RegisterDto {
 
 export interface AuthResponse {
   access_token: string;
+  refresh_token?: string;
   user: User;
+}
+
+export interface RefreshTokenResponse {
+  access_token: string;
+  refresh_token?: string;
 }
 
 export interface ApiError {
