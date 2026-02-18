@@ -10,7 +10,10 @@ import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
+import { ImageWithPlaceholder } from "@/modules/shared/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
+import { parsePhotos } from "@/modules/client/utils/roomHelpers";
+import { roomsService } from "@/modules/shared/services/rooms.service";
 import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
@@ -187,7 +190,20 @@ export default function Reservations() {
                 <h3 className="font-bold text-lg mb-4">Resumen de Reserva</h3>
                 {selectedRoom ? (
                   <>
-                    <img src={selectedRoom.mainPhoto?.[0] || '/placeholder.svg'} alt={selectedRoom.name} className="rounded-lg w-full h-40 object-cover mb-4" loading="lazy" />
+                    {(() => {
+                      const mainPhotoArray = parsePhotos(selectedRoom.mainPhoto);
+                      const mainImage = mainPhotoArray.length > 0
+                        ? roomsService.getMediaUrl(mainPhotoArray[0])
+                        : '/placeholder.svg';
+                      return (
+                        <ImageWithPlaceholder
+                          src={mainImage}
+                          alt={selectedRoom.name}
+                          className="rounded-lg w-full h-40 object-cover mb-4"
+                          loading="lazy"
+                        />
+                      );
+                    })()}
                     <p className="font-semibold">{selectedRoom.name}</p>
                     <p className="text-sm text-muted-foreground mb-4">{selectedRoom.roomType} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}</p>
                   </>
