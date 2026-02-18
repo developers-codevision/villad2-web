@@ -10,6 +10,8 @@ import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
+import { ImageWithPlaceholder } from "@/modules/shared/components";
+import { RoomDetailSkeleton } from "@/modules/client/components";
 import { useRoom } from "@/modules/client/hooks/useRooms";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
@@ -42,12 +44,7 @@ export default function RoomDetail() {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
-          <div>
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-            <p className="mt-4 text-muted-foreground">Cargando habitación...</p>
-          </div>
-        </main>
+        <RoomDetailSkeleton />
         <Footer />
       </div>
     );
@@ -111,10 +108,11 @@ export default function RoomDetail() {
       <main className="pb-20">
         {/* Hero */}
         <section className="relative h-[70vh] md:h-[80vh] overflow-hidden mt-16">
-          <img
+          <ImageWithPlaceholder
             src={mainImage}
             alt={room.name}
             className="w-full h-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
@@ -248,7 +246,12 @@ export default function RoomDetail() {
               <div className="lg:col-span-2">
                 <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
                   <h3 className="font-bold text-lg mb-4">Resumen</h3>
-                  <img src={mainImage} alt={room.name} className="rounded-lg w-full h-40 object-cover mb-4" loading="lazy" />
+                  <ImageWithPlaceholder
+                    src={mainImage}
+                    alt={room.name}
+                    className="rounded-lg w-full h-40 object-cover mb-4"
+                    loading="lazy"
+                  />
                   <p className="font-semibold">{room.name}</p>
                   <p className="text-sm text-muted-foreground mb-4">{room.roomType} · Hasta {room.capacity} {room.capacity === 1 ? "persona" : "personas"}</p>
                   <div className="border-t border-border pt-4 space-y-2 text-sm">
@@ -287,7 +290,7 @@ export default function RoomDetail() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {additionalPhotos.map((img, i) => (
                   <div key={i} className={`overflow-hidden rounded-xl ${i === 0 ? "col-span-2 row-span-2" : ""}`}>
-                    <img
+                    <ImageWithPlaceholder
                       src={img}
                       alt={`${room.name} - foto ${i + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"

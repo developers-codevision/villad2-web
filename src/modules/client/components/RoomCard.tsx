@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Users } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Card, CardContent } from "@/modules/shared/components/ui/card";
+import { ImageWithPlaceholder } from "@/modules/shared/components";
 import type { Room } from "@/modules/client/services/rooms.service";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
@@ -19,11 +20,10 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
   return (
     <Card className="overflow-hidden group hover:shadow-lg transition-shadow">
       <div className="relative overflow-hidden aspect-[4/3]">
-        <img
+        <ImageWithPlaceholder
           src={mainImage}
           alt={room.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
         />
       </div>
       <CardContent className="p-5">
