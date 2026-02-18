@@ -333,7 +333,7 @@ export default function AdminHabitaciones() {
               </div>
               <div className="space-y-2">
                 <Label>Tipo</Label>
-                <Select value={form.tipo_habitacion} onValueChange={v => setForm(f => ({ ...f, tipo_habitacion: v }))}>
+                <Select value={form.tipo_habitacion} onValueChange={v => setForm(f => ({ ...f, tipo_habitacion: v as RoomType }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {TIPOS.map(t => <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>)}
