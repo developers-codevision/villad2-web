@@ -19,7 +19,7 @@ export default function Services() {
           <h2 className="text-2xl font-bold mb-6">Seguridad del Hostal</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {SERVICES_SECURITY.map((s) => (
-              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
+              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
                 <div className="bg-primary/10 rounded-full p-3 shrink-0">
                   <s.icon size={24} className="text-primary" />
                 </div>
@@ -35,7 +35,7 @@ export default function Services() {
           <h2 className="text-2xl font-bold mb-6">Servicios Incluidos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {SERVICES_INCLUDED.map((s) => (
-              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
+              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
                 <div className="bg-primary/10 rounded-full p-3 shrink-0">
                   <s.icon size={24} className="text-primary" />
                 </div>
@@ -51,7 +51,7 @@ export default function Services() {
           <h2 className="text-2xl font-bold mb-6">Servicios Adicionales</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES_ADDITIONAL.map((s) => (
-              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow border border-border">
+              <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
                 <div className="bg-primary/10 rounded-full p-3 shrink-0">
                   <s.icon size={24} className="text-primary" />
                 </div>
