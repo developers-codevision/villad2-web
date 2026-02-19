@@ -65,7 +65,7 @@ export const roomsService = {
   /**
    * Update a room (admin only)
    */
-  async update(id: number, data: UpdateRoomDto, mainPhoto?: File, additionalPhotos?: File[]): Promise<Room> {
+  async update(id: number, data: UpdateRoomDto, mainPhoto?: File, additionalPhotos?: File[], keepPhotos?: string[]): Promise<Room> {
     const formData = new FormData();
 
     // Append only fields that are present
@@ -83,6 +83,11 @@ export const roomsService = {
 
     if (data.bathroomAmenities !== undefined) {
       formData.append('bathroomAmenities', JSON.stringify(data.bathroomAmenities));
+    }
+
+    // Send keepPhotos array to preserve existing photos
+    if (keepPhotos && keepPhotos.length > 0) {
+      formData.append('keepPhotos', JSON.stringify(keepPhotos));
     }
 
     if (mainPhoto) {

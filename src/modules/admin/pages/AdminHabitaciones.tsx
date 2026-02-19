@@ -167,7 +167,7 @@ export default function AdminHabitaciones() {
 
       if (editing) {
         // Update existing room
-        // Calculate which original photos are still present
+        // Calculate which original photos (relative paths) are still present
         const originalMainUrls = originalMainPhoto.map(getImageUrl);
         const originalAdditionalUrls = originalAdditionalPhotos.map(getImageUrl);
 
@@ -178,8 +178,8 @@ export default function AdminHabitaciones() {
           form.fotos_adicionales.includes(originalAdditionalUrls[i])
         );
 
-        // Combine kept photos with new ones
-        const existingPhotos = [...keptMainPhotos, ...keptAdditionalPhotos];
+        // Combine kept photos (original relative paths) to send to API
+        const keepPhotos = [...keptMainPhotos, ...keptAdditionalPhotos];
 
         const updatedRoom = await roomsService.update(
           editing.id,
@@ -196,7 +196,7 @@ export default function AdminHabitaciones() {
           },
           mainPhotoFile || undefined,
           additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined,
-          existingPhotos.length > 0 ? existingPhotos : undefined
+          keepPhotos.length > 0 ? keepPhotos : undefined
         );
 
         setHabitaciones(prev => prev.map(h => h.id === editing.id ? updatedRoom : h));

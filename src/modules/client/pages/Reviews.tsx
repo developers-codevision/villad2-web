@@ -84,24 +84,6 @@ const Reviews = () => {
             <p className="text-muted-foreground max-w-xl mx-auto mb-4">
               Comparte tu experiencia y ayuda a otros viajeros a conocer Villa D2.
             </p>
-            <div className="flex items-center justify-center gap-2">
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-5 w-5 ${
-                      i < Math.round(Number(averageRating))
-                        ? "text-primary fill-primary"
-                        : "text-muted-foreground/30"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-lg font-bold">{averageRating}</span>
-              <span className="text-muted-foreground text-sm">
-                ({reviews.length} reseñas)
-              </span>
-            </div>
           </div>
 
           {/* Form */}
