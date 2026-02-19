@@ -88,6 +88,10 @@ export default function AdminHabitaciones() {
   const [mainPhotoFile, setMainPhotoFile] = useState<File | null>(null);
   const [additionalPhotoFiles, setAdditionalPhotoFiles] = useState<File[]>([]);
 
+  // Keep track of original photo URLs (relative paths from server)
+  const [originalMainPhoto, setOriginalMainPhoto] = useState<string[]>([]);
+  const [originalAdditionalPhotos, setOriginalAdditionalPhotos] = useState<string[]>([]);
+
   // Load rooms on mount
   useEffect(() => {
     loadRooms();
@@ -113,11 +117,22 @@ export default function AdminHabitaciones() {
     setAmenityBannoInput("");
     setMainPhotoFile(null);
     setAdditionalPhotoFiles([]);
+    setOriginalMainPhoto([]);
+    setOriginalAdditionalPhotos([]);
     setOpen(true);
   }
 
   function openEdit(room: Room) {
     setEditing(room);
+
+    // Store original relative URLs
+    setOriginalMainPhoto(room.mainPhoto || []);
+    setOriginalAdditionalPhotos(room.additionalPhotos || []);
+
+    // Convert relative URLs to full URLs for preview
+    const mainPhotoUrls = (room.mainPhoto || []).map(getImageUrl);
+    const additionalPhotoUrls = (room.additionalPhotos || []).map(getImageUrl);
+
     setForm({
       numero: room.number,
       nombre: room.name,
@@ -128,8 +143,8 @@ export default function AdminHabitaciones() {
       amenities_habitacion: room.roomAmenities || [],
       amenities_banno: room.bathroomAmenities || [],
       estado: room.status,
-      foto_principal: room.mainPhoto || [],
-      fotos_adicionales: room.additionalPhotos || [],
+      foto_principal: mainPhotoUrls,
+      fotos_adicionales: additionalPhotoUrls,
     });
     setAmenityInput((room.roomAmenities || []).join(", "));
     setAmenityBannoInput((room.bathroomAmenities || []).join(", "));
@@ -152,6 +167,20 @@ export default function AdminHabitaciones() {
 
       if (editing) {
         // Update existing room
+        // Calculate which original photos are still present
+        const originalMainUrls = originalMainPhoto.map(getImageUrl);
+        const originalAdditionalUrls = originalAdditionalPhotos.map(getImageUrl);
+
+        const keptMainPhotos = originalMainPhoto.filter((_, i) =>
+          form.foto_principal.includes(originalMainUrls[i])
+        );
+        const keptAdditionalPhotos = originalAdditionalPhotos.filter((_, i) =>
+          form.fotos_adicionales.includes(originalAdditionalUrls[i])
+        );
+
+        // Combine kept photos with new ones
+        const existingPhotos = [...keptMainPhotos, ...keptAdditionalPhotos];
+
         const updatedRoom = await roomsService.update(
           editing.id,
           {
@@ -166,7 +195,8 @@ export default function AdminHabitaciones() {
             status: form.estado,
           },
           mainPhotoFile || undefined,
-          additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined
+          additionalPhotoFiles.length > 0 ? additionalPhotoFiles : undefined,
+          existingPhotos.length > 0 ? existingPhotos : undefined
         );
 
         setHabitaciones(prev => prev.map(h => h.id === editing.id ? updatedRoom : h));
