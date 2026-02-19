@@ -56,7 +56,7 @@ export default function Reservations() {
             <p className="text-muted-foreground mb-1">
               {checkIn && format(checkIn, "dd MMM yyyy", { locale: es })} — {checkOut && format(checkOut, "dd MMM yyyy", { locale: es })}
             </p>
-            <p className="text-2xl font-bold text-primary mt-4">{total}€ total</p>
+            <p className="text-2xl font-bold text-primary mt-4">{total}$ total</p>
             <p className="text-sm text-muted-foreground mt-4">
               Recibirás un email de confirmación en <strong>{email}</strong>.
             </p>
@@ -116,7 +116,7 @@ export default function Reservations() {
                     <SelectContent>
                       {rooms.map((r) => (
                         <SelectItem key={r.id} value={r.id.toString()}>
-                          {r.name} — {r.pricePerNight}€/noche
+                          {r.name} — {r.pricePerNight}$/noche
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -231,14 +231,14 @@ export default function Reservations() {
                   {selectedRoom && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Precio/noche</span>
-                      <span>{selectedRoom.pricePerNight}€</span>
+                      <span>{selectedRoom.pricePerNight}$</span>
                     </div>
                   )}
                 </div>
 
                 <div className="border-t border-border mt-4 pt-4 flex justify-between items-center">
                   <span className="font-bold text-lg">Total</span>
-                  <span className="font-bold text-2xl text-primary">{total}€</span>
+                  <span className="font-bold text-2xl text-primary">{total}$</span>
                 </div>
               </div>
             </div>

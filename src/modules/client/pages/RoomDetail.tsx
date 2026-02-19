@@ -88,7 +88,7 @@ export default function RoomDetail() {
             <p className="text-muted-foreground mb-1">
               {checkIn && format(checkIn, "dd MMM yyyy", { locale: es })} — {checkOut && format(checkOut, "dd MMM yyyy", { locale: es })}
             </p>
-            <p className="text-2xl font-bold text-primary mt-4">{total}€ total</p>
+            <p className="text-2xl font-bold text-primary mt-4">{total}$ total</p>
             <p className="text-sm text-muted-foreground mt-4">
               Recibirás un email de confirmación en <strong>{email}</strong>.
             </p>
@@ -129,7 +129,7 @@ export default function RoomDetail() {
               <p className="text-white/90 text-lg max-w-2xl">{room.description}</p>
               <div className="flex items-center gap-4 mt-4">
                 <span className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full font-bold text-lg">
-                  {room.pricePerNight}€/noche
+                  {room.pricePerNight}$/noche
                 </span>
                 <span className="flex items-center gap-1 text-white/80">
                   <Users size={16} /> Hasta {room.capacity} {room.capacity === 1 ? "persona" : "personas"}
@@ -239,7 +239,7 @@ export default function RoomDetail() {
                 </div>
 
                 <Button type="submit" size="lg" className="w-full font-bold text-lg py-6" disabled={!canSubmit}>
-                  Confirmar Reserva — {total > 0 ? `${total}€` : "Selecciona fechas"}
+                  Confirmar Reserva — {total > 0 ? `${total}$` : "Selecciona fechas"}
                 </Button>
               </div>
 
@@ -269,12 +269,12 @@ export default function RoomDetail() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Precio/noche</span>
-                      <span>{room.pricePerNight}€</span>
+                      <span>{room.pricePerNight}$</span>
                     </div>
                   </div>
                   <div className="border-t border-border mt-4 pt-4 flex justify-between items-center">
                     <span className="font-bold text-lg">Total</span>
-                    <span className="font-bold text-2xl text-primary">{total}€</span>
+                    <span className="font-bold text-2xl text-primary">{total}$</span>
                   </div>
                 </div>
               </div>

@@ -302,7 +302,7 @@ export default function AdminHabitaciones() {
                       </div>
                     </TableCell>
                     <TableCell className="capitalize">{h.roomType}</TableCell>
-                    <TableCell className="text-right">{h.pricePerNight}€</TableCell>
+                    <TableCell className="text-right">{h.pricePerNight}$</TableCell>
                     <TableCell className="text-center">{h.capacity}</TableCell>
                     <TableCell>{estadoBadge(h.status)}</TableCell>
                     <TableCell className="text-right">
@@ -354,7 +354,7 @@ export default function AdminHabitaciones() {
             {/* Row: precio + capacidad + tipo */}
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label>Precio/noche (€)</Label>
+                <Label>Precio/noche ($)</Label>
                 <Input type="number" min={0} step={0.01} value={form.precio_por_noche} onChange={e => setForm(f => ({ ...f, precio_por_noche: parseFloat(e.target.value) || 0 }))} />
               </div>
               <div className="space-y-2">
