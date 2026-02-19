@@ -154,30 +154,7 @@ export default function Reservations() {
                 </div>
               </div>
 
-              {/* Payment methods info */}
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Métodos de Pago Aceptados</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="border border-border rounded-lg p-4 text-center">
-                    <CreditCard size={28} className="mx-auto mb-2 text-primary" />
-                    <p className="font-semibold text-sm">Tarjeta (Stripe)</p>
-                    <p className="text-xs text-muted-foreground mt-1">Visa, Mastercard, Amex</p>
-                  </div>
-                  <div className="border border-border rounded-lg p-4 text-center">
-                    <Smartphone size={28} className="mx-auto mb-2 text-primary" />
-                    <p className="font-semibold text-sm">Bizum</p>
-                    <p className="text-xs text-muted-foreground mt-1">Pago instantáneo móvil</p>
-                  </div>
-                  <div className="border border-border rounded-lg p-4 text-center">
-                    <DollarSign size={28} className="mx-auto mb-2 text-primary" />
-                    <p className="font-semibold text-sm">Zelle</p>
-                    <p className="text-xs text-muted-foreground mt-1">Transferencia digital</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  * El pago se realizará en el momento del check-in o según instrucciones enviadas por email.
-                </p>
-              </div>
+
 
               <Button type="submit" size="lg" className="w-full font-bold text-lg py-6" disabled={!canSubmit}>
                 Confirmar Reserva

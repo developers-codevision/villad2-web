@@ -182,35 +182,7 @@ const Reviews = () => {
             </CardContent>
           </Card>
 
-          {/* Reviews list */}
-          <div className="space-y-4">
-            {reviews.map((r) => (
-              <Card key={r.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <p className="font-semibold">{r.name}</p>
-                      <p className="text-xs text-muted-foreground">{r.country}</p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: 5 }).map((_, s) => (
-                        <Star
-                          key={s}
-                          className={`h-4 w-4 ${
-                            s < r.rating
-                              ? "text-primary fill-primary"
-                              : "text-muted-foreground/30"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground italic">"{r.text}"</p>
-                  <p className="text-xs text-muted-foreground/60 mt-3">{r.createdAt}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+
         </div>
       </main>
 
