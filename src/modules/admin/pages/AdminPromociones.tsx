@@ -23,20 +23,8 @@ interface Promocion {
 }
 
 const INITIAL: Promocion[] = [
-  {
-    id: 1,
-    titulo: "Escapada Romántica",
-    descripcion: "Disfruta de una noche especial con cena incluida y decoración romántica.",
-    precio: 89.99,
-    imagen: [],
-  },
-  {
-    id: 2,
-    titulo: "Fin de Semana Relax",
-    descripcion: "2 noches con acceso al spa y desayuno buffet.",
-    precio: 149.0,
-    imagen: [],
-  },
+
+
 ];
 
 const EMPTY: Omit<Promocion, "id"> = { titulo: "", descripcion: "", precio: 0, imagen: [] };
