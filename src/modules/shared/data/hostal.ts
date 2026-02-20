@@ -19,8 +19,8 @@ export const HOSTAL = {
 // DEPRECATED: Mock room data - Now using API from backend
 // ============================================================
 // The room data is now fetched from the API at http://localhost:3000/rooms
-// Use the roomsService and useRooms hook from @/modules/client/services/rooms.service
-// and @/modules/client/hooks/useRooms instead
+// Use the roomsService from @/modules/shared/services/rooms.service
+// and hooks from @/modules/client/hooks instead
 
 /*
 export interface Room {

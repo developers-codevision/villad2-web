@@ -1,27 +1,7 @@
 // Users API Service
 
 import { authenticatedApiClient } from './api';
-import { User } from '../types/api.types';
-
-export interface CreateUserDto {
-  username: string;
-  password: string;
-  email: string;
-  fullName?: string;
-  phone?: string;
-  roles?: string[];
-  isActive?: boolean;
-}
-
-export interface UpdateUserDto {
-  username?: string;
-  email?: string;
-  fullName?: string;
-  phone?: string;
-  roles?: string[];
-  isActive?: boolean;
-  password?: string;
-}
+import { User, CreateUserDto, UpdateUserDto } from '../types/api.types';
 
 export const usersService = {
   /**

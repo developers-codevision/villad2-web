@@ -2,7 +2,19 @@
 import { authService } from './auth.service';
 import { ApiError } from '../types/api.types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+/**
+ * Get full URL for media paths
+ */
+export function getMediaUrl(path: string): string {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+  return `${API_BASE_URL}/${cleanPath}`;
+}
 
 /**
  * Parse API error response

@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Card, CardContent } from "@/modules/shared/components/ui/card";
 import { ImageWithPlaceholder } from "@/modules/shared/components";
-import type { Room } from "@/modules/client/services/rooms.service";
+import type { Room } from "@/modules/shared/types/api.types";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
 

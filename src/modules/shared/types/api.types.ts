@@ -1,4 +1,8 @@
-// API Types and Interfaces
+// API Types and Interfaces - Single Source of Truth
+
+// ============================================
+// ENUMS
+// ============================================
 
 export enum RoomType {
   INDIVIDUAL = 'individual',
@@ -18,6 +22,17 @@ export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
 }
+
+export enum ReservationStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed',
+}
+
+// ============================================
+// ROOM INTERFACES
+// ============================================
 
 export interface Room {
   id: number;
@@ -56,6 +71,10 @@ export interface CreateRoomDto {
 
 export interface UpdateRoomDto extends Partial<CreateRoomDto> {}
 
+// ============================================
+// USER INTERFACES
+// ============================================
+
 export interface User {
   id: number;
   username: string;
@@ -68,6 +87,30 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface CreateUserDto {
+  username: string;
+  password: string;
+  email: string;
+  fullName?: string;
+  phone?: string;
+  roles?: string[];
+  isActive?: boolean;
+}
+
+export interface UpdateUserDto {
+  username?: string;
+  email?: string;
+  fullName?: string;
+  phone?: string;
+  roles?: string[];
+  isActive?: boolean;
+  password?: string;
+}
+
+// ============================================
+// AUTH INTERFACES
+// ============================================
 
 export interface LoginDto {
   username: string;
@@ -92,6 +135,47 @@ export interface RefreshTokenResponse {
   access_token: string;
   refresh_token?: string;
 }
+
+// ============================================
+// RESERVATION INTERFACES
+// ============================================
+
+export interface Reservation {
+  id: number;
+  roomId: number;
+  userId?: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone?: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  totalPrice: number;
+  status: ReservationStatus;
+  specialRequests?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateReservationDto {
+  roomId: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone?: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  specialRequests?: string;
+}
+
+export interface UpdateReservationDto {
+  status?: ReservationStatus;
+  specialRequests?: string;
+}
+
+// ============================================
+// API ERROR INTERFACE
+// ============================================
 
 export interface ApiError {
   statusCode: number;

@@ -1,6 +1,6 @@
 // Rooms API Service
 
-import { authenticatedApiClient, apiClient } from './api';
+import { authenticatedApiClient, apiClient, getMediaUrl } from './api';
 import { Room, CreateRoomDto, UpdateRoomDto, RoomStatus, RoomType } from '../types/api.types';
 
 export const roomsService = {
@@ -120,11 +120,6 @@ export const roomsService = {
   /**
    * Get media URL for room photos
    */
-  getMediaUrl(path: string): string {
-    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    // Remove leading slash if present
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-    return `${API_BASE_URL}/${cleanPath}`;
-  },
+  getMediaUrl,
 };
 

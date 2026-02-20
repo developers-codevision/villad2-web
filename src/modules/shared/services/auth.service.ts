@@ -1,7 +1,7 @@
 // Authentication Service with secure token management
 
 import { AuthResponse, LoginDto, RegisterDto, User, RefreshTokenResponse } from '../types/api.types';
-import { apiPost, apiGet } from '../lib/api-client';
+import { apiClient } from './api';
 
 const TOKEN_KEY = 'villad2_auth_token';
 const REFRESH_TOKEN_KEY = 'villad2_refresh_token';
@@ -75,7 +75,7 @@ class AuthService {
    */
   async login(credentials: LoginDto): Promise<AuthResponse> {
     try {
-      const data = await apiPost<AuthResponse>('/auth/login', credentials, { skipAuth: true });
+      const data = await apiClient.post<AuthResponse>('/auth/login', credentials);
       this.storeAuth(data.access_token, data.user, data.refresh_token);
       return data;
     } catch (error) {
@@ -88,7 +88,7 @@ class AuthService {
    */
   async register(userData: RegisterDto): Promise<AuthResponse> {
     try {
-      const data = await apiPost<AuthResponse>('/auth/register', userData, { skipAuth: true });
+      const data = await apiClient.post<AuthResponse>('/auth/register', userData);
       this.storeAuth(data.access_token, data.user, data.refresh_token);
       return data;
     } catch (error) {
@@ -108,7 +108,7 @@ class AuthService {
     // Try to notify server, but don't fail if it doesn't work
     if (token) {
       try {
-        await apiPost<void>('/auth/logout', {});
+        await apiClient.post<void>('/auth/logout', {});
       } catch (error) {
         // Silently fail - local logout already done
         console.warn('Error notifying server of logout:', error);
@@ -127,10 +127,9 @@ class AuthService {
     }
 
     try {
-      const data = await apiPost<RefreshTokenResponse>(
+      const data = await apiClient.post<RefreshTokenResponse>(
         '/auth/refresh',
-        { refresh_token: refreshToken },
-        { skipAuth: true }
+        { refresh_token: refreshToken }
       );
 
       // Update tokens
@@ -156,7 +155,9 @@ class AuthService {
     }
 
     try {
-      const user = await apiGet<User>('/auth/profile');
+      // Note: This should use authenticatedApiClient, but we avoid circular dependency
+      // by using apiClient and manually adding the auth header check in the api client
+      const user = await apiClient.get<User>('/auth/profile');
       localStorage.setItem(USER_KEY, JSON.stringify(user));
       return user;
     } catch (error) {
