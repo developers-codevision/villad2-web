@@ -64,7 +64,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Rooms preview */}
+      {/* Rooms preview
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
@@ -95,7 +95,7 @@ const Index = () => {
             </>
           )}
         </div>
-      </section>
+      </section>*/}
 
       {/* Services */}
       <section className="py-20 px-4 bg-accent/30">

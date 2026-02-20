@@ -128,9 +128,7 @@ export default function RoomDetail() {
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{room.name}</h1>
               <p className="text-white/90 text-lg max-w-2xl">{room.description}</p>
               <div className="flex items-center gap-4 mt-4">
-                <span className="bg-primary text-primary-foreground px-4 py-1.5 rounded-full font-bold text-lg">
-                  {room.pricePerNight}$/noche
-                </span>
+
                 <span className="flex items-center gap-1 text-white/80">
                   <Users size={16} /> Hasta {room.capacity} {room.capacity === 1 ? "persona" : "personas"}
                 </span>
