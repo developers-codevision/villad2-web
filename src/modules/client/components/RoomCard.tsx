@@ -22,13 +22,13 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
       <div className="relative overflow-hidden aspect-[4/3]">
         <ImageWithPlaceholder
           src={mainImage}
-          alt={room.name}
+          alt={`Habitación #${room.number}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
       <CardContent className="p-5">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-lg">{room.name}</h3>
+          <h3 className="font-bold text-lg">#{room.number}</h3>
           <span className="flex items-center gap-1 text-muted-foreground text-sm">
             <Users size={14} /> {room.capacity}
           </span>
