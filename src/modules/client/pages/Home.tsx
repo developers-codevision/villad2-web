@@ -31,8 +31,8 @@ const Index = () => {
         />
         <div className="absolute inset-0 bg-secondary/80" />
         <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-secondary-foreground mb-4 leading-tight">
-            Bienvenido a{" "}
+          <h1 className="text-4xl md:text-5xl font-extrabold text-secondary-foreground mb-4 leading-tight">
+            Hostal Boutique{" "}
             <span className="text-primary">{HOSTAL.name}</span>
           </h1>
           <p className="text-lg md:text-xl text-secondary-foreground/80 mb-8">

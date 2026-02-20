@@ -3,7 +3,7 @@ import { Wifi, Coffee, Car, Shield, Flame, Camera, Lightbulb, MapPin, Luggage, H
 export const HOSTAL = {
   name: "Villa D2",
   tagline: "Un viaje por la historia de Cuba",
-  description: "Nuestras 7 habitaciones llevan los nombres de las antiguas provincias (hasta 1976) e Isla de Pinos, contando la evolución territorial del país hasta la actualidad. La Terraza-Bar, inspirada en los emblemáticos cayos cubanos, rinde homenaje a los archipiélagos de Jardines del Rey, Jardines de la Reina, Canarreos y Colorados.\n",
+  description: "Nuestras 7 habitaciones llevan los nombres de las antiguas provincias (hasta 1976) e Isla de Pinos, contando la evolución territorial del país hasta la actualidad.",
   phone: "+5378820045 / +53 63511623",
   email: "contacto@villad2.com",
   whatsapp: "+53 63511623",
