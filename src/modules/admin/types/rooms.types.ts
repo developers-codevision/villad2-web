@@ -1,9 +1,16 @@
-// Admin Room Types - Separated from components
+// Admin Room Types - UI-specific types and constants
+// Backend types (Room, RoomType, RoomStatus, DTOs) are in @/modules/shared/types/api.types
 
 import { Room, RoomType, RoomStatus } from '@/modules/shared/types/api.types';
 
+// ============================================
+// ADMIN-SPECIFIC FORM TYPES
+// ============================================
+
 /**
- * Form data structure for room creation/editing
+ * Form data structure for room creation/editing in admin panel
+ * Note: This is different from CreateRoomDto/UpdateRoomDto because
+ * it's used for UI state management with additional fields like photo URLs
  */
 export interface RoomFormData {
   numero: string;
@@ -20,7 +27,7 @@ export interface RoomFormData {
 }
 
 /**
- * Photo state management
+ * Photo state management for admin forms
  */
 export interface RoomPhotoState {
   mainPhotoFile: File | null;
@@ -30,7 +37,7 @@ export interface RoomPhotoState {
 }
 
 /**
- * Room list state
+ * Room list state for admin panel
  */
 export interface RoomListState {
   rooms: Room[];
@@ -39,7 +46,7 @@ export interface RoomListState {
 }
 
 /**
- * Room form state
+ * Room form dialog state
  */
 export interface RoomFormState {
   open: boolean;
@@ -48,25 +55,12 @@ export interface RoomFormState {
   deleteConfirm: number | null;
 }
 
-/**
- * Constants for room types and statuses
- */
-export const ROOM_TYPES: RoomType[] = [
-  RoomType.INDIVIDUAL,
-  RoomType.DOUBLE,
-  RoomType.SUITE,
-  RoomType.FAMILY,
-  RoomType.PRESIDENTIAL,
-];
-
-export const ROOM_STATUSES: RoomStatus[] = [
-  RoomStatus.AVAILABLE,
-  RoomStatus.OCCUPIED,
-  RoomStatus.MAINTENANCE,
-];
+// ============================================
+// UI CONSTANTS (for admin panel dropdowns, labels, etc.)
+// ============================================
 
 /**
- * Room status labels for display
+ * Spanish labels for room statuses (for display in admin UI)
  */
 export const ROOM_STATUS_LABELS: Record<RoomStatus, string> = {
   [RoomStatus.AVAILABLE]: 'Disponible',
@@ -75,11 +69,42 @@ export const ROOM_STATUS_LABELS: Record<RoomStatus, string> = {
 };
 
 /**
- * Room status badge variants
+ * Room type labels (Spanish)
+ */
+export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
+  [RoomType.INDIVIDUAL]: 'Individual',
+  [RoomType.DOUBLE]: 'Doble',
+  [RoomType.SUITE]: 'Suite',
+  [RoomType.FAMILY]: 'Familiar',
+  [RoomType.PRESIDENTIAL]: 'Presidencial',
+};
+
+/**
+ * Badge variants for room statuses (for UI styling)
  */
 export const ROOM_STATUS_VARIANTS: Record<RoomStatus, 'default' | 'destructive' | 'secondary'> = {
   [RoomStatus.AVAILABLE]: 'default',
   [RoomStatus.OCCUPIED]: 'destructive',
   [RoomStatus.MAINTENANCE]: 'secondary',
 };
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+/**
+ * Get all room types as array (for Select options)
+ * Dynamically generates from enum to avoid duplication
+ */
+export function getRoomTypes(): RoomType[] {
+  return Object.values(RoomType);
+}
+
+/**
+ * Get all room statuses as array (for Select options)
+ * Dynamically generates from enum to avoid duplication
+ */
+export function getRoomStatuses(): RoomStatus[] {
+  return Object.values(RoomStatus);
+}
 
