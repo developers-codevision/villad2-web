@@ -13,6 +13,7 @@ import Footer from "@/modules/shared/components/Footer";
 import RoomCard from "@/modules/client/components/RoomCard";
 import { HOSTAL, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
 import { useRooms } from "@/modules/client/hooks/useRooms";
+import logo from "@/assets/logo.png";
 
 const Index = () => {
   const { rooms, loading } = useRooms();
@@ -22,24 +23,41 @@ const Index = () => {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Imagen de fondo completa sin overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: "url('/Foto-portada-no1-editada-scaled.jpg')",
           }}
         />
-        <div className="absolute inset-0 bg-secondary/80" />
-        <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-secondary-foreground mb-4 leading-tight">
+
+        {/* Título - Esquina superior izquierda */}
+        <div className="absolute top-20 left-4 md:top-24 md:left-8 z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
             Hostal Boutique{" "}
-            <span className="text-primary">{HOSTAL.name}</span>
+            <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
-          <p className="text-lg md:text-xl text-secondary-foreground/80 mb-8">
-            {HOSTAL.tagline} — {HOSTAL.description}
-          </p>
+        </div>
+
+        {/* Logo - Esquina superior derecha (sin fondo) */}
+        <div className="absolute top-20 right-4 md:top-24 md:right-8 z-10">
+          <img src={logo} alt="Villa D2" className="h-16 md:h-24 lg:h-28 w-auto drop-shadow-2xl" />
+        </div>
+
+        {/* Descripción - Esquina inferior izquierda */}
+        <div className="absolute bottom-8 md:bottom-12 left-4 md:left-8 z-10 max-w-md md:max-w-xl">
+          <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
+            <p className="text-base md:text-lg lg:text-xl">
+              {HOSTAL.tagline} — {HOSTAL.description}
+            </p>
+          </div>
+        </div>
+
+        {/* Botón - Centro inferior */}
+        <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-10">
           <Link to="/reservas">
-            <Button size="lg" className="text-lg px-10 py-6 font-bold">
+            <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
               Reservar Ahora
             </Button>
           </Link>
