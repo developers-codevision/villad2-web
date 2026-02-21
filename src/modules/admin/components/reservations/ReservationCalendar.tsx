@@ -41,8 +41,8 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
     return reservations.filter((r) => {
       if (r.status === ReservationStatus.CANCELLED) return false;
 
-      const checkIn = parseISO(r.checkIn);
-      const checkOut = parseISO(r.checkOut);
+      const checkIn = parseISO(r.checkInDate);
+      const checkOut = parseISO(r.checkOutDate);
 
       return isWithinInterval(day, { start: checkIn, end: checkOut });
     });
@@ -125,6 +125,7 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
               <div className="mt-1 space-y-0.5">
                 {dayReservations.slice(0, 3).map((reservation) => {
                   const roomNumber = reservation.room?.number || `#${reservation.roomId}`;
+                  const guestName = `${reservation.mainGuest.firstName} ${reservation.mainGuest.lastName}`;
 
                   return (
                     <div
@@ -132,9 +133,9 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
                       className={`text-[10px] text-white px-1 py-0.5 rounded truncate ${
                         statusColors[reservation.status] ?? "bg-muted"
                       }`}
-                      title={`${reservation.guestName} - ${roomNumber}`}
+                      title={`${guestName} - ${roomNumber}`}
                     >
-                      {reservation.guestName.split(' ')[0]} · {roomNumber}
+                      {reservation.mainGuest.firstName} · {roomNumber}
                     </div>
                   );
                 })}
@@ -191,7 +192,9 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
                     <div className="flex-1 space-y-2">
                       {/* Guest and status */}
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold">{reservation.guestName}</span>
+                        <span className="font-semibold">
+                          {reservation.mainGuest.firstName} {reservation.mainGuest.lastName}
+                        </span>
                         <Badge variant={RESERVATION_STATUS_VARIANTS[reservation.status]} className="text-xs">
                           {RESERVATION_STATUS_LABELS[reservation.status]}
                         </Badge>
@@ -207,19 +210,19 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
 
                       {/* Dates */}
                       <div className="text-sm text-muted-foreground">
-                        📅 {format(parseISO(reservation.checkIn), 'dd/MM/yyyy')} → {format(parseISO(reservation.checkOut), 'dd/MM/yyyy')}
+                        📅 {format(parseISO(reservation.checkInDate), 'dd/MM/yyyy')} → {format(parseISO(reservation.checkOutDate), 'dd/MM/yyyy')}
                       </div>
 
                       {/* Contact */}
                       <div className="text-xs text-muted-foreground">
-                        📧 {reservation.guestEmail}
-                        {reservation.guestPhone && ` · 📞 ${reservation.guestPhone}`}
+                        📧 {reservation.mainGuest.email}
+                        {reservation.mainGuest.phone && ` · 📞 ${reservation.mainGuest.phone}`}
                       </div>
 
                       {/* Special requests */}
-                      {reservation.specialRequests && (
+                      {reservation.notes && (
                         <div className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
-                          {reservation.specialRequests}
+                          {reservation.notes}
                         </div>
                       )}
                     </div>
@@ -227,9 +230,9 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
                     {/* Price and guests */}
                     <div className="text-right">
                       <div className="text-xs text-muted-foreground">Total</div>
-                      <div className="font-semibold text-primary">${reservation.totalPrice}</div>
+                      <div className="font-semibold text-primary">${(reservation.totalPrice || 0).toFixed(2)}</div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        👥 {reservation.guests} {reservation.guests === 1 ? 'huésped' : 'huéspedes'}
+                        👥 {reservation.baseGuestsCount + reservation.extraGuestsCount} {(reservation.baseGuestsCount + reservation.extraGuestsCount) === 1 ? 'huésped' : 'huéspedes'}
                       </div>
                     </div>
                   </div>

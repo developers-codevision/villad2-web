@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
+import { reservationsService } from '@/modules/shared/services';
 import {
   ReservationFormData,
   ReservationWithDetails,
@@ -19,7 +20,7 @@ import {
   filterReservationsByDateRange,
   filterReservationsBySearch,
   sortReservationsByDate,
-  calculateTotalPrice,
+  normalizeReservation,
 } from '../../utils/reservations.utils';
 
 /**
@@ -92,17 +93,14 @@ export function useReservationManagement() {
   const loadReservations = useCallback(async () => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const data = await reservationsService.getAll();
-      // setReservations(data);
-
-      // Mock data for now
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setReservations([]);
-
+      const data = await reservationsService.getAll();
+      // Normalize reservations to ensure consistent format
+      const normalized = data.map(normalizeReservation);
+      setReservations(normalized);
     } catch (error) {
       console.error('Error loading reservations:', error);
       toast.error('Error al cargar las reservas');
+      setReservations([]);
     } finally {
       setLoading(false);
     }
@@ -198,24 +196,12 @@ export function useReservationManagement() {
       if (formState.editing) {
         // Update existing reservation
         const updateDto = formDataToUpdateDto(formData);
-
-        // TODO: Replace with actual API call
-        // await reservationsService.update(formState.editing.id, updateDto);
-
+        await reservationsService.update(formState.editing.id, updateDto);
         toast.success('Reserva actualizada correctamente');
       } else {
         // Create new reservation
-        // Calculate total price (you'll need to get room price)
-        const roomPrice = 100; // TODO: Get from selected room
-        const totalPrice = formData.checkIn && formData.checkOut
-          ? calculateTotalPrice(roomPrice, formData.checkIn, formData.checkOut)
-          : 0;
-
-        const createDto = formDataToCreateDto(formData, totalPrice);
-
-        // TODO: Replace with actual API call
-        // await reservationsService.create(createDto);
-
+        const createDto = formDataToCreateDto(formData);
+        await reservationsService.create(createDto);
         toast.success('Reserva creada correctamente');
       }
 
@@ -234,9 +220,7 @@ export function useReservationManagement() {
    */
   const deleteReservation = useCallback(async (id: number) => {
     try {
-      // TODO: Replace with actual API call
-      // await reservationsService.delete(id);
-
+      await reservationsService.delete(id);
       toast.success('Reserva eliminada correctamente');
       await reloadReservations();
     } catch (error) {
@@ -285,9 +269,7 @@ export function useReservationManagement() {
     const { id, newStatus } = formState.statusChangeConfirm;
 
     try {
-      // TODO: Replace with actual API call
-      // await reservationsService.updateStatus(id, newStatus);
-
+      await reservationsService.updateStatus(id, newStatus);
       toast.success('Estado actualizado correctamente');
       await reloadReservations();
     } catch (error) {

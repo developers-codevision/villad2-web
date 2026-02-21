@@ -24,10 +24,10 @@ export enum UserRole {
 }
 
 export enum ReservationStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  CANCELLED = 'cancelled',
-  COMPLETED = 'completed',
+  PENDING = 'pendiente',
+  CONFIRMED = 'confirmada',
+  CANCELLED = 'cancelada',
+  COMPLETED = 'completada',
 }
 
 // ============================================
@@ -140,37 +140,59 @@ export interface RefreshTokenResponse {
 // RESERVATION INTERFACES
 // ============================================
 
+export interface GuestInfo {
+  firstName: string;
+  lastName: string;
+  sex: 'M' | 'F' | 'O';
+}
+
+export interface MainGuestInfo extends GuestInfo {
+  email: string;
+  phone: string;
+}
+
 export interface Reservation {
   id: number;
   roomId: number;
   userId?: number;
-  guestName: string;
-  guestEmail: string;
-  guestPhone?: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
+  checkInDate: string;
+  checkOutDate: string;
+  mainGuest: MainGuestInfo;
+  baseGuestsCount: number;
+  extraGuestsCount: number;
   totalPrice: number;
   status: ReservationStatus;
-  specialRequests?: string;
+  notes?: string;
+  additionalGuests?: GuestInfo[];
+  earlyCheckIn: boolean;
+  lateCheckOut: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateReservationDto {
   roomId: number;
-  guestName: string;
-  guestEmail: string;
-  guestPhone?: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-  specialRequests?: string;
+  checkInDate: string;
+  checkOutDate: string;
+  mainGuest: MainGuestInfo;
+  baseGuestsCount: number;
+  extraGuestsCount: number;
+  status?: ReservationStatus;
+  notes?: string;
+  additionalGuests?: GuestInfo[];
+  earlyCheckIn?: boolean;
+  lateCheckOut?: boolean;
 }
 
 export interface UpdateReservationDto {
   status?: ReservationStatus;
-  specialRequests?: string;
+  notes?: string;
+  checkInDate?: string;
+  checkOutDate?: string;
+  baseGuestsCount?: number;
+  extraGuestsCount?: number;
+  earlyCheckIn?: boolean;
+  lateCheckOut?: boolean;
 }
 
 // ============================================
@@ -182,4 +204,3 @@ export interface ApiError {
   message: string | string[];
   error: string;
 }
-

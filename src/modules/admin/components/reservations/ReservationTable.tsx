@@ -61,13 +61,15 @@ export function ReservationTable({
                 <div className="flex items-start gap-2">
                   <User size={16} className="text-muted-foreground mt-0.5" />
                   <div>
-                    <p className="font-medium">{reservation.guestName}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {reservation.guestEmail}
+                    <p className="font-medium">
+                      {reservation.mainGuest.firstName} {reservation.mainGuest.lastName}
                     </p>
-                    {reservation.guestPhone && (
+                    <p className="text-sm text-muted-foreground">
+                      {reservation.mainGuest.email}
+                    </p>
+                    {reservation.mainGuest.phone && (
                       <p className="text-xs text-muted-foreground">
-                        {reservation.guestPhone}
+                        {reservation.mainGuest.phone}
                       </p>
                     )}
                   </div>
@@ -97,10 +99,10 @@ export function ReservationTable({
                   <Calendar size={16} className="text-muted-foreground mt-0.5" />
                   <div className="text-sm">
                     <p className="font-medium">
-                      {format(new Date(reservation.checkIn), 'dd MMM', { locale: es })}
+                      {format(new Date(reservation.checkInDate), 'dd MMM', { locale: es })}
                     </p>
                     <p className="text-muted-foreground">
-                      {format(new Date(reservation.checkOut), 'dd MMM', { locale: es })}
+                      {format(new Date(reservation.checkOutDate), 'dd MMM', { locale: es })}
                     </p>
                   </div>
                 </div>
@@ -108,13 +110,20 @@ export function ReservationTable({
 
               {/* Guests */}
               <TableCell>
-                <span className="font-medium">{reservation.guests}</span>
+                <span className="font-medium">
+                  {reservation.baseGuestsCount + reservation.extraGuestsCount}
+                </span>
+                {reservation.extraGuestsCount > 0 && (
+                  <span className="text-xs text-muted-foreground block">
+                    ({reservation.baseGuestsCount} base + {reservation.extraGuestsCount} extra)
+                  </span>
+                )}
               </TableCell>
 
               {/* Total Price */}
               <TableCell>
                 <span className="font-semibold">
-                  ${reservation.totalPrice.toFixed(2)}
+                  ${(reservation.totalPrice || 0).toFixed(2)}
                 </span>
               </TableCell>
 
@@ -180,4 +189,3 @@ export function ReservationTable({
     </div>
   );
 }
-

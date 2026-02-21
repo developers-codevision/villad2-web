@@ -23,14 +23,19 @@ import {
 export function createEmptyReservationForm(): ReservationFormData {
   return {
     roomId: null,
-    guestName: '',
+    guestFirstName: '',
+    guestLastName: '',
+    guestSex: 'M',
     guestEmail: '',
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
-    guests: 1,
-    specialRequests: '',
+    baseGuestsCount: 1,
+    extraGuestsCount: 0,
+    notes: '',
     status: ReservationStatus.PENDING,
+    earlyCheckIn: false,
+    lateCheckOut: false,
   };
 }
 
@@ -40,19 +45,61 @@ export function createEmptyReservationForm(): ReservationFormData {
 export function createEmptyClientReservationForm(): ClientReservationFormData {
   return {
     roomId: null,
-    guestName: '',
+    guestFirstName: '',
+    guestLastName: '',
+    guestSex: 'M',
     guestEmail: '',
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
-    guests: 1,
-    specialRequests: '',
+    baseGuestsCount: 1,
+    extraGuestsCount: 0,
+    notes: '',
+    earlyCheckIn: false,
+    lateCheckOut: false,
   };
 }
 
 // ============================================
 // FORM TRANSFORMATIONS
 // ============================================
+
+/**
+ * Normalize reservation data from backend
+ * Handles both old and new formats
+ */
+export function normalizeReservation(reservation: any): ReservationWithDetails {
+  // If already has mainGuest, return as is
+  if (reservation.mainGuest) {
+    return reservation as ReservationWithDetails;
+  }
+
+  // Transform old format to new format
+  const guestName = reservation.guestName || '';
+  const nameParts = guestName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  return {
+    ...reservation,
+    mainGuest: {
+      firstName: firstName,
+      lastName: lastName,
+      sex: reservation.guestSex || 'M',
+      email: reservation.guestEmail || '',
+      phone: reservation.guestPhone || '',
+    },
+    checkInDate: reservation.checkInDate || reservation.checkIn,
+    checkOutDate: reservation.checkOutDate || reservation.checkOut,
+    baseGuestsCount: reservation.baseGuestsCount || reservation.guests || 1,
+    extraGuestsCount: reservation.extraGuestsCount || 0,
+    totalPrice: reservation.totalPrice || 0,
+    notes: reservation.notes || reservation.specialRequests || '',
+    earlyCheckIn: reservation.earlyCheckIn || false,
+    lateCheckOut: reservation.lateCheckOut || false,
+    additionalGuests: reservation.additionalGuests || [],
+  } as ReservationWithDetails;
+}
 
 /**
  * Convert Reservation to FormData for editing
@@ -62,14 +109,19 @@ export function reservationToFormData(
 ): ReservationFormData {
   return {
     roomId: reservation.roomId,
-    guestName: reservation.guestName,
-    guestEmail: reservation.guestEmail,
-    guestPhone: reservation.guestPhone || '',
-    checkIn: new Date(reservation.checkIn),
-    checkOut: new Date(reservation.checkOut),
-    guests: reservation.guests,
-    specialRequests: reservation.specialRequests || '',
+    guestFirstName: reservation.mainGuest.firstName,
+    guestLastName: reservation.mainGuest.lastName,
+    guestSex: reservation.mainGuest.sex,
+    guestEmail: reservation.mainGuest.email,
+    guestPhone: reservation.mainGuest.phone || '',
+    checkIn: new Date(reservation.checkInDate),
+    checkOut: new Date(reservation.checkOutDate),
+    baseGuestsCount: reservation.baseGuestsCount,
+    extraGuestsCount: reservation.extraGuestsCount,
+    notes: reservation.notes || '',
     status: reservation.status,
+    earlyCheckIn: reservation.earlyCheckIn,
+    lateCheckOut: reservation.lateCheckOut,
   };
 }
 
@@ -77,8 +129,7 @@ export function reservationToFormData(
  * Convert FormData to CreateReservationDto
  */
 export function formDataToCreateDto(
-  formData: ReservationFormData,
-  totalPrice: number
+  formData: ReservationFormData
 ): CreateReservationDto {
   if (!formData.roomId || !formData.checkIn || !formData.checkOut) {
     throw new Error('Missing required fields');
@@ -86,13 +137,22 @@ export function formDataToCreateDto(
 
   return {
     roomId: formData.roomId,
-    guestName: formData.guestName.trim(),
-    guestEmail: formData.guestEmail.trim(),
-    guestPhone: formData.guestPhone.trim() || undefined,
-    checkIn: format(formData.checkIn, 'yyyy-MM-dd'),
-    checkOut: format(formData.checkOut, 'yyyy-MM-dd'),
-    guests: formData.guests,
-    specialRequests: formData.specialRequests.trim() || undefined,
+    checkInDate: format(formData.checkIn, 'yyyy-MM-dd'),
+    checkOutDate: format(formData.checkOut, 'yyyy-MM-dd'),
+    mainGuest: {
+      firstName: formData.guestFirstName.trim(),
+      lastName: formData.guestLastName.trim(),
+      sex: formData.guestSex,
+      email: formData.guestEmail.trim(),
+      phone: formData.guestPhone.trim(),
+    },
+    baseGuestsCount: formData.baseGuestsCount,
+    extraGuestsCount: formData.extraGuestsCount,
+    status: formData.status,
+    notes: formData.notes.trim() || undefined,
+    additionalGuests: undefined, // No additional guests by default
+    earlyCheckIn: formData.earlyCheckIn,
+    lateCheckOut: formData.lateCheckOut,
   };
 }
 
@@ -100,8 +160,7 @@ export function formDataToCreateDto(
  * Convert ClientFormData to CreateReservationDto
  */
 export function clientFormDataToCreateDto(
-  formData: ClientReservationFormData,
-  totalPrice: number
+  formData: ClientReservationFormData
 ): CreateReservationDto {
   if (!formData.roomId || !formData.checkIn || !formData.checkOut) {
     throw new Error('Missing required fields');
@@ -109,13 +168,22 @@ export function clientFormDataToCreateDto(
 
   return {
     roomId: formData.roomId,
-    guestName: formData.guestName.trim(),
-    guestEmail: formData.guestEmail.trim(),
-    guestPhone: formData.guestPhone.trim() || undefined,
-    checkIn: format(formData.checkIn, 'yyyy-MM-dd'),
-    checkOut: format(formData.checkOut, 'yyyy-MM-dd'),
-    guests: formData.guests,
-    specialRequests: formData.specialRequests.trim() || undefined,
+    checkInDate: format(formData.checkIn, 'yyyy-MM-dd'),
+    checkOutDate: format(formData.checkOut, 'yyyy-MM-dd'),
+    mainGuest: {
+      firstName: formData.guestFirstName.trim(),
+      lastName: formData.guestLastName.trim(),
+      sex: formData.guestSex,
+      email: formData.guestEmail.trim(),
+      phone: formData.guestPhone.trim(),
+    },
+    baseGuestsCount: formData.baseGuestsCount,
+    extraGuestsCount: formData.extraGuestsCount,
+    status: ReservationStatus.PENDING, // Client always creates pending
+    notes: formData.notes.trim() || undefined,
+    additionalGuests: undefined, // No additional guests by default
+    earlyCheckIn: formData.earlyCheckIn,
+    lateCheckOut: formData.lateCheckOut,
   };
 }
 
@@ -127,7 +195,13 @@ export function formDataToUpdateDto(
 ): UpdateReservationDto {
   return {
     status: formData.status,
-    specialRequests: formData.specialRequests.trim() || undefined,
+    notes: formData.notes.trim() || undefined,
+    checkInDate: formData.checkIn ? format(formData.checkIn, 'yyyy-MM-dd') : undefined,
+    checkOutDate: formData.checkOut ? format(formData.checkOut, 'yyyy-MM-dd') : undefined,
+    baseGuestsCount: formData.baseGuestsCount,
+    extraGuestsCount: formData.extraGuestsCount,
+    earlyCheckIn: formData.earlyCheckIn,
+    lateCheckOut: formData.lateCheckOut,
   };
 }
 
@@ -145,11 +219,13 @@ export function validateReservationForm(
 
   // Required fields
   if (!formData.roomId) errors.push('Selecciona una habitación');
-  if (!formData.guestName.trim()) errors.push('El nombre es requerido');
+  if (!formData.guestFirstName.trim()) errors.push('El nombre es requerido');
+  if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
   if (!formData.guestEmail.trim()) errors.push('El email es requerido');
+  if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
   if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
   if (!formData.checkOut) errors.push('Selecciona fecha de salida');
-  if (formData.guests < 1) errors.push('Mínimo 1 huésped');
+  if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
 
   // Email validation
   if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
@@ -182,11 +258,13 @@ export function validateClientReservationForm(
 
   // Required fields
   if (!formData.roomId) errors.push('Selecciona una habitación');
-  if (!formData.guestName.trim()) errors.push('El nombre es requerido');
+  if (!formData.guestFirstName.trim()) errors.push('El nombre es requerido');
+  if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
   if (!formData.guestEmail.trim()) errors.push('El email es requerido');
+  if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
   if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
   if (!formData.checkOut) errors.push('Selecciona fecha de salida');
-  if (formData.guests < 1) errors.push('Mínimo 1 huésped');
+  if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
 
   // Email validation
   if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
@@ -229,15 +307,22 @@ export function calculateNights(checkIn: Date, checkOut: Date): number {
 }
 
 /**
- * Calculate total price
+ * Calculate total price including extra guests
+ * Extra guests cost $5 per night per guest
  */
 export function calculateTotalPrice(
   pricePerNight: number,
   checkIn: Date,
-  checkOut: Date
+  checkOut: Date,
+  extraGuestsCount: number = 0
 ): number {
   const nights = calculateNights(checkIn, checkOut);
-  return nights * pricePerNight;
+  const EXTRA_GUEST_PRICE_PER_NIGHT = 5;
+
+  const basePrice = nights * pricePerNight;
+  const extraGuestsPrice = nights * extraGuestsCount * EXTRA_GUEST_PRICE_PER_NIGHT;
+
+  return basePrice + extraGuestsPrice;
 }
 
 /**
@@ -281,8 +366,8 @@ export function filterReservationsByDateRange(
   dateTo?: Date
 ): ReservationWithDetails[] {
   return reservations.filter(r => {
-    const checkIn = new Date(r.checkIn);
-    const checkOut = new Date(r.checkOut);
+    const checkIn = new Date(r.checkInDate);
+    const checkOut = new Date(r.checkOutDate);
 
     if (dateFrom && checkOut < dateFrom) return false;
     if (dateTo && checkIn > dateTo) return false;
@@ -303,8 +388,9 @@ export function filterReservationsBySearch(
   const lowercaseQuery = query.toLowerCase();
   return reservations.filter(r => {
     return (
-      r.guestName.toLowerCase().includes(lowercaseQuery) ||
-      r.guestEmail.toLowerCase().includes(lowercaseQuery) ||
+      r.mainGuest.firstName.toLowerCase().includes(lowercaseQuery) ||
+      r.mainGuest.lastName.toLowerCase().includes(lowercaseQuery) ||
+      r.mainGuest.email.toLowerCase().includes(lowercaseQuery) ||
       r.room?.number.toLowerCase().includes(lowercaseQuery) ||
       r.room?.name.toLowerCase().includes(lowercaseQuery)
     );
@@ -319,8 +405,8 @@ export function sortReservationsByDate(
   ascending = false
 ): ReservationWithDetails[] {
   return [...reservations].sort((a, b) => {
-    const dateA = new Date(a.checkIn).getTime();
-    const dateB = new Date(b.checkIn).getTime();
+    const dateA = new Date(a.checkInDate).getTime();
+    const dateB = new Date(b.checkInDate).getTime();
     return ascending ? dateA - dateB : dateB - dateA;
   });
 }
@@ -342,7 +428,7 @@ export function getTodayCheckIns(
 ): ReservationWithDetails[] {
   const today = format(new Date(), 'yyyy-MM-dd');
   return reservations.filter(r => {
-    const checkInDate = format(new Date(r.checkIn), 'yyyy-MM-dd');
+    const checkInDate = format(new Date(r.checkInDate), 'yyyy-MM-dd');
     return checkInDate === today && r.status === ReservationStatus.CONFIRMED;
   });
 }
@@ -355,8 +441,7 @@ export function getTodayCheckOuts(
 ): ReservationWithDetails[] {
   const today = format(new Date(), 'yyyy-MM-dd');
   return reservations.filter(r => {
-    const checkOutDate = format(new Date(r.checkOut), 'yyyy-MM-dd');
+    const checkOutDate = format(new Date(r.checkOutDate), 'yyyy-MM-dd');
     return checkOutDate === today && r.status === ReservationStatus.CONFIRMED;
   });
 }
-

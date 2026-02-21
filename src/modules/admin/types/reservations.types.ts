@@ -13,14 +13,19 @@ import { Reservation, ReservationStatus } from '@/modules/shared/types/api.types
  */
 export interface ReservationFormData {
   roomId: number | null;
-  guestName: string;
+  guestFirstName: string;
+  guestLastName: string;
+  guestSex: 'M' | 'F' | 'O';
   guestEmail: string;
   guestPhone: string;
   checkIn: Date | undefined;
   checkOut: Date | undefined;
-  guests: number;
-  specialRequests: string;
+  baseGuestsCount: number;
+  extraGuestsCount: number;
+  notes: string;
   status: ReservationStatus;
+  earlyCheckIn: boolean;
+  lateCheckOut: boolean;
 }
 
 /**
@@ -76,13 +81,18 @@ export interface ReservationFilterState {
  */
 export interface ClientReservationFormData {
   roomId: number | null;
-  guestName: string;
+  guestFirstName: string;
+  guestLastName: string;
+  guestSex: 'M' | 'F' | 'O';
   guestEmail: string;
   guestPhone: string;
   checkIn: Date | undefined;
   checkOut: Date | undefined;
-  guests: number;
-  specialRequests: string;
+  baseGuestsCount: number;
+  extraGuestsCount: number;
+  notes: string;
+  earlyCheckIn: boolean;
+  lateCheckOut: boolean;
 }
 
 /**

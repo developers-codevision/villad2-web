@@ -62,7 +62,8 @@ export default function Reservations() {
     formData.checkOut &&
     nights > 0 &&
     formData.roomId &&
-    formData.guestName &&
+    formData.guestFirstName &&
+    formData.guestLastName &&
     formData.guestEmail &&
     formData.guestPhone;
 
@@ -84,7 +85,7 @@ export default function Reservations() {
             <CheckCircle size={64} className="text-primary mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-3">¡Reserva Solicitada!</h1>
             <p className="text-muted-foreground mb-2">
-              Gracias, <strong>{formData.guestName}</strong>. Tu solicitud de reserva ha sido registrada.
+              Gracias, <strong>{formData.guestFirstName} {formData.guestLastName}</strong>. Tu solicitud de reserva ha sido registrada.
             </p>
             {confirmationId && (
               <p className="text-sm text-muted-foreground mb-4">
@@ -97,8 +98,13 @@ export default function Reservations() {
                 {formData.checkIn && format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {formData.checkOut && format(formData.checkOut, "dd MMM yyyy", { locale: es })}
               </p>
               <p className="text-sm text-muted-foreground mb-2">
-                {nights} {nights === 1 ? "noche" : "noches"} · {formData.guests} {formData.guests === 1 ? "huésped" : "huéspedes"}
+                {nights} {nights === 1 ? "noche" : "noches"} · {formData.baseGuestsCount + formData.extraGuestsCount} {(formData.baseGuestsCount + formData.extraGuestsCount) === 1 ? "huésped" : "huéspedes"}
               </p>
+              {formData.extraGuestsCount > 0 && (
+                <p className="text-xs text-muted-foreground mb-2">
+                  ({formData.baseGuestsCount} base + {formData.extraGuestsCount} extra)
+                </p>
+              )}
               <p className="text-2xl font-bold text-primary mt-2">${totalPrice}</p>
             </div>
             <p className="text-sm text-muted-foreground mb-2">
@@ -185,14 +191,14 @@ export default function Reservations() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Huéspedes</Label>
+                  <Label>Huéspedes Base</Label>
                   <Select
-                    value={formData.guests.toString()}
-                    onValueChange={(value) => updateFormField('guests', parseInt(value))}
+                    value={formData.baseGuestsCount.toString()}
+                    onValueChange={(value) => updateFormField('baseGuestsCount', parseInt(value))}
                   >
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                      {[1, 2, 3, 4].map((n) => (
                         <SelectItem key={n} value={String(n)}>
                           {n} {n === 1 ? "huésped" : "huéspedes"}
                         </SelectItem>
@@ -202,19 +208,67 @@ export default function Reservations() {
                 </div>
               </div>
 
+              {/* Extra guests */}
+              <div className="space-y-2">
+                <Label>Huéspedes Extra (${5}/huésped/noche)</Label>
+                <Select
+                  value={formData.extraGuestsCount.toString()}
+                  onValueChange={(value) => updateFormField('extraGuestsCount', parseInt(value))}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {[0, 1, 2, 3, 4].map((n) => (
+                      <SelectItem key={n} value={String(n)}>
+                        {n} {n === 1 ? "huésped" : "huéspedes"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Guest info */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Datos del Huésped</h3>
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nombre completo</Label>
-                  <Input
-                    id="name"
-                    value={formData.guestName}
-                    onChange={(e) => updateFormField('guestName', e.target.value)}
-                    placeholder="Tu nombre completo"
-                    required
-                  />
+                <h3 className="font-semibold text-lg">Datos del Huésped Principal</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">Nombre</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.guestFirstName}
+                      onChange={(e) => updateFormField('guestFirstName', e.target.value)}
+                      placeholder="Juan"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Apellido</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.guestLastName}
+                      onChange={(e) => updateFormField('guestLastName', e.target.value)}
+                      placeholder="Pérez"
+                      required
+                    />
+                  </div>
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="sex">Sexo</Label>
+                  <Select
+                    value={formData.guestSex}
+                    onValueChange={(value) => updateFormField('guestSex', value as 'M' | 'F' | 'O')}
+                  >
+                    <SelectTrigger id="sex">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="M">Masculino</SelectItem>
+                      <SelectItem value="F">Femenino</SelectItem>
+                      <SelectItem value="O">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -234,7 +288,7 @@ export default function Reservations() {
                       type="tel"
                       value={formData.guestPhone}
                       onChange={(e) => updateFormField('guestPhone', e.target.value)}
-                      placeholder="+34 600 000 000"
+                      placeholder="+51 987 654 321"
                       required
                     />
                   </div>
@@ -243,13 +297,13 @@ export default function Reservations() {
 
               {/* Special Requests */}
               <div className="space-y-2">
-                <Label htmlFor="requests">Peticiones Especiales (Opcional)</Label>
+                <Label htmlFor="requests">Notas o Peticiones Especiales (Opcional)</Label>
                 <Textarea
                   id="requests"
                   rows={3}
-                  value={formData.specialRequests}
-                  onChange={(e) => updateFormField('specialRequests', e.target.value)}
-                  placeholder="Cuna para bebé, llegada tardía, etc."
+                  value={formData.notes}
+                  onChange={(e) => updateFormField('notes', e.target.value)}
+                  placeholder="Llegada tardía, cuna para bebé, etc."
                 />
               </div>
 
@@ -306,14 +360,28 @@ export default function Reservations() {
                     <span>{nights}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Huéspedes</span>
-                    <span>{formData.guests}</span>
+                    <span className="text-muted-foreground">Huéspedes Base</span>
+                    <span>{formData.baseGuestsCount}</span>
                   </div>
-                  {selectedRoom && (
+                  {formData.extraGuestsCount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Precio/noche</span>
-                      <span>${selectedRoom.pricePerNight}</span>
+                      <span className="text-muted-foreground">Huéspedes Extra</span>
+                      <span>{formData.extraGuestsCount} × $5/noche</span>
                     </div>
+                  )}
+                  {selectedRoom && (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Precio/noche</span>
+                        <span>${selectedRoom.pricePerNight}</span>
+                      </div>
+                      {formData.extraGuestsCount > 0 && (
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">Extra guests</span>
+                          <span>${nights * formData.extraGuestsCount * 5}</span>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
 

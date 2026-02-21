@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Room } from '@/modules/shared/types/api.types';
+import { reservationsService } from '@/modules/shared/services';
 import {
   ClientReservationFormData,
   ClientReservationStep,
@@ -48,12 +49,13 @@ export function useClientReservation() {
       const totalPrice = calculateTotalPrice(
         room.pricePerNight,
         formData.checkIn,
-        formData.checkOut
+        formData.checkOut,
+        formData.extraGuestsCount
       );
 
       return { nights, totalPrice };
     },
-    [formData.checkIn, formData.checkOut]
+    [formData.checkIn, formData.checkOut, formData.extraGuestsCount]
   );
 
   /**
@@ -67,9 +69,11 @@ export function useClientReservation() {
         return !!formData.roomId;
       case 'details':
         return !!(
-          formData.guestName &&
+          formData.guestFirstName &&
+          formData.guestLastName &&
           formData.guestEmail &&
-          formData.guests > 0
+          formData.guestPhone &&
+          formData.baseGuestsCount > 0
         );
       case 'confirmation':
         return false;
@@ -176,19 +180,12 @@ export function useClientReservation() {
       setSubmitting(true);
 
       try {
-        // Calculate total price
-        const { totalPrice } = reservationSummary(room);
-
         // Convert to DTO
-        const createDto = clientFormDataToCreateDto(formData, totalPrice);
+        const createDto = clientFormDataToCreateDto(formData);
 
-        // TODO: Replace with actual API call
-        // const response = await reservationsService.create(createDto);
-        // setConfirmationId(response.id);
-
-        // Mock success
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setConfirmationId(Math.floor(Math.random() * 10000));
+        // Call API
+        const response = await reservationsService.create(createDto);
+        setConfirmationId(response.id);
 
         toast.success('¡Reserva solicitada correctamente!');
         setConfirmed(true);
@@ -200,7 +197,7 @@ export function useClientReservation() {
         setSubmitting(false);
       }
     },
-    [formData, reservationSummary]
+    [formData]
   );
 
   // ============================================
