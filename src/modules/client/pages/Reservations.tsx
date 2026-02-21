@@ -1,47 +1,80 @@
-import { useState } from "react";
+// Client Reservations Page - Clean Architecture
+// All business logic moved to hooks, utils, and types
+
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { format, differenceInDays } from "date-fns";
+import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CreditCard, Smartphone, DollarSign, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Calendar } from "@/modules/shared/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/modules/shared/components/ui/select";
 import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
+import { Textarea } from "@/modules/shared/components/ui/textarea";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { ImageWithPlaceholder } from "@/modules/shared/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
+import { useClientReservation } from "@/modules/client/hooks/useClientReservation";
 import { parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
 import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
-  const preselected = searchParams.get("room") || "";
-  const { rooms, loading } = useRooms();
+  const preselectedRoomId = searchParams.get("room");
 
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [roomId, setRoomId] = useState(preselected);
-  const [guests, setGuests] = useState("1");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [confirmed, setConfirmed] = useState(false);
+  const { rooms, loading: loadingRooms } = useRooms();
+  const {
+    formData,
+    submitting,
+    confirmed,
+    confirmationId,
+    isStepComplete,
+    reservationSummary,
+    updateFormField,
+    setDateRange,
+    selectRoom,
+    resetForm,
+    submitReservation,
+  } = useClientReservation();
 
-  const checkIn = dateRange?.from;
-  const checkOut = dateRange?.to;
-  const selectedRoom = rooms.find((r) => r.id.toString() === roomId);
-  const nights = checkIn && checkOut ? Math.max(differenceInDays(checkOut, checkIn), 0) : 0;
-  const total = selectedRoom ? nights * selectedRoom.pricePerNight : 0;
+  // Set preselected room if available
+  useEffect(() => {
+    if (preselectedRoomId && rooms.length > 0) {
+      const roomId = parseInt(preselectedRoomId);
+      if (!isNaN(roomId)) {
+        selectRoom(roomId);
+      }
+    }
+  }, [preselectedRoomId, rooms, selectRoom]);
 
-  const canSubmit = checkIn && checkOut && nights > 0 && roomId && name && email && phone;
+  // Get selected room
+  const selectedRoom = rooms.find(r => r.id === formData.roomId);
 
+  // Get reservation summary
+  const { nights, totalPrice } = reservationSummary(selectedRoom);
+
+  // Can submit form
+  const canSubmit =
+    formData.checkIn &&
+    formData.checkOut &&
+    nights > 0 &&
+    formData.roomId &&
+    formData.guestName &&
+    formData.guestEmail &&
+    formData.guestPhone;
+
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (canSubmit) setConfirmed(true);
+    if (canSubmit && selectedRoom) {
+      submitReservation(selectedRoom);
+    }
   };
 
+  // Confirmation screen
   if (confirmed) {
     return (
       <div className="min-h-screen bg-background">
@@ -49,18 +82,35 @@ export default function Reservations() {
         <main className="pt-24 pb-20 px-4 flex items-center justify-center min-h-[70vh]">
           <div className="text-center max-w-md">
             <CheckCircle size={64} className="text-primary mx-auto mb-6" />
-            <h1 className="text-3xl font-bold mb-3">¡Reserva Confirmada!</h1>
+            <h1 className="text-3xl font-bold mb-3">¡Reserva Solicitada!</h1>
             <p className="text-muted-foreground mb-2">
-              Gracias, <strong>{name}</strong>. Tu reserva en <strong>{selectedRoom?.name}</strong> ha sido registrada.
+              Gracias, <strong>{formData.guestName}</strong>. Tu solicitud de reserva ha sido registrada.
             </p>
-            <p className="text-muted-foreground mb-1">
-              {checkIn && format(checkIn, "dd MMM yyyy", { locale: es })} — {checkOut && format(checkOut, "dd MMM yyyy", { locale: es })}
+            {confirmationId && (
+              <p className="text-sm text-muted-foreground mb-4">
+                Número de confirmación: <strong>#{confirmationId}</strong>
+              </p>
+            )}
+            <div className="bg-muted/30 rounded-lg p-4 mb-4">
+              <p className="font-semibold mb-2">{selectedRoom?.name}</p>
+              <p className="text-sm text-muted-foreground mb-2">
+                {formData.checkIn && format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {formData.checkOut && format(formData.checkOut, "dd MMM yyyy", { locale: es })}
+              </p>
+              <p className="text-sm text-muted-foreground mb-2">
+                {nights} {nights === 1 ? "noche" : "noches"} · {formData.guests} {formData.guests === 1 ? "huésped" : "huéspedes"}
+              </p>
+              <p className="text-2xl font-bold text-primary mt-2">${totalPrice}</p>
+            </div>
+            <p className="text-sm text-muted-foreground mb-2">
+              Tu reserva está <strong>pendiente de confirmación</strong>.
             </p>
-            <p className="text-2xl font-bold text-primary mt-4">{total}$ total</p>
-            <p className="text-sm text-muted-foreground mt-4">
-              Recibirás un email de confirmación en <strong>{email}</strong>.
+            <p className="text-sm text-muted-foreground mb-6">
+              Recibirás un email en <strong>{formData.guestEmail}</strong> cuando sea confirmada por el administrador.
             </p>
-            <Button className="mt-8 font-semibold" onClick={() => setConfirmed(false)}>
+            <Button
+              className="font-semibold"
+              onClick={resetForm}
+            >
               Nueva Reserva
             </Button>
           </div>
@@ -70,6 +120,7 @@ export default function Reservations() {
     );
   }
 
+  // Reservation form
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -88,17 +139,22 @@ export default function Reservations() {
             <div className="border border-border rounded-lg p-6 flex justify-center">
               <Calendar
                 mode="range"
-                selected={dateRange}
-                onSelect={setDateRange}
+                selected={{
+                  from: formData.checkIn,
+                  to: formData.checkOut,
+                }}
+                onSelect={(range: DateRange | undefined) => {
+                  setDateRange(range?.from, range?.to);
+                }}
                 numberOfMonths={2}
-                disabled={(d) => d < new Date()}
+                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
                 locale={es}
                 className="pointer-events-auto"
               />
             </div>
-            {checkIn && checkOut && (
+            {formData.checkIn && formData.checkOut && (
               <p className="text-sm text-muted-foreground text-center">
-                {format(checkIn, "dd MMM yyyy", { locale: es })} — {format(checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+                {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
               </p>
             )}
           </div>
@@ -111,12 +167,18 @@ export default function Reservations() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Habitación</Label>
-                  <Select value={roomId} onValueChange={setRoomId} disabled={loading}>
-                    <SelectTrigger><SelectValue placeholder={loading ? "Cargando..." : "Seleccionar habitación"} /></SelectTrigger>
+                  <Select
+                    value={formData.roomId?.toString() || ''}
+                    onValueChange={(value) => selectRoom(parseInt(value))}
+                    disabled={loadingRooms}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
+                    </SelectTrigger>
                     <SelectContent>
                       {rooms.map((r) => (
                         <SelectItem key={r.id} value={r.id.toString()}>
-                          {r.name} — {r.pricePerNight}$/noche
+                          {r.name} — ${r.pricePerNight}/noche
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -124,11 +186,16 @@ export default function Reservations() {
                 </div>
                 <div className="space-y-2">
                   <Label>Huéspedes</Label>
-                  <Select value={guests} onValueChange={setGuests}>
+                  <Select
+                    value={formData.guests.toString()}
+                    onValueChange={(value) => updateFormField('guests', parseInt(value))}
+                  >
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {[1, 2, 3, 4, 5, 6].map((n) => (
-                        <SelectItem key={n} value={String(n)}>{n} {n === 1 ? "huésped" : "huéspedes"}</SelectItem>
+                        <SelectItem key={n} value={String(n)}>
+                          {n} {n === 1 ? "huésped" : "huéspedes"}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -140,24 +207,59 @@ export default function Reservations() {
                 <h3 className="font-semibold text-lg">Datos del Huésped</h3>
                 <div className="space-y-2">
                   <Label htmlFor="name">Nombre completo</Label>
-                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre" required />
+                  <Input
+                    id="name"
+                    value={formData.guestName}
+                    onChange={(e) => updateFormField('guestName', e.target.value)}
+                    placeholder="Tu nombre completo"
+                    required
+                  />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu@email.com" required />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.guestEmail}
+                      onChange={(e) => updateFormField('guestEmail', e.target.value)}
+                      placeholder="tu@email.com"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Teléfono</Label>
-                    <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+34 600 000 000" required />
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.guestPhone}
+                      onChange={(e) => updateFormField('guestPhone', e.target.value)}
+                      placeholder="+34 600 000 000"
+                      required
+                    />
                   </div>
                 </div>
               </div>
 
+              {/* Special Requests */}
+              <div className="space-y-2">
+                <Label htmlFor="requests">Peticiones Especiales (Opcional)</Label>
+                <Textarea
+                  id="requests"
+                  rows={3}
+                  value={formData.specialRequests}
+                  onChange={(e) => updateFormField('specialRequests', e.target.value)}
+                  placeholder="Cuna para bebé, llegada tardía, etc."
+                />
+              </div>
 
-
-              <Button type="submit" size="lg" className="w-full font-bold text-lg py-6" disabled={!canSubmit}>
-                Confirmar Reserva
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full font-bold text-lg py-6"
+                disabled={!canSubmit || submitting}
+              >
+                {submitting ? 'Procesando...' : 'Confirmar Reserva'}
               </Button>
             </div>
 
@@ -182,7 +284,9 @@ export default function Reservations() {
                       );
                     })()}
                     <p className="font-semibold">{selectedRoom.name}</p>
-                    <p className="text-sm text-muted-foreground mb-4">{selectedRoom.roomType} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {selectedRoom.roomType} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}
+                    </p>
                   </>
                 ) : (
                   <p className="text-muted-foreground text-sm mb-4">Selecciona una habitación</p>
@@ -191,11 +295,11 @@ export default function Reservations() {
                 <div className="border-t border-border pt-4 space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Check-in</span>
-                    <span>{checkIn ? format(checkIn, "dd MMM yyyy", { locale: es }) : "—"}</span>
+                    <span>{formData.checkIn ? format(formData.checkIn, "dd MMM yyyy", { locale: es }) : "—"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Check-out</span>
-                    <span>{checkOut ? format(checkOut, "dd MMM yyyy", { locale: es }) : "—"}</span>
+                    <span>{formData.checkOut ? format(formData.checkOut, "dd MMM yyyy", { locale: es }) : "—"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Noches</span>
@@ -203,19 +307,19 @@ export default function Reservations() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Huéspedes</span>
-                    <span>{guests}</span>
+                    <span>{formData.guests}</span>
                   </div>
                   {selectedRoom && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Precio/noche</span>
-                      <span>{selectedRoom.pricePerNight}$</span>
+                      <span>${selectedRoom.pricePerNight}</span>
                     </div>
                   )}
                 </div>
 
                 <div className="border-t border-border mt-4 pt-4 flex justify-between items-center">
                   <span className="font-bold text-lg">Total</span>
-                  <span className="font-bold text-2xl text-primary">{total}$</span>
+                  <span className="font-bold text-2xl text-primary">${totalPrice}</span>
                 </div>
               </div>
             </div>
@@ -226,3 +330,4 @@ export default function Reservations() {
     </div>
   );
 }
+
