@@ -76,15 +76,16 @@ export default function Reservations() {
     if (!selectedRoom) return;
 
     const baseGuestsCount = Math.min(total, selectedRoom.baseCapacity);
-    const extraGuestsCount = total - baseGuestsCount;
+    const extraGuestsCount = Math.max(total - selectedRoom.baseCapacity, 0);
 
     updateFormField('totalGuests', total);
     updateFormField('baseGuestsCount', baseGuestsCount);
     updateFormField('extraGuestsCount', extraGuestsCount);
 
-    // Update additional guests array
+    // All non-principal guests (total - 1)
+    const otherGuestsCount = total - 1;
     const currentAdditional = formData.additionalGuests || [];
-    const newAdditional = Array.from({ length: extraGuestsCount }, (_, i) =>
+    const newAdditional = Array.from({ length: otherGuestsCount }, (_, i) =>
       currentAdditional[i] || { firstName: '', lastName: '', sex: 'M' as const }
     );
     updateFormField('additionalGuests', newAdditional);
@@ -310,13 +311,12 @@ export default function Reservations() {
                 </div>
               </div>
 
-              {/* Additional guests */}
-              {formData.extraGuestsCount > 0 && (
+              {/* Other guests */}
+              {formData.additionalGuests.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-lg">Huéspedes Adicionales</h3>
                   {formData.additionalGuests.map((guest, index) => (
                     <div key={index} className="border border-border rounded-lg p-4 space-y-4">
-                      <h4 className="font-medium">Huésped Adicional {index + 1}</h4>
+                      <h4 className="font-medium">Huésped #{index + 2}</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Nombre</Label>
@@ -447,7 +447,7 @@ export default function Reservations() {
                       {formData.extraGuestsCount > 0 && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Huéspedes adicionales</span>
-                          <span>{formData.extraGuestsCount} × $5/noche</span>
+                          <span>+${formData.extraGuestsCount * selectedRoom.extraGuestCharge * nights}</span>
                         </div>
                       )}
                     </>

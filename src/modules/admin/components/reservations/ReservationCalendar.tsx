@@ -230,7 +230,7 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
                     {/* Price and guests */}
                     <div className="text-right">
                       <div className="text-xs text-muted-foreground">Total</div>
-                      <div className="font-semibold text-primary">${(reservation.totalPrice || 0).toFixed(2)}</div>
+                      <div className="font-semibold text-primary">${(Number(reservation.totalPrice) || 0).toFixed(2)}</div>
                       <div className="text-xs text-muted-foreground mt-1">
                         👥 {reservation.baseGuestsCount + reservation.extraGuestsCount} {(reservation.baseGuestsCount + reservation.extraGuestsCount) === 1 ? 'huésped' : 'huéspedes'}
                       </div>

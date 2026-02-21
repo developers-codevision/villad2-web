@@ -187,7 +187,8 @@ export function clientFormDataToCreateDto(
     extraGuestsCount: formData.extraGuestsCount,
     status: ReservationStatus.PENDING, // Client always creates pending
     notes: formData.notes.trim() || undefined,
-    additionalGuests: formData.additionalGuests,
+    // Send all non-principal guests regardless of base/extra distinction
+    additionalGuests: formData.additionalGuests.length > 0 ? formData.additionalGuests : undefined,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
   };
@@ -310,16 +311,17 @@ export function validateClientReservationForm(
     errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
   }
 
-  // Additional guests validation
-  if (formData.additionalGuests.length !== formData.extraGuestsCount) {
-    errors.push('El número de huéspedes adicionales debe coincidir con la cantidad especificada');
+  // Additional guests validation: all non-principal guests (totalGuests - 1)
+  const expectedAdditional = Math.max(formData.totalGuests - 1, 0);
+  if (formData.additionalGuests.length !== expectedAdditional) {
+    errors.push('El número de huéspedes registrados no coincide con el total seleccionado');
   }
   formData.additionalGuests.forEach((guest, index) => {
     if (!guest.firstName.trim()) {
-      errors.push(`El nombre del huésped adicional ${index + 1} es requerido`);
+      errors.push(`El nombre del huésped #${index + 2} es requerido`);
     }
     if (!guest.lastName.trim()) {
-      errors.push(`El apellido del huésped adicional ${index + 1} es requerido`);
+      errors.push(`El apellido del huésped #${index + 2} es requerido`);
     }
   });
 

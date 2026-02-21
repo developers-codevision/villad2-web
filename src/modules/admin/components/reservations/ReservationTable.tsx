@@ -123,7 +123,7 @@ export function ReservationTable({
               {/* Total Price */}
               <TableCell>
                 <span className="font-semibold">
-                  ${(reservation.totalPrice || 0).toFixed(2)}
+                  ${(Number(reservation.totalPrice) || 0).toFixed(2)}
                 </span>
               </TableCell>
 
