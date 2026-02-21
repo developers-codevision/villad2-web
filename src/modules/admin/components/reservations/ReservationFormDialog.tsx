@@ -7,6 +7,7 @@ import { Button } from '@/modules/shared/components/ui/button';
 import { Input } from '@/modules/shared/components/ui/input';
 import { Label } from '@/modules/shared/components/ui/label';
 import { Textarea } from '@/modules/shared/components/ui/textarea';
+import { Checkbox } from '@/modules/shared/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/modules/shared/components/ui/dialog';
 import {
   Select,
@@ -48,6 +49,41 @@ export function ReservationFormDialog({
   onSave,
   onFormChange,
 }: ReservationFormDialogProps) {
+  // Get selected room to calculate max capacity
+  const selectedRoom = availableRooms.find(r => r.id === formData.roomId);
+  const maxCapacity = selectedRoom
+    ? selectedRoom.baseCapacity + selectedRoom.extraCapacity
+    : 0;
+
+  // Handle total guests change (mirrors client logic)
+  const handleTotalGuestsChange = (total: number) => {
+    if (!selectedRoom) return;
+
+    const baseGuestsCount = Math.min(total, selectedRoom.baseCapacity);
+    const extraGuestsCount = Math.max(total - selectedRoom.baseCapacity, 0);
+
+    onFormChange('totalGuests', total);
+    onFormChange('baseGuestsCount', baseGuestsCount);
+    onFormChange('extraGuestsCount', extraGuestsCount);
+
+    // All non-principal guests (total - 1)
+    const otherGuestsCount = total - 1;
+    const currentAdditional = formData.additionalGuests || [];
+    const newAdditional = Array.from({ length: otherGuestsCount }, (_, i) =>
+      currentAdditional[i] || { firstName: '', lastName: '', sex: 'M' as const }
+    );
+    onFormChange('additionalGuests', newAdditional);
+  };
+
+  // Handle room selection
+  const handleRoomSelect = (roomId: number) => {
+    onFormChange('roomId', roomId);
+    // Reset guests when room changes
+    if (formData.totalGuests > 0) {
+      handleTotalGuestsChange(formData.totalGuests);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -63,7 +99,7 @@ export function ReservationFormDialog({
             <Label>Habitación *</Label>
             <Select
               value={formData.roomId?.toString() || ''}
-              onValueChange={value => onFormChange('roomId', parseInt(value))}
+              onValueChange={value => handleRoomSelect(parseInt(value))}
               disabled={isEditing}
             >
               <SelectTrigger>
@@ -77,38 +113,6 @@ export function ReservationFormDialog({
                 ))}
               </SelectContent>
             </Select>
-          </div>
-
-          {/* Guest Information */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Nombre del Huésped *</Label>
-              <Input
-                placeholder="Juan Pérez"
-                value={formData.guestName}
-                onChange={e => onFormChange('guestName', e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Email *</Label>
-              <Input
-                type="email"
-                placeholder="juan@email.com"
-                value={formData.guestEmail}
-                onChange={e => onFormChange('guestEmail', e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div className="space-y-2">
-            <Label>Teléfono</Label>
-            <Input
-              type="tel"
-              placeholder="+34 612 345 678"
-              value={formData.guestPhone}
-              onChange={e => onFormChange('guestPhone', e.target.value)}
-            />
           </div>
 
           {/* Check-in and Check-out Dates */}
@@ -172,16 +176,145 @@ export function ReservationFormDialog({
             </div>
           </div>
 
+          {/* Guest Information */}
+          <div className="space-y-4">
+            <h3 className="font-semibold">Datos del Huésped Principal</h3>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Nombre *</Label>
+                <Input
+                  placeholder="Juan"
+                  value={formData.guestFirstName}
+                  onChange={e => onFormChange('guestFirstName', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Apellido *</Label>
+                <Input
+                  placeholder="Pérez"
+                  value={formData.guestLastName}
+                  onChange={e => onFormChange('guestLastName', e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Sexo</Label>
+              <Select
+                value={formData.guestSex}
+                onValueChange={value => onFormChange('guestSex', value as 'M' | 'F' | 'O')}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="M">Masculino</SelectItem>
+                  <SelectItem value="F">Femenino</SelectItem>
+                  <SelectItem value="O">Otro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Email *</Label>
+                <Input
+                  type="email"
+                  placeholder="juan@email.com"
+                  value={formData.guestEmail}
+                  onChange={e => onFormChange('guestEmail', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Teléfono *</Label>
+                <Input
+                  type="tel"
+                  placeholder="+51 987 654 321"
+                  value={formData.guestPhone}
+                  onChange={e => onFormChange('guestPhone', e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Number of Guests */}
           <div className="space-y-2">
-            <Label>Número de Huéspedes *</Label>
-            <Input
-              type="number"
-              min={1}
-              value={formData.guests}
-              onChange={e => onFormChange('guests', parseInt(e.target.value) || 1)}
-            />
+            <Label>Huéspedes Totales *</Label>
+            <Select
+              value={formData.totalGuests.toString()}
+              onValueChange={value => handleTotalGuestsChange(parseInt(value))}
+              disabled={!selectedRoom}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={!selectedRoom ? 'Selecciona una habitación primero' : undefined} />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: maxCapacity }, (_, i) => i + 1).map(n => (
+                  <SelectItem key={n} value={String(n)}>
+                    {n} {n === 1 ? 'huésped' : 'huéspedes'}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+
+          {/* Additional Guests */}
+          {formData.additionalGuests.length > 0 && (
+            <div className="space-y-4">
+              {formData.additionalGuests.map((guest, index) => (
+                <div key={index} className="border border-border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium">Huésped #{index + 2}</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Nombre</Label>
+                      <Input
+                        value={guest.firstName}
+                        onChange={e => {
+                          const newGuests = [...formData.additionalGuests];
+                          newGuests[index] = { ...newGuests[index], firstName: e.target.value };
+                          onFormChange('additionalGuests', newGuests);
+                        }}
+                        placeholder="Juan"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Apellido</Label>
+                      <Input
+                        value={guest.lastName}
+                        onChange={e => {
+                          const newGuests = [...formData.additionalGuests];
+                          newGuests[index] = { ...newGuests[index], lastName: e.target.value };
+                          onFormChange('additionalGuests', newGuests);
+                        }}
+                        placeholder="Pérez"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Sexo</Label>
+                    <Select
+                      value={guest.sex}
+                      onValueChange={value => {
+                        const newGuests = [...formData.additionalGuests];
+                        newGuests[index] = { ...newGuests[index], sex: value as 'M' | 'F' | 'O' };
+                        onFormChange('additionalGuests', newGuests);
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="M">Masculino</SelectItem>
+                        <SelectItem value="F">Femenino</SelectItem>
+                        <SelectItem value="O">Otro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Status (only for editing) */}
           {isEditing && (
@@ -205,14 +338,45 @@ export function ReservationFormDialog({
             </div>
           )}
 
-          {/* Special Requests */}
+          {/* Check-in / Check-out options */}
+          <div className="space-y-3">
+            <h3 className="font-semibold">Opciones de Llegada y Salida</h3>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                id="earlyCheckIn"
+                checked={formData.earlyCheckIn}
+                onCheckedChange={checked => onFormChange('earlyCheckIn', !!checked)}
+              />
+              <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
+                Check-in anticipado{' '}
+                <span className="text-muted-foreground text-sm">
+                  (solicitar llegada antes del horario estándar)
+                </span>
+              </Label>
+            </div>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                id="lateCheckOut"
+                checked={formData.lateCheckOut}
+                onCheckedChange={checked => onFormChange('lateCheckOut', !!checked)}
+              />
+              <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
+                Check-out tardío{' '}
+                <span className="text-muted-foreground text-sm">
+                  (solicitar salida después del horario estándar)
+                </span>
+              </Label>
+            </div>
+          </div>
+
+          {/* Notes */}
           <div className="space-y-2">
-            <Label>Peticiones Especiales</Label>
+            <Label>Notas o Peticiones Especiales (Opcional)</Label>
             <Textarea
               rows={3}
-              placeholder="Cuna para bebé, llegada tardía, etc."
-              value={formData.specialRequests}
-              onChange={e => onFormChange('specialRequests', e.target.value)}
+              placeholder="Llegada tardía, cuna para bebé, etc."
+              value={formData.notes}
+              onChange={e => onFormChange('notes', e.target.value)}
             />
           </div>
         </div>
