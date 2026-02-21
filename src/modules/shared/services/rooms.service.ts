@@ -32,11 +32,32 @@ export const roomsService = {
     formData.append('name', data.name);
     formData.append('description', data.description);
     formData.append('pricePerNight', data.pricePerNight.toString());
-    formData.append('capacity', data.capacity.toString());
+    formData.append('baseCapacity', data.baseCapacity.toString());
+    formData.append('extraCapacity', data.extraCapacity.toString());
+    formData.append('extraGuestCharge', data.extraGuestCharge.toString());
     formData.append('roomType', data.roomType);
 
     if (data.status) {
       formData.append('status', data.status);
+    }
+
+    if (data.floor !== undefined) {
+      formData.append('floor', data.floor.toString());
+    }
+    if (data.hasJacuzzi !== undefined) {
+      formData.append('hasJacuzzi', data.hasJacuzzi.toString());
+    }
+    if (data.hasTv !== undefined) {
+      formData.append('hasTv', data.hasTv.toString());
+    }
+    if (data.hasAirConditioning !== undefined) {
+      formData.append('hasAirConditioning', data.hasAirConditioning.toString());
+    }
+    if (data.hasHeating !== undefined) {
+      formData.append('hasHeating', data.hasHeating.toString());
+    }
+    if (data.isPetFriendly !== undefined) {
+      formData.append('isPetFriendly', data.isPetFriendly.toString());
     }
 
     // Append arrays as JSON strings
@@ -73,9 +94,17 @@ export const roomsService = {
     if (data.name !== undefined) formData.append('name', data.name);
     if (data.description !== undefined) formData.append('description', data.description);
     if (data.pricePerNight !== undefined) formData.append('pricePerNight', data.pricePerNight.toString());
-    if (data.capacity !== undefined) formData.append('capacity', data.capacity.toString());
+    if (data.baseCapacity !== undefined) formData.append('baseCapacity', data.baseCapacity.toString());
+    if (data.extraCapacity !== undefined) formData.append('extraCapacity', data.extraCapacity.toString());
+    if (data.extraGuestCharge !== undefined) formData.append('extraGuestCharge', data.extraGuestCharge.toString());
     if (data.roomType !== undefined) formData.append('roomType', data.roomType);
     if (data.status !== undefined) formData.append('status', data.status);
+    if (data.floor !== undefined) formData.append('floor', data.floor.toString());
+    if (data.hasJacuzzi !== undefined) formData.append('hasJacuzzi', data.hasJacuzzi.toString());
+    if (data.hasTv !== undefined) formData.append('hasTv', data.hasTv.toString());
+    if (data.hasAirConditioning !== undefined) formData.append('hasAirConditioning', data.hasAirConditioning.toString());
+    if (data.hasHeating !== undefined) formData.append('hasHeating', data.hasHeating.toString());
+    if (data.isPetFriendly !== undefined) formData.append('isPetFriendly', data.isPetFriendly.toString());
 
     if (data.roomAmenities !== undefined) {
       formData.append('roomAmenities', JSON.stringify(data.roomAmenities));

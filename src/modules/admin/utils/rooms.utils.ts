@@ -1,6 +1,6 @@
 // Admin Room Utils - Helper functions separated from components
 
-import { Room, CreateRoomDto, UpdateRoomDto } from '@/modules/shared/types/api.types';
+import { Room, CreateRoomDto, UpdateRoomDto, RoomType, RoomStatus } from '@/modules/shared/types/api.types';
 import { RoomFormData, RoomPhotoState } from '../types/rooms.types';
 import { roomsService } from '@/modules/shared/services';
 
@@ -16,11 +16,19 @@ export function roomToFormData(room: Room, getImageUrl: (path: string) => string
     nombre: room.name,
     descripcion: room.description,
     precio_por_noche: room.pricePerNight,
-    capacidad_personas: room.capacity,
+    baseCapacity: room.baseCapacity || 0,
+    extraCapacity: room.extraCapacity || 0,
+    extraGuestCharge: room.extraGuestCharge || 0,
     tipo_habitacion: room.roomType,
     amenities_habitacion: room.roomAmenities || [],
     amenities_banno: room.bathroomAmenities || [],
     estado: room.status,
+    floor: room.floor ?? 0,
+    hasJacuzzi: room.hasJacuzzi ?? false,
+    hasTv: room.hasTv ?? false,
+    hasAirConditioning: room.hasAirConditioning ?? false,
+    hasHeating: room.hasHeating ?? false,
+    isPetFriendly: room.isPetFriendly ?? false,
     foto_principal: mainPhotoUrls,
     fotos_adicionales: additionalPhotoUrls,
   };
@@ -42,11 +50,19 @@ export function formDataToCreateDto(
     name: formData.nombre.trim(),
     description: formData.descripcion.trim(),
     pricePerNight: formData.precio_por_noche,
-    capacity: formData.capacidad_personas,
+    baseCapacity: formData.baseCapacity,
+    extraCapacity: formData.extraCapacity,
+    extraGuestCharge: formData.extraGuestCharge,
     roomType: formData.tipo_habitacion,
     roomAmenities: amenities,
     bathroomAmenities: amenitiesBanno,
     status: formData.estado,
+    floor: formData.floor,
+    hasJacuzzi: formData.hasJacuzzi,
+    hasTv: formData.hasTv,
+    hasAirConditioning: formData.hasAirConditioning,
+    hasHeating: formData.hasHeating,
+    isPetFriendly: formData.isPetFriendly,
   };
 }
 
@@ -116,8 +132,8 @@ export function validateRoomForm(formData: RoomFormData): { valid: boolean; erro
     return { valid: false, error: 'El precio debe ser mayor a 0' };
   }
 
-  if (formData.capacidad_personas < 1) {
-    return { valid: false, error: 'La capacidad debe ser al menos 1' };
+  if (formData.baseCapacity < 1) {
+    return { valid: false, error: 'La capacidad base debe ser al menos 1' };
   }
 
   return { valid: true };
@@ -132,13 +148,20 @@ export function createEmptyFormData(): RoomFormData {
     nombre: '',
     descripcion: '',
     precio_por_noche: 0,
-    capacidad_personas: 1,
-    tipo_habitacion: 'individual' as const,
+    baseCapacity: 1,
+    extraCapacity: 0,
+    extraGuestCharge: 5,
+    tipo_habitacion: RoomType.INDIVIDUAL,
     amenities_habitacion: [],
     amenities_banno: [],
-    estado: 'available' as const,
+    estado: RoomStatus.AVAILABLE,
+    floor: 0,
+    hasJacuzzi: false,
+    hasTv: false,
+    hasAirConditioning: false,
+    hasHeating: false,
+    isPetFriendly: false,
     foto_principal: [],
     fotos_adicionales: [],
   };
 }
-

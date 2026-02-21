@@ -17,11 +17,19 @@ export interface RoomFormData {
   nombre: string;
   descripcion: string;
   precio_por_noche: number;
-  capacidad_personas: number;
+  baseCapacity: number;
+  extraCapacity: number;
+  extraGuestCharge: number;
   tipo_habitacion: RoomType;
   amenities_habitacion: string[];
   amenities_banno: string[];
   estado: RoomStatus;
+  floor: number;
+  hasJacuzzi: boolean;
+  hasTv: boolean;
+  hasAirConditioning: boolean;
+  hasHeating: boolean;
+  isPetFriendly: boolean;
   foto_principal: string[];
   fotos_adicionales: string[];
 }
@@ -107,4 +115,3 @@ export function getRoomTypes(): RoomType[] {
 export function getRoomStatuses(): RoomStatus[] {
   return Object.values(RoomStatus);
 }
-

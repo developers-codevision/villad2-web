@@ -40,9 +40,9 @@ export interface Room {
   name: string;
   description: string;
   pricePerNight: number;
-  capacity: number;
-  baseCapacity?: number;
-  extraCapacity?: number;
+  baseCapacity: number;
+  extraCapacity: number;
+  extraGuestCharge: number;
   roomType: RoomType;
   roomAmenities: string[];
   bathroomAmenities: string[];
@@ -64,11 +64,19 @@ export interface CreateRoomDto {
   name: string;
   description: string;
   pricePerNight: number;
-  capacity: number;
+  baseCapacity: number;
+  extraCapacity: number;
+  extraGuestCharge: number;
   roomType: RoomType;
   roomAmenities?: string[];
   bathroomAmenities?: string[];
   status?: RoomStatus;
+  floor?: number;
+  hasJacuzzi?: boolean;
+  hasTv?: boolean;
+  hasAirConditioning?: boolean;
+  hasHeating?: boolean;
+  isPetFriendly?: boolean;
 }
 
 export interface UpdateRoomDto extends Partial<CreateRoomDto> {}

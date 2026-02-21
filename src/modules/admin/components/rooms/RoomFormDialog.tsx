@@ -86,8 +86,8 @@ export function RoomFormDialog({
             />
           </div>
 
-          {/* Price, Capacity, Type */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* Price, Type */}
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Precio/noche ($)</Label>
               <Input
@@ -96,15 +96,6 @@ export function RoomFormDialog({
                 step={0.01}
                 value={formData.precio_por_noche}
                 onChange={e => onFormChange('precio_por_noche', parseFloat(e.target.value) || 0)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Capacidad</Label>
-              <Input
-                type="number"
-                min={1}
-                value={formData.capacidad_personas}
-                onChange={e => onFormChange('capacidad_personas', parseInt(e.target.value) || 1)}
               />
             </div>
             <div className="space-y-2">
@@ -122,6 +113,38 @@ export function RoomFormDialog({
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          {/* Base Capacity, Extra Capacity, Extra Guest Charge */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>Capacidad Base</Label>
+              <Input
+                type="number"
+                min={0}
+                value={formData.baseCapacity}
+                onChange={e => onFormChange('baseCapacity', parseInt(e.target.value) || 0)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Capacidad Extra</Label>
+              <Input
+                type="number"
+                min={0}
+                value={formData.extraCapacity}
+                onChange={e => onFormChange('extraCapacity', parseInt(e.target.value) || 0)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Cargo Huésped Extra ($)</Label>
+              <Input
+                type="number"
+                min={0}
+                step={0.01}
+                value={formData.extraGuestCharge}
+                onChange={e => onFormChange('extraGuestCharge', parseFloat(e.target.value) || 0)}
+              />
             </div>
           </div>
 
@@ -201,4 +224,3 @@ export function RoomFormDialog({
     </Dialog>
   );
 }
-
