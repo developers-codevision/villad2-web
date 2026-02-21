@@ -126,12 +126,12 @@ export const RESERVATION_STATUS_LABELS: Record<ReservationStatus, string> = {
  */
 export const RESERVATION_STATUS_VARIANTS: Record<
   ReservationStatus,
-  'default' | 'secondary' | 'destructive' | 'outline'
+  'default' | 'secondary' | 'destructive' | 'outline' | 'pending' | 'confirmed' | 'completed' | 'cancelled'
 > = {
-  [ReservationStatus.PENDING]: 'secondary',
-  [ReservationStatus.CONFIRMED]: 'default',
-  [ReservationStatus.CANCELLED]: 'destructive',
-  [ReservationStatus.COMPLETED]: 'outline',
+  [ReservationStatus.PENDING]: 'pending',
+  [ReservationStatus.CONFIRMED]: 'confirmed',
+  [ReservationStatus.CANCELLED]: 'cancelled',
+  [ReservationStatus.COMPLETED]: 'completed',
 };
 
 /**
@@ -217,4 +217,3 @@ export function getAvailableStatusTransitions(
 
   return transitions[currentStatus] || [];
 }
-
