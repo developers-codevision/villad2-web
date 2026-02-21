@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, User, BedDouble, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, BedDouble, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/modules/shared/components/ui/button';
 import { Badge } from '@/modules/shared/components/ui/badge';
 import {
@@ -44,9 +44,9 @@ export function ReservationTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Huésped</TableHead>
             <TableHead>Habitación</TableHead>
-            <TableHead>Fechas</TableHead>
+            <TableHead>Entrada</TableHead>
+            <TableHead>Salida</TableHead>
             <TableHead>Huéspedes</TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Estado</TableHead>
@@ -56,26 +56,6 @@ export function ReservationTable({
         <TableBody>
           {reservations.map(reservation => (
             <TableRow key={reservation.id}>
-              {/* Guest Info */}
-              <TableCell>
-                <div className="flex items-start gap-2">
-                  <User size={16} className="text-muted-foreground mt-0.5" />
-                  <div>
-                    <p className="font-medium">
-                      {reservation.mainGuest.firstName} {reservation.mainGuest.lastName}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {reservation.mainGuest.email}
-                    </p>
-                    {reservation.mainGuest.phone && (
-                      <p className="text-xs text-muted-foreground">
-                        {reservation.mainGuest.phone}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </TableCell>
-
               {/* Room Info */}
               <TableCell>
                 <div className="flex items-center gap-2">
@@ -93,18 +73,23 @@ export function ReservationTable({
                 </div>
               </TableCell>
 
-              {/* Dates */}
+              {/* Check-in Date */}
               <TableCell>
-                <div className="flex items-start gap-2">
-                  <Calendar size={16} className="text-muted-foreground mt-0.5" />
-                  <div className="text-sm">
-                    <p className="font-medium">
-                      {format(new Date(reservation.checkInDate), 'dd MMM', { locale: es })}
-                    </p>
-                    <p className="text-muted-foreground">
-                      {format(new Date(reservation.checkOutDate), 'dd MMM', { locale: es })}
-                    </p>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Calendar size={16} className="text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    {format(new Date(reservation.checkInDate), 'dd MMM yyyy', { locale: es })}
+                  </span>
+                </div>
+              </TableCell>
+
+              {/* Check-out Date */}
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Calendar size={16} className="text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    {format(new Date(reservation.checkOutDate), 'dd MMM yyyy', { locale: es })}
+                  </span>
                 </div>
               </TableCell>
 
