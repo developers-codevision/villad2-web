@@ -66,10 +66,10 @@ export function ReservationFormDialog({
     onFormChange('baseGuestsCount', baseGuestsCount);
     onFormChange('extraGuestsCount', extraGuestsCount);
 
-    // All non-principal guests (total - 1)
-    const otherGuestsCount = total - 1;
+    // Additional guests = all companions except the main guest (total - 1)
+    const companionsCount = total - 1;
     const currentAdditional = formData.additionalGuests || [];
-    const newAdditional = Array.from({ length: otherGuestsCount }, (_, i) =>
+    const newAdditional = Array.from({ length: companionsCount }, (_, i) =>
       currentAdditional[i] || { firstName: '', lastName: '', sex: 'M' as const }
     );
     onFormChange('additionalGuests', newAdditional);
@@ -259,12 +259,13 @@ export function ReservationFormDialog({
             </Select>
           </div>
 
-          {/* Additional Guests */}
+          {/* Additional Guests (all companions) */}
           {formData.additionalGuests.length > 0 && (
             <div className="space-y-4">
+              <h3 className="font-semibold">Datos de Acompañantes</h3>
               {formData.additionalGuests.map((guest, index) => (
                 <div key={index} className="border border-border rounded-lg p-4 space-y-4">
-                  <h4 className="font-medium">Huésped #{index + 2}</h4>
+                  <h4 className="font-medium">Acompañante #{index + 1}</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Nombre</Label>

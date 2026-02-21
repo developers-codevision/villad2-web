@@ -156,7 +156,7 @@ export function formDataToCreateDto(
     extraGuestsCount: formData.extraGuestsCount,
     status: formData.status,
     notes: formData.notes.trim() || undefined,
-    additionalGuests: formData.additionalGuests,
+    additionalGuests: formData.additionalGuests.length > 0 ? formData.additionalGuests : undefined,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
   };
@@ -254,16 +254,17 @@ export function validateReservationForm(
     errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
   }
 
-  // Additional guests validation
-  if (formData.additionalGuests.length !== formData.extraGuestsCount) {
-    errors.push('El número de huéspedes adicionales debe coincidir con la cantidad especificada');
+  // Additional guests validation (all companions = total - 1)
+  const expectedAdditional = formData.totalGuests - 1;
+  if (formData.additionalGuests.length !== expectedAdditional) {
+    errors.push('El número de huéspedes adicionales no coincide con el total especificado');
   }
   formData.additionalGuests.forEach((guest, index) => {
     if (!guest.firstName.trim()) {
-      errors.push(`El nombre del huésped adicional ${index + 1} es requerido`);
+      errors.push(`El nombre del acompañante #${index + 1} es requerido`);
     }
     if (!guest.lastName.trim()) {
-      errors.push(`El apellido del huésped adicional ${index + 1} es requerido`);
+      errors.push(`El apellido del acompañante #${index + 1} es requerido`);
     }
   });
 
