@@ -30,8 +30,10 @@ export function createEmptyReservationForm(): ReservationFormData {
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
+    totalGuests: 1,
     baseGuestsCount: 1,
     extraGuestsCount: 0,
+    additionalGuests: [],
     notes: '',
     status: ReservationStatus.PENDING,
     earlyCheckIn: false,
@@ -52,8 +54,10 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
+    totalGuests: 1,
     baseGuestsCount: 1,
     extraGuestsCount: 0,
+    additionalGuests: [],
     notes: '',
     earlyCheckIn: false,
     lateCheckOut: false,
@@ -116,8 +120,10 @@ export function reservationToFormData(
     guestPhone: reservation.mainGuest.phone || '',
     checkIn: new Date(reservation.checkInDate),
     checkOut: new Date(reservation.checkOutDate),
+    totalGuests: reservation.baseGuestsCount + reservation.extraGuestsCount,
     baseGuestsCount: reservation.baseGuestsCount,
     extraGuestsCount: reservation.extraGuestsCount,
+    additionalGuests: reservation.additionalGuests || [],
     notes: reservation.notes || '',
     status: reservation.status,
     earlyCheckIn: reservation.earlyCheckIn,
@@ -150,7 +156,7 @@ export function formDataToCreateDto(
     extraGuestsCount: formData.extraGuestsCount,
     status: formData.status,
     notes: formData.notes.trim() || undefined,
-    additionalGuests: undefined, // No additional guests by default
+    additionalGuests: formData.additionalGuests,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
   };
@@ -181,7 +187,7 @@ export function clientFormDataToCreateDto(
     extraGuestsCount: formData.extraGuestsCount,
     status: ReservationStatus.PENDING, // Client always creates pending
     notes: formData.notes.trim() || undefined,
-    additionalGuests: undefined, // No additional guests by default
+    additionalGuests: formData.additionalGuests,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
   };
@@ -242,6 +248,24 @@ export function validateReservationForm(
     }
   }
 
+  // Total guests validation
+  if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
+    errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
+  }
+
+  // Additional guests validation
+  if (formData.additionalGuests.length !== formData.extraGuestsCount) {
+    errors.push('El número de huéspedes adicionales debe coincidir con la cantidad especificada');
+  }
+  formData.additionalGuests.forEach((guest, index) => {
+    if (!guest.firstName.trim()) {
+      errors.push(`El nombre del huésped adicional ${index + 1} es requerido`);
+    }
+    if (!guest.lastName.trim()) {
+      errors.push(`El apellido del huésped adicional ${index + 1} es requerido`);
+    }
+  });
+
   return {
     valid: errors.length === 0,
     errors,
@@ -280,6 +304,24 @@ export function validateClientReservationForm(
       errors.push('La fecha de entrada no puede ser en el pasado');
     }
   }
+
+  // Total guests validation
+  if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
+    errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
+  }
+
+  // Additional guests validation
+  if (formData.additionalGuests.length !== formData.extraGuestsCount) {
+    errors.push('El número de huéspedes adicionales debe coincidir con la cantidad especificada');
+  }
+  formData.additionalGuests.forEach((guest, index) => {
+    if (!guest.firstName.trim()) {
+      errors.push(`El nombre del huésped adicional ${index + 1} es requerido`);
+    }
+    if (!guest.lastName.trim()) {
+      errors.push(`El apellido del huésped adicional ${index + 1} es requerido`);
+    }
+  });
 
   return {
     valid: errors.length === 0,

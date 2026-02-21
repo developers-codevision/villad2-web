@@ -1,7 +1,7 @@
 // Admin Reservations Types - UI-specific types and constants
 // Backend types (Reservation, ReservationStatus, DTOs) are in @/modules/shared/types/api.types
 
-import { Reservation, ReservationStatus } from '@/modules/shared/types/api.types';
+import { Reservation, ReservationStatus, GuestInfo } from '@/modules/shared/types/api.types';
 
 // ============================================
 // ADMIN-SPECIFIC FORM TYPES
@@ -20,8 +20,10 @@ export interface ReservationFormData {
   guestPhone: string;
   checkIn: Date | undefined;
   checkOut: Date | undefined;
+  totalGuests: number;
   baseGuestsCount: number;
   extraGuestsCount: number;
+  additionalGuests: GuestInfo[];
   notes: string;
   status: ReservationStatus;
   earlyCheckIn: boolean;
@@ -88,8 +90,10 @@ export interface ClientReservationFormData {
   guestPhone: string;
   checkIn: Date | undefined;
   checkOut: Date | undefined;
+  totalGuests: number;
   baseGuestsCount: number;
   extraGuestsCount: number;
+  additionalGuests: GuestInfo[];
   notes: string;
   earlyCheckIn: boolean;
   lateCheckOut: boolean;

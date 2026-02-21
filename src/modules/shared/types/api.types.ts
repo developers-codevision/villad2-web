@@ -41,6 +41,8 @@ export interface Room {
   description: string;
   pricePerNight: number;
   capacity: number;
+  baseCapacity?: number;
+  extraCapacity?: number;
   roomType: RoomType;
   roomAmenities: string[];
   bathroomAmenities: string[];

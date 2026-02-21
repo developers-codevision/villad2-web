@@ -53,6 +53,9 @@ export default function Reservations() {
   // Get selected room
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
 
+  // Get max capacity for selected room
+  const maxCapacity = selectedRoom ? selectedRoom.baseCapacity + selectedRoom.extraCapacity : 0;
+
   // Get reservation summary
   const { nights, totalPrice } = reservationSummary(selectedRoom);
 
@@ -65,7 +68,36 @@ export default function Reservations() {
     formData.guestFirstName &&
     formData.guestLastName &&
     formData.guestEmail &&
-    formData.guestPhone;
+    formData.guestPhone &&
+    formData.additionalGuests.every(guest => guest.firstName.trim() && guest.lastName.trim());
+
+  // Handle total guests change
+  const handleTotalGuestsChange = (total: number) => {
+    if (!selectedRoom) return;
+
+    const baseGuestsCount = Math.min(total, selectedRoom.baseCapacity);
+    const extraGuestsCount = total - baseGuestsCount;
+
+    updateFormField('totalGuests', total);
+    updateFormField('baseGuestsCount', baseGuestsCount);
+    updateFormField('extraGuestsCount', extraGuestsCount);
+
+    // Update additional guests array
+    const currentAdditional = formData.additionalGuests || [];
+    const newAdditional = Array.from({ length: extraGuestsCount }, (_, i) =>
+      currentAdditional[i] || { firstName: '', lastName: '', sex: 'M' as const }
+    );
+    updateFormField('additionalGuests', newAdditional);
+  };
+
+  // Handle room selection
+  const handleRoomSelect = (roomId: number) => {
+    selectRoom(roomId);
+    // Reset total guests when room changes
+    if (formData.totalGuests > 0) {
+      handleTotalGuestsChange(formData.totalGuests);
+    }
+  };
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -98,11 +130,11 @@ export default function Reservations() {
                 {formData.checkIn && format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {formData.checkOut && format(formData.checkOut, "dd MMM yyyy", { locale: es })}
               </p>
               <p className="text-sm text-muted-foreground mb-2">
-                {nights} {nights === 1 ? "noche" : "noches"} · {formData.baseGuestsCount + formData.extraGuestsCount} {(formData.baseGuestsCount + formData.extraGuestsCount) === 1 ? "huésped" : "huéspedes"}
+                {nights} {nights === 1 ? "noche" : "noches"} · {formData.totalGuests} {formData.totalGuests === 1 ? "huésped" : "huéspedes"}
               </p>
               {formData.extraGuestsCount > 0 && (
                 <p className="text-xs text-muted-foreground mb-2">
-                  ({formData.baseGuestsCount} base + {formData.extraGuestsCount} extra)
+                  Incluye {formData.extraGuestsCount} huésped{formData.extraGuestsCount === 1 ? '' : 'es'} adicional{formData.extraGuestsCount === 1 ? '' : 'es'}
                 </p>
               )}
               <p className="text-2xl font-bold text-primary mt-2">${totalPrice}</p>
@@ -175,7 +207,7 @@ export default function Reservations() {
                   <Label>Habitación</Label>
                   <Select
                     value={formData.roomId?.toString() || ''}
-                    onValueChange={(value) => selectRoom(parseInt(value))}
+                    onValueChange={(value) => handleRoomSelect(parseInt(value))}
                     disabled={loadingRooms}
                   >
                     <SelectTrigger>
@@ -191,14 +223,15 @@ export default function Reservations() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Huéspedes Base</Label>
+                  <Label>Huéspedes Totales</Label>
                   <Select
-                    value={formData.baseGuestsCount.toString()}
-                    onValueChange={(value) => updateFormField('baseGuestsCount', parseInt(value))}
+                    value={formData.totalGuests.toString()}
+                    onValueChange={(value) => handleTotalGuestsChange(parseInt(value))}
+                    disabled={!selectedRoom}
                   >
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {[1, 2, 3, 4].map((n) => (
+                      {Array.from({ length: maxCapacity }, (_, i) => i + 1).map((n) => (
                         <SelectItem key={n} value={String(n)}>
                           {n} {n === 1 ? "huésped" : "huéspedes"}
                         </SelectItem>
@@ -206,24 +239,6 @@ export default function Reservations() {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-
-              {/* Extra guests */}
-              <div className="space-y-2">
-                <Label>Huéspedes Extra (${5}/huésped/noche)</Label>
-                <Select
-                  value={formData.extraGuestsCount.toString()}
-                  onValueChange={(value) => updateFormField('extraGuestsCount', parseInt(value))}
-                >
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {[0, 1, 2, 3, 4].map((n) => (
-                      <SelectItem key={n} value={String(n)}>
-                        {n} {n === 1 ? "huésped" : "huéspedes"}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
 
               {/* Guest info */}
@@ -295,6 +310,66 @@ export default function Reservations() {
                 </div>
               </div>
 
+              {/* Additional guests */}
+              {formData.extraGuestsCount > 0 && (
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Huéspedes Adicionales</h3>
+                  {formData.additionalGuests.map((guest, index) => (
+                    <div key={index} className="border border-border rounded-lg p-4 space-y-4">
+                      <h4 className="font-medium">Huésped Adicional {index + 1}</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Nombre</Label>
+                          <Input
+                            value={guest.firstName}
+                            onChange={(e) => {
+                              const newGuests = [...formData.additionalGuests];
+                              newGuests[index] = { ...newGuests[index], firstName: e.target.value };
+                              updateFormField('additionalGuests', newGuests);
+                            }}
+                            placeholder="Juan"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Apellido</Label>
+                          <Input
+                            value={guest.lastName}
+                            onChange={(e) => {
+                              const newGuests = [...formData.additionalGuests];
+                              newGuests[index] = { ...newGuests[index], lastName: e.target.value };
+                              updateFormField('additionalGuests', newGuests);
+                            }}
+                            placeholder="Pérez"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Sexo</Label>
+                        <Select
+                          value={guest.sex}
+                          onValueChange={(value) => {
+                            const newGuests = [...formData.additionalGuests];
+                            newGuests[index] = { ...newGuests[index], sex: value as 'M' | 'F' | 'O' };
+                            updateFormField('additionalGuests', newGuests);
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="M">Masculino</SelectItem>
+                            <SelectItem value="F">Femenino</SelectItem>
+                            <SelectItem value="O">Otro</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Special Requests */}
               <div className="space-y-2">
                 <Label htmlFor="requests">Notas o Peticiones Especiales (Opcional)</Label>
@@ -339,7 +414,7 @@ export default function Reservations() {
                     })()}
                     <p className="font-semibold">{selectedRoom.name}</p>
                     <p className="text-sm text-muted-foreground mb-4">
-                      {selectedRoom.roomType} · Hasta {selectedRoom.capacity} {selectedRoom.capacity === 1 ? "persona" : "personas"}
+                      {selectedRoom.roomType} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
                     </p>
                   </>
                 ) : (
@@ -360,15 +435,9 @@ export default function Reservations() {
                     <span>{nights}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Huéspedes Base</span>
-                    <span>{formData.baseGuestsCount}</span>
+                    <span className="text-muted-foreground">Huéspedes</span>
+                    <span>{formData.totalGuests}</span>
                   </div>
-                  {formData.extraGuestsCount > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Huéspedes Extra</span>
-                      <span>{formData.extraGuestsCount} × $5/noche</span>
-                    </div>
-                  )}
                   {selectedRoom && (
                     <>
                       <div className="flex justify-between">
@@ -376,9 +445,9 @@ export default function Reservations() {
                         <span>${selectedRoom.pricePerNight}</span>
                       </div>
                       {formData.extraGuestsCount > 0 && (
-                        <div className="flex justify-between text-xs">
-                          <span className="text-muted-foreground">Extra guests</span>
-                          <span>${nights * formData.extraGuestsCount * 5}</span>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Huéspedes adicionales</span>
+                          <span>{formData.extraGuestsCount} × $5/noche</span>
                         </div>
                       )}
                     </>
