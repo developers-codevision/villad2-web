@@ -15,3 +15,4 @@ export { ReservationTable } from './reservations/ReservationTable';
 export { ReservationFormDialog } from './reservations/ReservationFormDialog';
 export { ReservationFilters } from './reservations/ReservationFilters';
 export { ReservationStats } from './reservations/ReservationStats';
+export { ReservationCalendar } from './reservations/ReservationCalendar';

@@ -1,18 +1,20 @@
 // Admin Reservas Page - Clean Architecture
 // All business logic moved to hooks, utils, and types
 
-import { useEffect } from "react";
-import { CalendarCheck, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarCheck, Plus, Calendar as CalendarIcon, List } from "lucide-react";
 import { useReservationManagement } from "../hooks/reservations/useReservationManagement";
 import { useRoomManagement } from "../hooks/rooms/useRoomManagement";
 import { PageHeader } from "../components/common/PageHeader";
 import { EmptyState } from "../components/common/EmptyState";
 import { DeleteConfirmDialog } from "../components/common/DeleteConfirmDialog";
+import { Button } from "@/modules/shared/components/ui/button";
 import {
   ReservationTable,
   ReservationFormDialog,
   ReservationFilters,
   ReservationStats,
+  ReservationCalendar,
 } from "../components/reservations";
 import {
   AlertDialog,
@@ -27,6 +29,9 @@ import {
 import { RESERVATION_STATUS_LABELS } from "../types/reservations.types";
 
 export default function AdminReservas() {
+  // View mode state
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
+
   // Use the custom hook for all business logic
   const {
     reservations,
@@ -49,7 +54,6 @@ export default function AdminReservas() {
     cancelStatusChange,
     updateFilter,
     clearFilters,
-    setFormData,
   } = useReservationManagement();
 
   // Load available rooms for the form
@@ -63,14 +67,44 @@ export default function AdminReservas() {
 
   return (
     <div>
-      {/* Page Header */}
-      <PageHeader
-        title="Reservas"
-        description="Gestiona las reservas del hostal y crea reservas manuales."
-        actionLabel="Nueva Reserva Manual"
-        actionIcon={Plus}
-        onAction={openCreate}
-      />
+      {/* Page Header with View Toggle */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold mb-1">Reservas</h1>
+          <p className="text-muted-foreground">
+            Gestiona las reservas del hostal y crea reservas manuales.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="flex items-center gap-1 border rounded-lg p-1">
+            <Button
+              variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className="gap-2"
+            >
+              <List size={16} />
+              Lista
+            </Button>
+            <Button
+              variant={viewMode === 'calendar' ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('calendar')}
+              className="gap-2"
+            >
+              <CalendarIcon size={16} />
+              Calendario
+            </Button>
+          </div>
+
+          {/* Create Button */}
+          <Button onClick={openCreate}>
+            <Plus className="mr-2 h-4 w-4" />
+            Nueva Reserva Manual
+          </Button>
+        </div>
+      </div>
 
       {/* Stats */}
       {!loading && allReservations.length > 0 && (
@@ -79,8 +113,8 @@ export default function AdminReservas() {
         </div>
       )}
 
-      {/* Filters */}
-      {!loading && allReservations.length > 0 && (
+      {/* Filters (only in list view) */}
+      {!loading && allReservations.length > 0 && viewMode === 'list' && (
         <div className="mb-6">
           <ReservationFilters
             filters={filterState}
@@ -107,8 +141,8 @@ export default function AdminReservas() {
         />
       )}
 
-      {/* No Results State (after filtering) */}
-      {!loading && allReservations.length > 0 && reservations.length === 0 && (
+      {/* No Results State (after filtering - only in list view) */}
+      {!loading && allReservations.length > 0 && reservations.length === 0 && viewMode === 'list' && (
         <EmptyState
           icon={CalendarCheck}
           title="No se encontraron reservas"
@@ -116,13 +150,21 @@ export default function AdminReservas() {
         />
       )}
 
-      {/* Reservation Table */}
-      {!loading && reservations.length > 0 && (
+      {/* List View */}
+      {!loading && reservations.length > 0 && viewMode === 'list' && (
         <ReservationTable
           reservations={reservations}
           onEdit={openEdit}
           onDelete={confirmDelete}
           onStatusChange={requestStatusChange}
+        />
+      )}
+
+      {/* Calendar View - Always visible when in calendar mode */}
+      {!loading && viewMode === 'calendar' && (
+        <ReservationCalendar
+          reservations={allReservations}
+          onReservationClick={openEdit}
         />
       )}
 

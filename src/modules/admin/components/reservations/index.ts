@@ -4,4 +4,5 @@ export { ReservationTable } from './ReservationTable';
 export { ReservationFormDialog } from './ReservationFormDialog';
 export { ReservationFilters } from './ReservationFilters';
 export { ReservationStats } from './ReservationStats';
+export { ReservationCalendar } from './ReservationCalendar';
 
