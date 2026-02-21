@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
+import { Checkbox } from "@/modules/shared/components/ui/checkbox";
 import { Calendar } from "@/modules/shared/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/modules/shared/components/ui/select";
 import { Input } from "@/modules/shared/components/ui/input";
@@ -369,6 +370,31 @@ export default function Reservations() {
                   ))}
                 </div>
               )}
+
+              {/* Check-in / Check-out options */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-lg">Opciones de Llegada y Salida</h3>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    id="earlyCheckIn"
+                    checked={formData.earlyCheckIn}
+                    onCheckedChange={(checked) => updateFormField('earlyCheckIn', !!checked)}
+                  />
+                  <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
+                    Check-in anticipado <span className="text-muted-foreground text-sm">(solicitar llegada antes del horario estándar)</span>
+                  </Label>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    id="lateCheckOut"
+                    checked={formData.lateCheckOut}
+                    onCheckedChange={(checked) => updateFormField('lateCheckOut', !!checked)}
+                  />
+                  <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
+                    Check-out tardío <span className="text-muted-foreground text-sm">(solicitar salida después del horario estándar)</span>
+                  </Label>
+                </div>
+              </div>
 
               {/* Special Requests */}
               <div className="space-y-2">
