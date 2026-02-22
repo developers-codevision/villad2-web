@@ -16,12 +16,14 @@ import {
   formDataToCreateDto,
   formDataToUpdateDto,
   validateReservationForm,
-  filterReservationsByStatus,
-  filterReservationsByDateRange,
-  filterReservationsBySearch,
-  sortReservationsByDate,
+
   normalizeReservation,
 } from '../../utils/reservations.utils';
+
+import {  filterReservationsByStatus,
+  filterReservationsByDateRange,
+  filterReservationsBySearch,
+  sortReservationsByDate }  from '../../../shared/utils/reservations.utils.ts';
 
 /**
  * Custom hook for managing reservations in admin panel

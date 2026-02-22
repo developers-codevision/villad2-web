@@ -12,9 +12,11 @@ import {
   createEmptyClientReservationForm,
   validateClientReservationForm,
   clientFormDataToCreateDto,
-  calculateTotalPrice,
-  calculateNights,
+
 } from '../../admin/utils/reservations.utils';
+
+import { calculateTotalPrice,
+  calculateNights} from '../../shared/utils/reservations.utils.ts'
 
 /**
  * Custom hook for managing client-side reservations

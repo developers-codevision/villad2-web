@@ -4,7 +4,7 @@ import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/modules/shared/components/ui/card';
 import { ReservationWithDetails } from '../../types/reservations.types';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
-import { getTodayCheckIns, getTodayCheckOuts } from '../../utils/reservations.utils';
+import { getTodayCheckIns, getTodayCheckOuts } from '../../../shared/utils/reservations.utils.ts';
 
 interface ReservationStatsProps {
   reservations: ReservationWithDetails[];
