@@ -6,7 +6,6 @@ import {
   UpdateReservationDto,
   ReservationStatus,
 } from '@/modules/shared/types/api.types';
-import type { ClientReservationFormData } from '@/modules/shared/types/reservations.types';
 import {
   ReservationFormData,
   ReservationWithDetails,
@@ -143,7 +142,7 @@ export function formDataToCreateDto(
     },
     baseGuestsCount: formData.baseGuestsCount,
     extraGuestsCount: formData.extraGuestsCount,
-    status: ReservationStatus.CONFIRMED, // Admin siempre crea confirmada
+    status: formData.status,
     notes: formData.notes.trim() || undefined,
     additionalGuests: formData.additionalGuests.length > 0 ? formData.additionalGuests : undefined,
     earlyCheckIn: formData.earlyCheckIn,
