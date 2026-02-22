@@ -72,57 +72,24 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
  * Handles both old and new formats
  */
 export function normalizeReservation(reservation: any): ReservationWithDetails {
-  // If already has mainGuest, return as is
-  if (reservation.mainGuest) {
-    return reservation as ReservationWithDetails;
-  }
-
-  // If has client relation, transform from client
-  if (reservation.client) {
-    return {
-      ...reservation,
-      mainGuest: {
-        firstName: reservation.client.firstName,
-        lastName: reservation.client.lastName,
-        sex: reservation.client.sex,
-        email: reservation.client.email,
-        phone: reservation.client.phone,
-      },
-      checkInDate: reservation.checkInDate,
-      checkOutDate: reservation.checkOutDate,
-      baseGuestsCount: reservation.baseGuestsCount,
-      extraGuestsCount: reservation.extraGuestsCount,
-      totalPrice: reservation.totalPrice,
-      notes: reservation.notes || '',
-      earlyCheckIn: reservation.earlyCheckIn,
-      lateCheckOut: reservation.lateCheckOut,
-      additionalGuests: reservation.additionalGuests || [],
-    } as ReservationWithDetails;
-  }
-
-  // Transform old format to new format
-  const guestName = reservation.guestName || '';
-  const nameParts = guestName.split(' ');
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
-
+  // Nuevo formato: siempre hay client
   return {
     ...reservation,
     mainGuest: {
-      firstName: firstName,
-      lastName: lastName,
-      sex: reservation.guestSex || 'M',
-      email: reservation.guestEmail || '',
-      phone: reservation.guestPhone || '',
+      firstName: reservation.client.firstName,
+      lastName: reservation.client.lastName,
+      sex: reservation.client.sex,
+      email: reservation.client.email,
+      phone: reservation.client.phone,
     },
-    checkInDate: reservation.checkInDate || reservation.checkIn,
-    checkOutDate: reservation.checkOutDate || reservation.checkOut,
-    baseGuestsCount: reservation.baseGuestsCount || reservation.guests || 1,
-    extraGuestsCount: reservation.extraGuestsCount || 0,
-    totalPrice: reservation.totalPrice || 0,
-    notes: reservation.notes || reservation.specialRequests || '',
-    earlyCheckIn: reservation.earlyCheckIn || false,
-    lateCheckOut: reservation.lateCheckOut || false,
+    checkInDate: reservation.checkInDate,
+    checkOutDate: reservation.checkOutDate,
+    baseGuestsCount: reservation.baseGuestsCount,
+    extraGuestsCount: reservation.extraGuestsCount,
+    totalPrice: reservation.totalPrice,
+    notes: reservation.notes || '',
+    earlyCheckIn: reservation.earlyCheckIn,
+    lateCheckOut: reservation.lateCheckOut,
     additionalGuests: reservation.additionalGuests || [],
   } as ReservationWithDetails;
 }
