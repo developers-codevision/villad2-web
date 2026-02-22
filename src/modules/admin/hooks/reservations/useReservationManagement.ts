@@ -328,7 +328,7 @@ export function useReservationManagement() {
 
   return {
     // State
-    reservations,
+    reservations: filteredReservations(),
     allReservations: reservations,
     loading,
     formState,
@@ -336,7 +336,6 @@ export function useReservationManagement() {
     filterState,
 
     // Computed
-    filteredReservations: filteredReservations(),
     canSubmit,
 
     // Data loading
