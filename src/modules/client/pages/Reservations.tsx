@@ -317,7 +317,7 @@ export default function Reservations() {
                 <div className="space-y-4">
                   {formData.additionalGuests.map((guest, index) => (
                     <div key={index} className="border border-border rounded-lg p-4 space-y-4">
-                      <h4 className="font-medium">Huésped #{index + 2}</h4>
+                      <h4 className="font-medium">Acompañante #{index + 1}</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Nombre</Label>
