@@ -15,9 +15,10 @@ import {
   reservationToFormData,
   formDataToCreateDto,
   formDataToUpdateDto,
+  validateReservationForm,
+
   normalizeReservation,
 } from '../../utils/reservations.utils';
-import { validateReservationForm } from '@/modules/shared/validations/reservations.validation';
 
 import {  filterReservationsByStatus,
   filterReservationsByDateRange,
@@ -322,16 +323,23 @@ export function useReservationManagement() {
   // RETURN
   // ============================================
 
+  // --- canSubmit: validación centralizada ---
+  const canSubmit = validateReservationForm(formData, 'admin').valid;
+
   return {
     // State
-    reservations: filteredReservations(),
+    reservations,
     allReservations: reservations,
     loading,
     formState,
     formData,
     filterState,
 
-    // Data operations
+    // Computed
+    filteredReservations: filteredReservations(),
+    canSubmit,
+
+    // Data loading
     loadReservations,
     reloadReservations,
 
@@ -339,21 +347,18 @@ export function useReservationManagement() {
     openCreate,
     openEdit,
     closeDialog,
-    updateFormField,
-    setFormData,
-
-    // CRUD operations
     saveReservation,
     deleteReservation,
     confirmDelete,
     cancelDelete,
+    updateFormField,
 
-    // Status management
+    // Status change
     requestStatusChange,
     confirmStatusChange,
     cancelStatusChange,
 
-    // Filter management
+    // Filters
     updateFilter,
     clearFilters,
   };

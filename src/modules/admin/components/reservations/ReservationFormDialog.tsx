@@ -48,7 +48,8 @@ export function ReservationFormDialog({
   onClose,
   onSave,
   onFormChange,
-}: ReservationFormDialogProps) {
+  canSubmit,
+}: ReservationFormDialogProps & { canSubmit: boolean }) {
   // Get selected room to calculate max capacity
   const selectedRoom = availableRooms.find(r => r.id === formData.roomId);
   const maxCapacity = selectedRoom
@@ -387,7 +388,7 @@ export function ReservationFormDialog({
           <Button variant="outline" onClick={onClose} disabled={saving}>
             Cancelar
           </Button>
-          <Button onClick={onSave} disabled={saving}>
+          <Button onClick={onSave} disabled={saving || !canSubmit}>
             {saving ? 'Guardando...' : isEditing ? 'Actualizar' : 'Crear Reserva'}
           </Button>
         </div>
@@ -395,4 +396,3 @@ export function ReservationFormDialog({
     </Dialog>
   );
 }
-

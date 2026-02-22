@@ -205,6 +205,9 @@ export function useClientReservation() {
   // RETURN
   // ============================================
 
+  // --- canSubmit: validación centralizada ---
+  const canSubmit = validateReservationForm(formData, 'client').valid;
+
   return {
     // State
     formData,
@@ -216,6 +219,7 @@ export function useClientReservation() {
     // Computed
     isStepComplete: isStepComplete(),
     reservationSummary,
+    canSubmit,
 
     // Form management
     updateFormField,

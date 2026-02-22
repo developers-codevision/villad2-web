@@ -209,3 +209,5 @@ export function formDataToUpdateDto(
     lateCheckOut: formData.lateCheckOut,
   };
 }
+
+export { validateReservationForm } from '@/modules/shared/validations/reservations.validation';

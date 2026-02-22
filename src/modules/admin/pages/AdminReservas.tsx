@@ -54,6 +54,7 @@ export default function AdminReservas() {
     cancelStatusChange,
     updateFilter,
     clearFilters,
+    canSubmit,
   } = useReservationManagement();
 
   // Load available rooms for the form
@@ -178,6 +179,7 @@ export default function AdminReservas() {
         onClose={closeDialog}
         onSave={saveReservation}
         onFormChange={updateFormField}
+        canSubmit={canSubmit}
       />
 
       {/* Delete Confirmation Dialog */}
@@ -221,4 +223,3 @@ export default function AdminReservas() {
     </div>
   );
 }
-

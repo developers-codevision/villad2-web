@@ -39,6 +39,7 @@ export default function Reservations() {
     selectRoom,
     resetForm,
     submitReservation,
+    canSubmit,
   } = useClientReservation();
 
   // Set preselected room if available
@@ -60,17 +61,6 @@ export default function Reservations() {
   // Get reservation summary
   const { nights, totalPrice } = reservationSummary(selectedRoom);
 
-  // Can submit form
-  const canSubmit =
-    formData.checkIn &&
-    formData.checkOut &&
-    nights > 0 &&
-    formData.roomId &&
-    formData.guestFirstName &&
-    formData.guestLastName &&
-    formData.guestEmail &&
-    formData.guestPhone &&
-    formData.additionalGuests.every(guest => guest.firstName.trim() && guest.lastName.trim());
 
   // Handle total guests change
   const handleTotalGuestsChange = (total: number) => {
