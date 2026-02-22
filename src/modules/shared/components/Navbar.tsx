@@ -20,9 +20,9 @@ export default function Navbar() {
 
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-			<nav className="container mx-auto flex items-center justify-between h-16 px-4">
+			<nav className="container mx-auto flex items-center justify-end h-16 px-4">
 				{/* Desktop */}
-				<ul className="hidden md:flex items-center gap-8">
+				<ul className="hidden md:flex justify-center items-center w-1/2 gap-8">
 					{links.map((l) => (
 						<li key={l.to}>
 							<Link
