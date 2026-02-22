@@ -153,7 +153,7 @@ export interface RefreshTokenResponse {
 export interface GuestInfo {
   firstName: string;
   lastName: string;
-  sex: 'M' | 'F' | 'O';
+  sex: 'M' | 'F' | 'otro';
 }
 
 export interface MainGuestInfo extends GuestInfo {

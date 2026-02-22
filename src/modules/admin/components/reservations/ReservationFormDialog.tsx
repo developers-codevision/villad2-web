@@ -204,7 +204,7 @@ export function ReservationFormDialog({
               <Label>Sexo</Label>
               <Select
                 value={formData.guestSex}
-                onValueChange={value => onFormChange('guestSex', value as 'M' | 'F' | 'O')}
+                onValueChange={value => onFormChange('guestSex', value as 'M' | 'F' | 'otro')}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -212,7 +212,7 @@ export function ReservationFormDialog({
                 <SelectContent>
                   <SelectItem value="M">Masculino</SelectItem>
                   <SelectItem value="F">Femenino</SelectItem>
-                  <SelectItem value="O">Otro</SelectItem>
+                  <SelectItem value="otro">Otro</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -299,7 +299,7 @@ export function ReservationFormDialog({
                       value={guest.sex}
                       onValueChange={value => {
                         const newGuests = [...formData.additionalGuests];
-                        newGuests[index] = { ...newGuests[index], sex: value as 'M' | 'F' | 'O' };
+                        newGuests[index] = { ...newGuests[index], sex: value as 'M' | 'F' | 'otro' };
                         onFormChange('additionalGuests', newGuests);
                       }}
                     >
@@ -309,7 +309,7 @@ export function ReservationFormDialog({
                       <SelectContent>
                         <SelectItem value="M">Masculino</SelectItem>
                         <SelectItem value="F">Femenino</SelectItem>
-                        <SelectItem value="O">Otro</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
