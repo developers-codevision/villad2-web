@@ -101,7 +101,7 @@ export default function AdminReservas() {
           {/* Create Button */}
           <Button onClick={openCreate}>
             <Plus className="mr-2 h-4 w-4" />
-            Nueva Reserva Manual
+            Nueva Reserva
           </Button>
         </div>
       </div>

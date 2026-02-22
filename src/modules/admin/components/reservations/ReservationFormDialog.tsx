@@ -89,7 +89,7 @@ export function ReservationFormDialog({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'Editar Reserva' : 'Nueva Reserva Manual'}
+            {isEditing ? 'Editar Reserva' : 'Nueva Reserva'}
           </DialogTitle>
         </DialogHeader>
 
