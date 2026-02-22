@@ -2,7 +2,6 @@
 
 import { format } from 'date-fns';
 import {
-  Reservation,
   CreateReservationDto,
   UpdateReservationDto,
   ReservationStatus,
@@ -10,7 +9,6 @@ import {
 import {
   ReservationFormData,
   ReservationWithDetails,
-  ClientReservationFormData,
 } from '../types/reservations.types';
 
 // ============================================
@@ -210,132 +208,4 @@ export function formDataToUpdateDto(
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
   };
-}
-
-// ============================================
-// VALIDATION
-// ============================================
-
-/**
- * Validate reservation form data
- */
-export function validateReservationForm(
-  formData: ReservationFormData
-): { valid: boolean; errors: string[] } {
-  const errors: string[] = [];
-
-  // Required fields
-  if (!formData.roomId) errors.push('Selecciona una habitación');
-  if (!formData.guestFirstName.trim()) errors.push('El nombre es requerido');
-  if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
-  if (!formData.guestEmail.trim()) errors.push('El email es requerido');
-  if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
-  if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
-  if (!formData.checkOut) errors.push('Selecciona fecha de salida');
-  if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
-
-  // Email validation
-  if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
-    errors.push('Email inválido');
-  }
-
-  // Date validation
-  if (formData.checkIn && formData.checkOut) {
-    if (formData.checkOut <= formData.checkIn) {
-      errors.push('La fecha de salida debe ser posterior a la de entrada');
-    }
-    if (formData.checkIn < new Date(new Date().setHours(0, 0, 0, 0))) {
-      errors.push('La fecha de entrada no puede ser en el pasado');
-    }
-  }
-
-  // Total guests validation
-  if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
-    errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
-  }
-
-  // Additional guests validation (all companions = total - 1)
-  const expectedAdditional = formData.totalGuests - 1;
-  if (formData.additionalGuests.length !== expectedAdditional) {
-    errors.push('El número de huéspedes adicionales no coincide con el total especificado');
-  }
-  formData.additionalGuests.forEach((guest, index) => {
-    if (!guest.firstName.trim()) {
-      errors.push(`El nombre del acompañante #${index + 1} es requerido`);
-    }
-    if (!guest.lastName.trim()) {
-      errors.push(`El apellido del acompañante #${index + 1} es requerido`);
-    }
-  });
-
-  return {
-    valid: errors.length === 0,
-    errors,
-  };
-}
-
-/**
- * Validate client reservation form data
- */
-export function validateClientReservationForm(
-  formData: ClientReservationFormData
-): { valid: boolean; errors: string[] } {
-  const errors: string[] = [];
-
-  // Required fields
-  if (!formData.roomId) errors.push('Selecciona una habitación');
-  if (!formData.guestFirstName.trim()) errors.push('El nombre es requerido');
-  if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
-  if (!formData.guestEmail.trim()) errors.push('El email es requerido');
-  if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
-  if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
-  if (!formData.checkOut) errors.push('Selecciona fecha de salida');
-  if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
-
-  // Email validation
-  if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
-    errors.push('Email inválido');
-  }
-
-  // Date validation
-  if (formData.checkIn && formData.checkOut) {
-    if (formData.checkOut <= formData.checkIn) {
-      errors.push('La fecha de salida debe ser posterior a la de entrada');
-    }
-    if (formData.checkIn < new Date(new Date().setHours(0, 0, 0, 0))) {
-      errors.push('La fecha de entrada no puede ser en el pasado');
-    }
-  }
-
-  // Total guests validation
-  if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
-    errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
-  }
-
-  // Additional guests validation: all non-principal guests (totalGuests - 1)
-  const expectedAdditional = Math.max(formData.totalGuests - 1, 0);
-  if (formData.additionalGuests.length !== expectedAdditional) {
-    errors.push('El número de huéspedes registrados no coincide con el total seleccionado');
-  }
-  formData.additionalGuests.forEach((guest, index) => {
-    if (!guest.firstName.trim()) {
-      errors.push(`El nombre del huésped #${index + 2} es requerido`);
-    }
-    if (!guest.lastName.trim()) {
-      errors.push(`El apellido del huésped #${index + 2} es requerido`);
-    }
-  });
-
-  return {
-    valid: errors.length === 0,
-    errors,
-  };
-}
-
-/**
- * Simple email validation
- */
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
 }

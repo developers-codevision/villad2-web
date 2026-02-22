@@ -5,15 +5,14 @@ import { toast } from 'sonner';
 import { Room } from '@/modules/shared/types/api.types';
 import { reservationsService } from '@/modules/shared/services';
 import {
-  ClientReservationFormData,
   ClientReservationStep,
 } from '../../admin/types/reservations.types';
 import {
   createEmptyClientReservationForm,
-  validateClientReservationForm,
   clientFormDataToCreateDto,
 
 } from '../../admin/utils/reservations.utils';
+import { validateReservationForm } from '@/modules/shared/validations/reservations.validation';
 
 import { calculateTotalPrice,
   calculateNights} from '../../shared/utils/reservations.utils.ts'
@@ -171,9 +170,9 @@ export function useClientReservation() {
    * Submit reservation
    */
   const submitReservation = useCallback(
-    async (room: Room) => {
+    async () => {
       // Validate form
-      const validation = validateClientReservationForm(formData);
+      const validation = validateReservationForm(formData, 'client');
       if (!validation.valid) {
         validation.errors.forEach(error => toast.error(error));
         return;

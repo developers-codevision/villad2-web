@@ -15,10 +15,9 @@ import {
   reservationToFormData,
   formDataToCreateDto,
   formDataToUpdateDto,
-  validateReservationForm,
-
   normalizeReservation,
 } from '../../utils/reservations.utils';
+import { validateReservationForm } from '@/modules/shared/validations/reservations.validation';
 
 import {  filterReservationsByStatus,
   filterReservationsByDateRange,
@@ -358,4 +357,3 @@ export function useReservationManagement() {
     clearFilters,
   };
 }
-

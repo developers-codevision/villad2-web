@@ -2,6 +2,7 @@
 // Backend types (Reservation, ReservationStatus, DTOs) are in @/modules/shared/types/api.types
 
 import { Reservation, ReservationStatus, GuestInfo } from '@/modules/shared/types/api.types';
+import { ReservationFormDataBase } from '@/modules/shared/types/reservations.types';
 
 // ============================================
 // ADMIN-SPECIFIC FORM TYPES
@@ -11,23 +12,8 @@ import { Reservation, ReservationStatus, GuestInfo } from '@/modules/shared/type
  * Form data structure for reservation creation/editing in admin panel
  * Used for manual reservations (phone, walk-in, etc.)
  */
-export interface ReservationFormData {
-  roomId: number | null;
-  guestFirstName: string;
-  guestLastName: string;
-  guestSex: 'M' | 'F' | 'O';
-  guestEmail: string;
-  guestPhone: string;
-  checkIn: Date | undefined;
-  checkOut: Date | undefined;
-  totalGuests: number;
-  baseGuestsCount: number;
-  extraGuestsCount: number;
-  additionalGuests: GuestInfo[];
-  notes: string;
+export interface ReservationFormData extends ReservationFormDataBase {
   status: ReservationStatus;
-  earlyCheckIn: boolean;
-  lateCheckOut: boolean;
 }
 
 /**
@@ -77,27 +63,6 @@ export interface ReservationFilterState {
 // ============================================
 // CLIENT-SPECIFIC TYPES
 // ============================================
-
-/**
- * Client reservation form data (simpler, no status selection)
- */
-export interface ClientReservationFormData {
-  roomId: number | null;
-  guestFirstName: string;
-  guestLastName: string;
-  guestSex: 'M' | 'F' | 'O';
-  guestEmail: string;
-  guestPhone: string;
-  checkIn: Date | undefined;
-  checkOut: Date | undefined;
-  totalGuests: number;
-  baseGuestsCount: number;
-  extraGuestsCount: number;
-  additionalGuests: GuestInfo[];
-  notes: string;
-  earlyCheckIn: boolean;
-  lateCheckOut: boolean;
-}
 
 /**
  * Client reservation step state
