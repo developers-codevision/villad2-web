@@ -71,7 +71,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 function GuestCard({ guest, index }: { guest: GuestInfo; index: number }) {
-  const sexLabel: Record<string, string> = { M: 'Masculino', F: 'Femenino', otro: 'Otro' };
+  const sexLabel: Record<string, string> = { M: 'Masculino', F: 'Femenino', O: 'otro' };
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40 border border-border/50">
       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -146,7 +146,7 @@ export function ReservationDetailSheet({
   const checkOut = safeParseDate(reservation.checkOutDate);
   const nights = checkIn && checkOut ? differenceInDays(checkOut, checkIn) : 0;
 
-  const sexLabel: Record<string, string> = { M: 'Masculino', F: 'Femenino', otro: 'Otro' };
+  const sexLabel: Record<string, string> = { M: 'Masculino', F: 'Femenino', O: 'otro' };
   const totalGuests = reservation.baseGuestsCount + reservation.extraGuestsCount;
 
   return (

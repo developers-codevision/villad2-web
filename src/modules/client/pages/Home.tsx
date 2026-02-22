@@ -14,6 +14,8 @@ import RoomCard from "@/modules/client/components/RoomCard";
 import { HOSTAL, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
 import { useRooms } from "@/modules/client/hooks/useRooms";
 import logo from "@/assets/logo.png";
+import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
+import ReceptionSection from "@/modules/client/components/ReceptionSection";
 
 const Index = () => {
   const { rooms, loading } = useRooms();
@@ -96,6 +98,9 @@ const Index = () => {
           )}
         </div>
       </section>*/}
+
+      <TerraceBarSection />
+      <ReceptionSection />
 
       {/* Services */}
       <section className="py-20 px-4 bg-accent/30">
