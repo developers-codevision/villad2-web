@@ -25,12 +25,15 @@ const Index = () => {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[100vh]  flex items-center ">
         {/* Imagen de fondo completa sin overlay */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-center mt-10 "
           style={{
             backgroundImage: "url('/Foto-portada-no1-editada-scaled.jpg')",
+             backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
           }}
         />
 
