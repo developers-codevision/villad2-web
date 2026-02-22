@@ -77,6 +77,29 @@ export function normalizeReservation(reservation: any): ReservationWithDetails {
     return reservation as ReservationWithDetails;
   }
 
+  // If has client relation, transform from client
+  if (reservation.client) {
+    return {
+      ...reservation,
+      mainGuest: {
+        firstName: reservation.client.firstName,
+        lastName: reservation.client.lastName,
+        sex: reservation.client.sex,
+        email: reservation.client.email,
+        phone: reservation.client.phone,
+      },
+      checkInDate: reservation.checkInDate,
+      checkOutDate: reservation.checkOutDate,
+      baseGuestsCount: reservation.baseGuestsCount,
+      extraGuestsCount: reservation.extraGuestsCount,
+      totalPrice: reservation.totalPrice,
+      notes: reservation.notes || '',
+      earlyCheckIn: reservation.earlyCheckIn,
+      lateCheckOut: reservation.lateCheckOut,
+      additionalGuests: reservation.additionalGuests || [],
+    } as ReservationWithDetails;
+  }
+
   // Transform old format to new format
   const guestName = reservation.guestName || '';
   const nameParts = guestName.split(' ');
