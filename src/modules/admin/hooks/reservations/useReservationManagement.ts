@@ -223,6 +223,7 @@ export function useReservationManagement() {
     try {
       await reservationsService.delete(id);
       toast.success('Reserva eliminada correctamente');
+      setFormState(prev => ({ ...prev, deleteConfirm: null }));
       await reloadReservations();
     } catch (error) {
       console.error('Error deleting reservation:', error);
