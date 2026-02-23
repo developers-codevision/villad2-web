@@ -13,7 +13,7 @@ export default function SocialLinks({ facebookUrl, twitterUrl, youtubeUrl, whats
         {/* Facebook iconos creados por Freepik - Flaticon */}
       </a>
       <a href={twitterUrl} target="_blank" rel="noopener noreferrer" aria-label="X">
-        <img src="/gorjeo.png" alt="X" className="w-8 h-8 hover:opacity-80 transition-opacity" />
+        <img src="/x.png" alt="X" className="w-8 h-8 hover:opacity-80 transition-opacity" />
         {/* Pío iconos creados por Freepik - Flaticon */}
       </a>
       <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="Youtube">
