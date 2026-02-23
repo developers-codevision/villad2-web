@@ -24,6 +24,7 @@ import {  filterReservationsByStatus,
   filterReservationsByDateRange,
   filterReservationsBySearch,
   sortReservationsByDate }  from '../../../shared/utils/reservations.utils.ts';
+import { useAvailability } from '@/modules/shared/hooks';
 
 /**
  * Custom hook for managing reservations in admin panel
@@ -55,7 +56,9 @@ export function useReservationManagement() {
     dateTo: undefined,
     searchQuery: '',
   });
-  const [occupiedDates, setOccupiedDates] = useState<string[]>([]);
+
+  // Availability
+  const { occupiedDates } = useAvailability();
 
   // ============================================
   // COMPUTED VALUES
@@ -116,23 +119,10 @@ export function useReservationManagement() {
     return loadReservations();
   }, [loadReservations]);
 
-  /**
-   * Load occupied dates from API
-   */
-  const loadOccupiedDates = useCallback(async () => {
-    try {
-      const dates = await reservationsService.getOccupiedDates();
-      setOccupiedDates(dates);
-    } catch (error) {
-      console.error('Error loading occupied dates:', error);
-    }
-  }, []);
-
   // Load data on mount
   useEffect(() => {
     loadReservations();
-    loadOccupiedDates();
-  }, [loadReservations, loadOccupiedDates]);
+  }, [loadReservations]);
 
   // ============================================
   // FORM MANAGEMENT

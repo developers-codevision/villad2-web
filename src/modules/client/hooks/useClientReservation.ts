@@ -17,6 +17,7 @@ import { validateReservationForm } from '@/modules/shared/validations/reservatio
 
 import { calculateTotalPrice,
   calculateNights} from '../../shared/utils/reservations.utils.ts'
+import { useAvailability } from '@/modules/shared/hooks';
 
 /**
  * Custom hook for managing client-side reservations
@@ -33,7 +34,9 @@ export function useClientReservation() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
-  const [occupiedDates, setOccupiedDates] = useState<string[]>([]);
+
+  // Availability
+  const { occupiedDates } = useAvailability();
 
   // ============================================
   // COMPUTED VALUES
@@ -125,23 +128,6 @@ export function useClientReservation() {
     setConfirmed(false);
     setConfirmationId(null);
   }, []);
-
-  /**
-   * Load occupied dates from API
-   */
-  const loadOccupiedDates = useCallback(async () => {
-    try {
-      const dates = await reservationsService.getOccupiedDates();
-      setOccupiedDates(dates);
-    } catch (error) {
-      console.error('Error loading occupied dates:', error);
-    }
-  }, []);
-
-  // Load occupied dates on mount
-  useEffect(() => {
-    loadOccupiedDates();
-  }, [loadOccupiedDates]);
 
   // ============================================
   // STEP NAVIGATION
