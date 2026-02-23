@@ -1,8 +1,9 @@
 // Client Reservation Hook - Business logic for client-side reservations
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Room } from '@/modules/shared/types/api.types';
+import { ClientReservationFormData } from '@/modules/shared/types/reservations.types';
 import { reservationsService } from '@/modules/shared/services';
 import {
   ClientReservationStep,
@@ -32,6 +33,7 @@ export function useClientReservation() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
+  const [occupiedDates, setOccupiedDates] = useState<string[]>([]);
 
   // ============================================
   // COMPUTED VALUES
@@ -124,6 +126,23 @@ export function useClientReservation() {
     setConfirmationId(null);
   }, []);
 
+  /**
+   * Load occupied dates from API
+   */
+  const loadOccupiedDates = useCallback(async () => {
+    try {
+      const dates = await reservationsService.getOccupiedDates();
+      setOccupiedDates(dates);
+    } catch (error) {
+      console.error('Error loading occupied dates:', error);
+    }
+  }, []);
+
+  // Load occupied dates on mount
+  useEffect(() => {
+    loadOccupiedDates();
+  }, [loadOccupiedDates]);
+
   // ============================================
   // STEP NAVIGATION
   // ============================================
@@ -215,6 +234,7 @@ export function useClientReservation() {
     submitting,
     confirmed,
     confirmationId,
+    occupiedDates,
 
     // Computed
     isStepComplete: isStepComplete(),
@@ -237,4 +257,3 @@ export function useClientReservation() {
     submitReservation,
   };
 }
-

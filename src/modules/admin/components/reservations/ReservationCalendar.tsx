@@ -18,10 +18,11 @@ import { ReservationStatus } from '@/modules/shared/types/api.types';
 interface ReservationCalendarProps {
   reservations: ReservationWithDetails[];
   onReservationClick?: (reservation: ReservationWithDetails) => void;
+  occupiedDates?: string[];
 }
 
 
-export function ReservationCalendar({ reservations, onReservationClick }: ReservationCalendarProps) {
+export function ReservationCalendar({ reservations, onReservationClick, occupiedDates }: ReservationCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedReservations, setSelectedReservations] = useState<ReservationWithDetails[] | null>(null);
 
@@ -103,13 +104,15 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
         {days.map((day) => {
           const dayReservations = getReservationsForDay(day);
           const isCurrentDay = isToday(day);
+          const dayString = format(day, 'yyyy-MM-dd');
+          const isOccupied = occupiedDates?.includes(dayString);
 
           return (
             <div
               key={day.toISOString()}
               className={`bg-background p-1.5 min-h-[100px] border-t ${
                 dayReservations.length > 0 ? 'cursor-pointer hover:bg-muted/50' : ''
-              }`}
+              } ${isOccupied ? 'bg-red-50' : ''}`}
               onClick={() => handleDayClick(dayReservations)}
             >
               {/* Day number */}
@@ -245,4 +248,3 @@ export function ReservationCalendar({ reservations, onReservationClick }: Reserv
     </div>
   );
 }
-

@@ -3,21 +3,11 @@
 import { apiClient, authenticatedApiClient } from './api';
 import { Reservation, CreateReservationDto, UpdateReservationDto, ReservationStatus } from '../types/api.types';
 
+/**
+ * Get occupied dates for reservations
+ * Returns an array of date strings in YYYY-MM-DD format
+ */
 export const reservationsService = {
-  /**
-   * Create a new reservation (public endpoint)
-   */
-  async create(data: CreateReservationDto): Promise<Reservation> {
-    return apiClient.post<Reservation>('/reservations', data);
-  },
-
-  /**
-   * Get all reservations for current user (authenticated)
-   */
-  async getMyReservations(): Promise<Reservation[]> {
-    return authenticatedApiClient.get<Reservation[]>('/reservations/my');
-  },
-
   /**
    * Get all reservations (admin only)
    */
@@ -26,38 +16,45 @@ export const reservationsService = {
   },
 
   /**
-   * Get reservation by ID (authenticated)
+   * Get a reservation by ID (admin only)
    */
   async getById(id: number): Promise<Reservation> {
     return authenticatedApiClient.get<Reservation>(`/reservations/${id}`);
   },
 
   /**
+   * Create a new reservation
+   */
+  async create(dto: CreateReservationDto): Promise<Reservation> {
+    return apiClient.post<Reservation>('/reservations', dto);
+  },
+
+  /**
+   * Update a reservation (admin only)
+   */
+  async update(id: number, dto: UpdateReservationDto): Promise<Reservation> {
+    return authenticatedApiClient.patch<Reservation>(`/reservations/${id}`, dto);
+  },
+
+  /**
    * Update reservation status (admin only)
    */
   async updateStatus(id: number, status: ReservationStatus): Promise<Reservation> {
-    return authenticatedApiClient.put<Reservation>(`/reservations/${id}`, { status });
+    return authenticatedApiClient.patch<Reservation>(`/reservations/${id}/status`, { status });
   },
 
   /**
-   * Update reservation (admin only)
-   */
-  async update(id: number, data: UpdateReservationDto): Promise<Reservation> {
-    return authenticatedApiClient.put<Reservation>(`/reservations/${id}`, data);
-  },
-
-  /**
-   * Cancel reservation (authenticated)
-   */
-  async cancel(id: number): Promise<Reservation> {
-    return authenticatedApiClient.put<Reservation>(`/reservations/${id}/cancel`, {});
-  },
-
-  /**
-   * Delete reservation (admin only)
+   * Delete a reservation (admin only)
    */
   async delete(id: number): Promise<void> {
-    return authenticatedApiClient.delete<void>(`/reservations/${id}`);
+    return authenticatedApiClient.delete(`/reservations/${id}`);
+  },
+
+  /**
+   * Get occupied dates for reservations
+   * Returns an array of date strings in YYYY-MM-DD format
+   */
+  async getOccupiedDates(): Promise<string[]> {
+    return apiClient.get<string[]>('/reservations/occupied-dates');
   },
 };
-

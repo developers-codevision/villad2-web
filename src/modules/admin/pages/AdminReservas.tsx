@@ -40,6 +40,7 @@ export default function AdminReservas() {
     formState,
     formData,
     filterState,
+    occupiedDates,
     loadReservations,
     openCreate,
     openEdit,
@@ -166,6 +167,7 @@ export default function AdminReservas() {
         <ReservationCalendar
           reservations={allReservations}
           onReservationClick={openEdit}
+          occupiedDates={occupiedDates}
         />
       )}
 

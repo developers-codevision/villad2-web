@@ -1,6 +1,6 @@
 // Admin Reservations Hook - Business logic for reservation management
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
 import { reservationsService } from '@/modules/shared/services';
@@ -55,6 +55,7 @@ export function useReservationManagement() {
     dateTo: undefined,
     searchQuery: '',
   });
+  const [occupiedDates, setOccupiedDates] = useState<string[]>([]);
 
   // ============================================
   // COMPUTED VALUES
@@ -114,6 +115,24 @@ export function useReservationManagement() {
   const reloadReservations = useCallback(() => {
     return loadReservations();
   }, [loadReservations]);
+
+  /**
+   * Load occupied dates from API
+   */
+  const loadOccupiedDates = useCallback(async () => {
+    try {
+      const dates = await reservationsService.getOccupiedDates();
+      setOccupiedDates(dates);
+    } catch (error) {
+      console.error('Error loading occupied dates:', error);
+    }
+  }, []);
+
+  // Load data on mount
+  useEffect(() => {
+    loadReservations();
+    loadOccupiedDates();
+  }, [loadReservations, loadOccupiedDates]);
 
   // ============================================
   // FORM MANAGEMENT
@@ -334,6 +353,7 @@ export function useReservationManagement() {
     formState,
     formData,
     filterState,
+    occupiedDates,
 
     // Computed
     canSubmit,

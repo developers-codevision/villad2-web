@@ -40,6 +40,7 @@ export default function Reservations() {
     resetForm,
     submitReservation,
     canSubmit,
+    occupiedDates,
   } = useClientReservation();
 
   // Set preselected room if available
@@ -177,7 +178,7 @@ export default function Reservations() {
                   setDateRange(range?.from, range?.to);
                 }}
                 numberOfMonths={2}
-                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
                 locale={es}
                 className="pointer-events-auto"
               />
