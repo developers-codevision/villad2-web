@@ -178,6 +178,7 @@ export default function AdminReservas() {
         saving={formState.saving}
         formData={formData}
         availableRooms={rooms}
+        occupiedDates={occupiedDates}
         onClose={closeDialog}
         onSave={saveReservation}
         onFormChange={updateFormField}

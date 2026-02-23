@@ -1,6 +1,5 @@
 // Reservation Form Dialog Component
 
-import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/modules/shared/components/ui/button';
@@ -17,13 +16,9 @@ import {
   SelectValue,
 } from '@/modules/shared/components/ui/select';
 import { Calendar } from '@/modules/shared/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/modules/shared/components/ui/popover';
 import { ReservationFormData, getReservationStatuses, RESERVATION_STATUS_LABELS } from '../../types/reservations.types';
 import { Room } from '@/modules/shared/types/api.types';
+import type { DateRange } from "react-day-picker";
 
 interface ReservationFormDialogProps {
   open: boolean;
@@ -31,6 +26,7 @@ interface ReservationFormDialogProps {
   saving: boolean;
   formData: ReservationFormData;
   availableRooms: Room[];
+  occupiedDates: string[];
   onClose: () => void;
   onSave: () => void;
   onFormChange: <K extends keyof ReservationFormData>(
@@ -45,6 +41,7 @@ export function ReservationFormDialog({
   saving,
   formData,
   availableRooms,
+  occupiedDates,
   onClose,
   onSave,
   onFormChange,
@@ -55,6 +52,9 @@ export function ReservationFormDialog({
   const maxCapacity = selectedRoom
     ? selectedRoom.baseCapacity + selectedRoom.extraCapacity
     : 0;
+
+  // Calculate nights
+  const nights = formData.checkIn && formData.checkOut ? Math.ceil((formData.checkOut.getTime() - formData.checkIn.getTime()) / (1000 * 60 * 60 * 24)) : 0;
 
   // Handle total guests change (mirrors client logic)
   const handleTotalGuestsChange = (total: number) => {
@@ -116,65 +116,31 @@ export function ReservationFormDialog({
             </Select>
           </div>
 
-          {/* Check-in and Check-out Dates */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Fecha de Entrada *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.checkIn ? (
-                      format(formData.checkIn, 'PPP', { locale: es })
-                    ) : (
-                      <span>Seleccionar fecha</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={formData.checkIn}
-                    onSelect={date => onFormChange('checkIn', date)}
-                    disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+          {/* Date range calendar - full width */}
+          <div className="space-y-2">
+            <Label className="text-base">Fechas de estancia</Label>
+            <div className="border border-border rounded-lg p-6 flex justify-center">
+              <Calendar
+                mode="range"
+                selected={{
+                  from: formData.checkIn,
+                  to: formData.checkOut,
+                }}
+                onSelect={(range: DateRange | undefined) => {
+                  onFormChange('checkIn', range?.from);
+                  onFormChange('checkOut', range?.to);
+                }}
+                numberOfMonths={2}
+                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
+                locale={es}
+                className="pointer-events-auto"
+              />
             </div>
-
-            <div className="space-y-2">
-              <Label>Fecha de Salida *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.checkOut ? (
-                      format(formData.checkOut, 'PPP', { locale: es })
-                    ) : (
-                      <span>Seleccionar fecha</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={formData.checkOut}
-                    onSelect={date => onFormChange('checkOut', date)}
-                    disabled={date =>
-                      date < (formData.checkIn || new Date(new Date().setHours(0, 0, 0, 0)))
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {formData.checkIn && formData.checkOut && (
+              <p className="text-sm text-muted-foreground text-center">
+                {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+              </p>
+            )}
           </div>
 
           {/* Guest Information */}
