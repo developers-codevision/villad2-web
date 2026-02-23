@@ -7,17 +7,14 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
-import { Checkbox } from "@/modules/shared/components/ui/checkbox";
 import { Calendar } from "@/modules/shared/components/ui/calendar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/modules/shared/components/ui/select";
-import { Input } from "@/modules/shared/components/ui/input";
 import { Label } from "@/modules/shared/components/ui/label";
-import { Textarea } from "@/modules/shared/components/ui/textarea";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { ImageWithPlaceholder } from "@/modules/shared/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
 import { useClientReservation } from "@/modules/client/hooks/useClientReservation";
+import ReservationForm from "@/modules/client/components/ReservationForm";
 import { parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
 import type { DateRange } from "react-day-picker";
@@ -27,31 +24,26 @@ export default function Reservations() {
   const preselectedRoomId = searchParams.get("room");
 
   const { rooms, loading: loadingRooms } = useRooms();
+  const reservationHook = useClientReservation();
   const {
     formData,
-    submitting,
     confirmed,
     confirmationId,
-    isStepComplete,
     reservationSummary,
-    updateFormField,
     setDateRange,
-    selectRoom,
     resetForm,
-    submitReservation,
-    canSubmit,
     occupiedDates,
-  } = useClientReservation();
+  } = reservationHook;
 
   // Set preselected room if available
   useEffect(() => {
     if (preselectedRoomId && rooms.length > 0) {
       const roomId = parseInt(preselectedRoomId);
       if (!isNaN(roomId)) {
-        selectRoom(roomId);
+        reservationHook.selectRoom(roomId);
       }
     }
-  }, [preselectedRoomId, rooms, selectRoom]);
+  }, [preselectedRoomId, rooms, reservationHook.selectRoom]);
 
   // Get selected room
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
@@ -61,44 +53,6 @@ export default function Reservations() {
 
   // Get reservation summary
   const { nights, totalPrice } = reservationSummary(selectedRoom);
-
-
-  // Handle total guests change
-  const handleTotalGuestsChange = (total: number) => {
-    if (!selectedRoom) return;
-
-    const baseGuestsCount = Math.min(total, selectedRoom.baseCapacity);
-    const extraGuestsCount = Math.max(total - selectedRoom.baseCapacity, 0);
-
-    updateFormField('totalGuests', total);
-    updateFormField('baseGuestsCount', baseGuestsCount);
-    updateFormField('extraGuestsCount', extraGuestsCount);
-
-    // All non-principal guests (total - 1)
-    const otherGuestsCount = total - 1;
-    const currentAdditional = formData.additionalGuests || [];
-    const newAdditional = Array.from({ length: otherGuestsCount }, (_, i) =>
-      currentAdditional[i] || { firstName: '', lastName: '', sex: 'M' as const }
-    );
-    updateFormField('additionalGuests', newAdditional);
-  };
-
-  // Handle room selection
-  const handleRoomSelect = (roomId: number) => {
-    selectRoom(roomId);
-    // Reset total guests when room changes
-    if (formData.totalGuests > 0) {
-      handleTotalGuestsChange(formData.totalGuests);
-    }
-  };
-
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (canSubmit && selectedRoom) {
-      submitReservation(selectedRoom);
-    }
-  };
 
   // Confirmation screen
   if (confirmed) {
@@ -190,294 +144,7 @@ export default function Reservations() {
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Form */}
-            <div className="lg:col-span-3 space-y-6">
-
-              {/* Room + guests */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Habitación</Label>
-                  <Select
-                    value={formData.roomId?.toString() || ''}
-                    onValueChange={(value) => handleRoomSelect(parseInt(value))}
-                    disabled={loadingRooms}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {rooms.map((r) => (
-                        <SelectItem key={r.id} value={r.id.toString()}>
-                          {r.name} — ${r.pricePerNight}/noche
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Huéspedes Totales</Label>
-                  <Select
-                    value={formData.totalGuests.toString()}
-                    onValueChange={(value) => handleTotalGuestsChange(parseInt(value))}
-                    disabled={!selectedRoom}
-                  >
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: maxCapacity }, (_, i) => i + 1).map((n) => (
-                        <SelectItem key={n} value={String(n)}>
-                          {n} {n === 1 ? "huésped" : "huéspedes"}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Guest info */}
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Datos del Huésped Principal</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">Nombre</Label>
-                    <Input
-                      id="firstName"
-                      value={formData.guestFirstName}
-                      onChange={(e) => updateFormField('guestFirstName', e.target.value)}
-                      placeholder="Juan"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Apellido</Label>
-                    <Input
-                      id="lastName"
-                      value={formData.guestLastName}
-                      onChange={(e) => updateFormField('guestLastName', e.target.value)}
-                      placeholder="Pérez"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="sex">Sexo</Label>
-                  <Select
-                    value={formData.guestSex}
-                    onValueChange={(value) => updateFormField('guestSex', value as 'M' | 'F' | 'otro')}
-                  >
-                    <SelectTrigger id="sex">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="M">Masculino</SelectItem>
-                      <SelectItem value="F">Femenino</SelectItem>
-                      <SelectItem value="otro">Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.guestEmail}
-                      onChange={(e) => updateFormField('guestEmail', e.target.value)}
-                      placeholder="tu@email.com"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Teléfono</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.guestPhone}
-                      onChange={(e) => updateFormField('guestPhone', e.target.value)}
-                      placeholder="+51 987 654 321"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Other guests */}
-              {formData.additionalGuests.length > 0 && (
-                <div className="space-y-4">
-                  {formData.additionalGuests.map((guest, index) => (
-                    <div key={index} className="border border-border rounded-lg p-4 space-y-4">
-                      <h4 className="font-medium">Acompañante #{index + 1}</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Nombre</Label>
-                          <Input
-                            value={guest.firstName}
-                            onChange={(e) => {
-                              const newGuests = [...formData.additionalGuests];
-                              newGuests[index] = { ...newGuests[index], firstName: e.target.value };
-                              updateFormField('additionalGuests', newGuests);
-                            }}
-                            placeholder="Juan"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Apellido</Label>
-                          <Input
-                            value={guest.lastName}
-                            onChange={(e) => {
-                              const newGuests = [...formData.additionalGuests];
-                              newGuests[index] = { ...newGuests[index], lastName: e.target.value };
-                              updateFormField('additionalGuests', newGuests);
-                            }}
-                            placeholder="Pérez"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Sexo</Label>
-                        <Select
-                          value={guest.sex}
-                          onValueChange={(value) => {
-                            const newGuests = [...formData.additionalGuests];
-                            newGuests[index] = { ...newGuests[index], sex: value as 'M' | 'F' | 'otro' };
-                            updateFormField('additionalGuests', newGuests);
-                          }}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="M">Masculino</SelectItem>
-                            <SelectItem value="F">Femenino</SelectItem>
-                            <SelectItem value="otro">Otro</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Check-in / Check-out options */}
-              <div className="space-y-3">
-                <h3 className="font-semibold text-lg">Opciones de Llegada y Salida</h3>
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id="earlyCheckIn"
-                    checked={formData.earlyCheckIn}
-                    onCheckedChange={(checked) => updateFormField('earlyCheckIn', !!checked)}
-                  />
-                  <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
-                    Check-in anticipado <span className="text-muted-foreground text-sm">(solicitar llegada antes del horario estándar)</span>
-                  </Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id="lateCheckOut"
-                    checked={formData.lateCheckOut}
-                    onCheckedChange={(checked) => updateFormField('lateCheckOut', !!checked)}
-                  />
-                  <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
-                    Check-out tardío <span className="text-muted-foreground text-sm">(solicitar salida después del horario estándar)</span>
-                  </Label>
-                </div>
-              </div>
-
-              {/* Special Requests */}
-              <div className="space-y-2">
-                <Label htmlFor="requests">Notas o Peticiones Especiales (Opcional)</Label>
-                <Textarea
-                  id="requests"
-                  rows={3}
-                  value={formData.notes}
-                  onChange={(e) => updateFormField('notes', e.target.value)}
-                  placeholder="Llegada tardía, cuna para bebé, etc."
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full font-bold text-lg py-6"
-                disabled={!canSubmit || submitting}
-              >
-                {submitting ? 'Procesando...' : 'Confirmar Reserva'}
-              </Button>
-            </div>
-
-            {/* Summary sidebar */}
-            <div className="lg:col-span-2">
-              <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
-                <h3 className="font-bold text-lg mb-4">Resumen de Reserva</h3>
-                {selectedRoom ? (
-                  <>
-                    {(() => {
-                      const mainPhotoArray = parsePhotos(selectedRoom.mainPhoto);
-                      const mainImage = mainPhotoArray.length > 0
-                        ? roomsService.getMediaUrl(mainPhotoArray[0])
-                        : '/placeholder.svg';
-                      return (
-                        <ImageWithPlaceholder
-                          src={mainImage}
-                          alt={selectedRoom.name}
-                          className="rounded-lg w-full h-40 object-cover mb-4"
-                          loading="lazy"
-                        />
-                      );
-                    })()}
-                    <p className="font-semibold">{selectedRoom.name}</p>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {selectedRoom.roomType} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground text-sm mb-4">Selecciona una habitación</p>
-                )}
-
-                <div className="border-t border-border pt-4 space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Check-in</span>
-                    <span>{formData.checkIn ? format(formData.checkIn, "dd MMM yyyy", { locale: es }) : "—"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Check-out</span>
-                    <span>{formData.checkOut ? format(formData.checkOut, "dd MMM yyyy", { locale: es }) : "—"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Noches</span>
-                    <span>{nights}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Huéspedes</span>
-                    <span>{formData.totalGuests}</span>
-                  </div>
-                  {selectedRoom && (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Precio/noche</span>
-                        <span>${selectedRoom.pricePerNight}</span>
-                      </div>
-                      {formData.extraGuestsCount > 0 && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Huéspedes adicionales</span>
-                          <span>+${formData.extraGuestsCount * selectedRoom.extraGuestCharge * nights}</span>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-
-                <div className="border-t border-border mt-4 pt-4 flex justify-between items-center">
-                  <span className="font-bold text-lg">Total</span>
-                  <span className="font-bold text-2xl text-primary">${totalPrice}</span>
-                </div>
-              </div>
-            </div>
-          </form>
+          <ReservationForm hook={reservationHook} rooms={rooms} loadingRooms={loadingRooms} />
         </div>
       </main>
       <Footer />
