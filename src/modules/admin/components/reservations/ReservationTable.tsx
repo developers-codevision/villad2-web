@@ -1,7 +1,6 @@
 // Reservation Table Component - Display reservations in admin panel
-
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format , parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar, BedDouble, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/modules/shared/components/ui/button';
@@ -31,6 +30,8 @@ interface ReservationTableProps {
   onStatusChange: (id: number, status: ReservationStatus) => void;
 }
 
+
+
 export function ReservationTable({
   reservations,
   onEdit,
@@ -59,7 +60,10 @@ export function ReservationTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reservations.map(reservation => (
+
+            {
+              reservations.map(reservation => (
+
               <TableRow
                 key={reservation.id}
                 className="cursor-pointer hover:bg-muted/60 transition-colors"
@@ -87,7 +91,7 @@ export function ReservationTable({
                   <div className="flex items-center gap-2">
                     <Calendar size={16} className="text-muted-foreground" />
                     <span className="text-sm font-medium">
-                      {format(new Date(reservation.checkInDate), 'dd MMM yyyy', { locale: es })}
+                      {format(parseISO(reservation.checkInDate), 'dd MMM yyyy', { locale: es })}
                     </span>
                   </div>
                 </TableCell>
@@ -97,7 +101,7 @@ export function ReservationTable({
                   <div className="flex items-center gap-2">
                     <Calendar size={16} className="text-muted-foreground" />
                     <span className="text-sm font-medium">
-                      {format(new Date(reservation.checkOutDate), 'dd MMM yyyy', { locale: es })}
+                      {format(parseISO(reservation.checkOutDate), 'dd MMM yyyy', { locale: es })}
                     </span>
                   </div>
                 </TableCell>
