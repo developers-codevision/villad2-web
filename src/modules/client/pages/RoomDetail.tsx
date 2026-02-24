@@ -14,6 +14,7 @@ import { roomsService } from "@/modules/shared/services/rooms.service";
 import ReservationForm from '@/modules/client/components/ReservationForm';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function RoomDetail() {
   const { id } = useParams();
@@ -22,6 +23,13 @@ export default function RoomDetail() {
 
   // Usar el mismo hook de reservas para una única fuente de verdad
   const reservationHook = useClientReservation();
+
+  // Set the room when loaded
+  useEffect(() => {
+    if (room) {
+      reservationHook.selectRoom(room.id);
+    }
+  }, [room, reservationHook.selectRoom]);
 
   if (loading) {
     return (

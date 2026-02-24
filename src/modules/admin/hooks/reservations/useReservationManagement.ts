@@ -58,7 +58,7 @@ export function useReservationManagement() {
   });
 
   // Availability
-  const { occupiedDates } = useAvailability();
+  const { occupiedDates } = useAvailability(formData.roomId);
 
   // ============================================
   // COMPUTED VALUES

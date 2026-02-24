@@ -36,7 +36,7 @@ export function useClientReservation() {
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
 
   // Availability
-  const { occupiedDates } = useAvailability();
+  const { occupiedDates } = useAvailability(formData.roomId);
 
   // ============================================
   // COMPUTED VALUES

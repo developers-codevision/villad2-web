@@ -44,10 +44,18 @@ export const reservationsService = {
   },
 
   /**
-   * Get occupied dates for reservations
+   * Get all occupied dates grouped by room ID
+   * Returns an object with room IDs as keys and arrays of date strings in YYYY-MM-DD format as values
+   */
+  async getOccupiedDatesGrouped(): Promise<{ [key: number]: string[] }> {
+    return apiClient.get<{ [key: number]: string[] }>('/reservations/occupied-dates');
+  },
+
+  /**
+   * Get occupied dates for a specific room
    * Returns an array of date strings in YYYY-MM-DD format
    */
-  async getOccupiedDates(): Promise<string[]> {
-    return apiClient.get<string[]>('/reservations/occupied-dates');
+  async getOccupiedDatesForRoom(roomId: number): Promise<string[]> {
+    return apiClient.get<string[]>(`/reservations/occupied-dates/${roomId}`);
   },
 };

@@ -7,6 +7,7 @@ import { useReservationManagement } from "../hooks/reservations/useReservationMa
 import { PageHeader } from "../components/common/PageHeader";
 import { EmptyState } from "../components/common/EmptyState";
 import { ReservationCalendar } from "../components/reservations";
+import { useAvailability } from "@/modules/shared/hooks";
 
 export default function AdminCalendario() {
   const {
@@ -15,6 +16,9 @@ export default function AdminCalendario() {
     loadReservations,
     openEdit,
   } = useReservationManagement();
+
+  // Load occupied dates for general info
+  const { occupiedDates } = useAvailability();
 
   // Load data on mount
   useEffect(() => {
@@ -42,9 +46,9 @@ export default function AdminCalendario() {
         <ReservationCalendar
           reservations={allReservations}
           onReservationClick={openEdit}
+          occupiedDates={occupiedDates}
         />
       )}
     </div>
   );
 }
-
