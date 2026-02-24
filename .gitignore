@@ -1,24 +1,58 @@
+# Node
+node_modules/
+
+# Build output
+dist/
+build/
+
 # Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# OS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Misc
+*.local
+*.log
+coverage/
+
+# Dependency directories
+bower_components/
+
+# Next.js
+.next/
+
+# Svelte
+.svelte-kit/
+
+# Storybook
+out/
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# Test coverage
+coverage/
+
+# Others
+*.tgz
+*.swp
+
+# Ignore media cache
+media/cache/
+
