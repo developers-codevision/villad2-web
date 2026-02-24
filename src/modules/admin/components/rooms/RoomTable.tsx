@@ -7,6 +7,7 @@ import { Room } from '@/modules/shared/types/api.types';
 import { RoomStatusBadge } from './RoomStatusBadge';
 import { parsePhotos } from '@/modules/client/utils/roomHelpers';
 import { getImageUrl } from '../../utils/rooms.utils';
+import { ROOM_TYPE_LABELS } from '../../types/rooms.types';
 
 interface RoomTableProps {
   rooms: Room[];
@@ -57,7 +58,7 @@ export function RoomTable({
                     <span className="font-medium">{room.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="capitalize">{room.roomType}</TableCell>
+                <TableCell className="capitalize">{ROOM_TYPE_LABELS[room.roomType] || room.roomType}</TableCell>
                 <TableCell className="text-right">{room.pricePerNight}$</TableCell>
                 <TableCell className="text-center">{room.capacity}</TableCell>
                 <TableCell>
@@ -108,4 +109,3 @@ export function RoomTable({
     </div>
   );
 }
-

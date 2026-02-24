@@ -80,11 +80,10 @@ export const ROOM_STATUS_LABELS: Record<RoomStatus, string> = {
  * Room type labels (Spanish)
  */
 export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
-  [RoomType.INDIVIDUAL]: 'Individual',
-  [RoomType.DOUBLE]: 'Doble',
-  [RoomType.SUITE]: 'Suite',
-  [RoomType.FAMILY]: 'Familiar',
-  [RoomType.PRESIDENTIAL]: 'Presidencial',
+  [RoomType.STANDARD_ECONOMIC]: 'Standard Económica',
+  [RoomType.STANDARD]: 'Standard',
+  [RoomType.STANDARD_PLUS]: 'Standard Plus',
+  [RoomType.SUITE_BALCONY]: 'Suite Balcony',
 };
 
 /**
