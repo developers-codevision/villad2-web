@@ -33,14 +33,7 @@ export const reservationsService = {
    * Update a reservation (admin only)
    */
   async update(id: number, dto: UpdateReservationDto): Promise<Reservation> {
-    return authenticatedApiClient.patch<Reservation>(`/reservations/${id}`, dto);
-  },
-
-  /**
-   * Update reservation status (admin only)
-   */
-  async updateStatus(id: number, status: ReservationStatus): Promise<Reservation> {
-    return authenticatedApiClient.patch<Reservation>(`/reservations/${id}/status`, { status });
+    return authenticatedApiClient.put<Reservation>(`/reservations/${id}`, dto);
   },
 
   /**

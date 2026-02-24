@@ -281,7 +281,7 @@ export function useReservationManagement() {
     const { id, newStatus } = formState.statusChangeConfirm;
 
     try {
-      await reservationsService.updateStatus(id, newStatus);
+      await reservationsService.update(id, { status: newStatus });
       toast.success('Estado actualizado correctamente');
       await reloadReservations();
     } catch (error) {
