@@ -119,7 +119,7 @@ export default function Reservations() {
           </p>
 
           {/* Date range calendar - full width */}
-          <div className="space-y-2 mb-8">
+          <div className="space-y-2">
             <Label className="text-base">Fechas de estancia</Label>
             <div className="border border-border rounded-lg p-6 flex justify-center">
               <Calendar
@@ -132,7 +132,10 @@ export default function Reservations() {
                   setDateRange(range?.from, range?.to);
                 }}
                 numberOfMonths={2}
-                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
+                disabled={(d) =>
+                  !selectedRoom || d < new Date(new Date().setHours(0, 0, 0, 0)) ||
+                  (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
+                }
                 locale={es}
                 className="pointer-events-auto"
               />

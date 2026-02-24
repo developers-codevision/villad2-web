@@ -131,7 +131,10 @@ export function ReservationFormDialog({
                   onFormChange('checkOut', range?.to);
                 }}
                 numberOfMonths={2}
-                disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
+                disabled={(d) =>
+                  !selectedRoom || d < new Date(new Date().setHours(0, 0, 0, 0)) ||
+                  (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
+                }
                 locale={es}
                 className="pointer-events-auto"
               />
