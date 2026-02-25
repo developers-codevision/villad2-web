@@ -9,6 +9,8 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml* ./
 
 # Install dependencies
+RUN pnpm config set fetch-retry-mintimeout 100000
+RUN pnpm config set fetch-retry-maxtimeout 600000
 RUN pnpm install
 
 # Expose port
