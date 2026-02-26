@@ -12,7 +12,16 @@ export const reservationsService = {
    * Get all reservations (admin only)
    */
   async getAll(): Promise<Reservation[]> {
-    return authenticatedApiClient.get<Reservation[]>('/reservations');
+    const response = await authenticatedApiClient.get<{
+      reservations: Reservation[];
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrevious: boolean;
+    }>('/reservations');
+    return response.reservations;
   },
 
   /**
