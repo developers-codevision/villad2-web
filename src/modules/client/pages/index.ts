@@ -6,3 +6,4 @@ export { default as Reservations } from './Reservations';
 export { default as Reviews } from './Reviews';
 export { default as Login } from './Login';
 export { default as InterestPlaces } from './InterestPlaces';
+export { default as StripeReturn } from './StripeReturn';

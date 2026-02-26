@@ -14,16 +14,6 @@ import type { Room } from '@/modules/shared/types/api.types';
 import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
-import { loadStripe } from '@stripe/stripe-js';
-import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
-import CheckoutForm from './CheckoutForm';
-
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-// This is a public sample test API key.
-// Don't submit any personally identifiable information in requests made with this key.
-// Sign in to see your own test API key embedded in code samples.
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -41,8 +31,6 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
     submitting,
     confirmed,
     confirmationId,
-    paymentMethod,
-    clientSecret,
     reservationSummary,
     updateFormField,
     selectRoom,
@@ -153,21 +141,6 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             </Button>
           </div>
         </div>
-
-        {/* Stripe Checkout Form */}
-        {paymentMethod === 'stripe' && clientSecret && (
-          <div className="border border-border rounded-lg p-6">
-            <CheckoutProvider
-              stripe={stripePromise}
-              options={{
-                clientSecret,
-                elementsOptions: { appearance: { theme: 'stripe' } },
-              }}
-            >
-              <CheckoutForm />
-            </CheckoutProvider>
-          </div>
-        )}
 
         {/* Back button */}
         <div className="text-center">

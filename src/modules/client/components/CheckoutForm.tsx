@@ -4,14 +4,38 @@ import {
   useCheckout
 } from '@stripe/react-stripe-js/checkout';
 
-const validateEmail = async (email, checkout) => {
+interface CheckoutObject {
+  updateEmail: (email: string) => Promise<{
+    type: 'success' | 'error';
+    error?: { message: string };
+  }>;
+  confirm: () => Promise<{
+    type: 'success' | 'error';
+    error?: { message: string };
+  }>;
+  total: {
+    total: {
+      amount: string;
+    };
+  };
+}
+
+const validateEmail = async (email: string, checkout: CheckoutObject) => {
   const updateResult = await checkout.updateEmail(email);
   const isValid = updateResult.type !== "error";
 
-  return { isValid, message: !isValid ? updateResult.error.message : null };
+  return { isValid, message: !isValid ? updateResult.error?.message || null : null };
 }
 
-const EmailInput = ({ checkout, email, setEmail, error, setError }) => {
+interface EmailInputProps {
+  checkout: CheckoutObject;
+  email: string;
+  setEmail: (email: string) => void;
+  error: string | null;
+  setError: (error: string | null) => void;
+}
+
+const EmailInput = ({ checkout, email, setEmail, error, setError }: EmailInputProps) => {
   const handleBlur = async () => {
     if (!email) {
       return;
@@ -23,7 +47,7 @@ const EmailInput = ({ checkout, email, setEmail, error, setError }) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
     setEmail(e.target.value);
   };
@@ -48,8 +72,8 @@ const EmailInput = ({ checkout, email, setEmail, error, setError }) => {
 
 const CheckoutForm = () => {
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const checkoutState = useCheckout();
@@ -66,7 +90,7 @@ const CheckoutForm = () => {
     );
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {checkout} = checkoutState;

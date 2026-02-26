@@ -198,21 +198,29 @@ export function useClientReservation() {
    */
   const submitPayment = useCallback(
     async (method: 'zelle' | 'bizum' | 'stripe') => {
-      setPaymentMethod(method);
       setSubmitting(true);
 
       try {
         const createDto = clientFormDataToCreateDto(formData);
-        console.log(createDto)
+        console.log('Creating reservation with payment method:', method, createDto);
+
         if (method === 'stripe') {
+          // Create checkout session and redirect to Stripe-hosted page
           const response = await reservationsService.createWithPayment(createDto);
-          setConfirmationId(response.reservation.id);
-          setClientSecret(response.clientSecret);
-          // Stay on payment step to show Stripe form
+          console.log('Stripe response:', response);
+
+          // The backend returns paymentSession with url
+          if (response.paymentSession?.url) {
+            // Redirect to Stripe-hosted checkout page
+            window.location.href = response.paymentSession.url;
+          } else {
+            throw new Error('No se recibió la URL de checkout de Stripe');
+          }
         } else {
           // For Zelle/Bizum, create reservation normally
           const response = await reservationsService.create(createDto);
           setConfirmationId(response.id);
+          setPaymentMethod(method);
           toast.success('¡Reserva solicitada correctamente!');
           setConfirmed(true);
           setStep('confirmation');
@@ -220,6 +228,7 @@ export function useClientReservation() {
       } catch (error) {
         console.error('Error processing payment:', error);
         toast.error('Error al procesar el pago. Por favor intenta de nuevo.');
+        setPaymentMethod(null);
       } finally {
         setSubmitting(false);
       }

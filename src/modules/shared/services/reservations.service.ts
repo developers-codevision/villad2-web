@@ -62,7 +62,13 @@ export const reservationsService = {
   /**
    * Create a new reservation with payment (Stripe checkout session)
    */
-  async createWithPayment(dto: CreateReservationDto): Promise<{ reservation: Reservation; clientSecret: string }> {
-    return apiClient.post<{ reservation: Reservation; clientSecret: string }>('/reservations/with-payment', dto);
+  async createWithPayment(dto: CreateReservationDto): Promise<{
+    reservation: Reservation;
+    paymentSession: { sessionId: string; url: string }
+  }> {
+    return apiClient.post<{
+      reservation: Reservation;
+      paymentSession: { sessionId: string; url: string }
+    }>('/reservations/with-payment', dto);
   },
 };
