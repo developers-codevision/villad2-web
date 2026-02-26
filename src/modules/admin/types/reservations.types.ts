@@ -68,7 +68,7 @@ export interface ReservationFilterState {
  * Client reservation step state
  */
 export interface ClientReservationStep {
-  current: 'dates' | 'room' | 'details' | 'confirmation';
+  current: 'dates' | 'room' | 'details' | 'payment' | 'confirmation';
   completed: boolean;
 }
 

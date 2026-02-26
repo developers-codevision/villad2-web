@@ -58,4 +58,11 @@ export const reservationsService = {
   async getOccupiedDatesForRoom(roomId: number): Promise<string[]> {
     return apiClient.get<string[]>(`/reservations/occupied-dates/${roomId}`);
   },
+
+  /**
+   * Create a new reservation with payment (Stripe checkout session)
+   */
+  async createWithPayment(dto: CreateReservationDto): Promise<{ reservation: Reservation; clientSecret: string }> {
+    return apiClient.post<{ reservation: Reservation; clientSecret: string }>('/reservations/with-payment', dto);
+  },
 };

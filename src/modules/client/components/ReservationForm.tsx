@@ -14,6 +14,16 @@ import type { Room } from '@/modules/shared/types/api.types';
 import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
+import { loadStripe } from '@stripe/stripe-js';
+import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
+import CheckoutForm from './CheckoutForm';
+
+// Make sure to call `loadStripe` outside of a component's render to avoid
+// recreating the `Stripe` object on every render.
+// This is a public sample test API key.
+// Don't submit any personally identifiable information in requests made with this key.
+// Sign in to see your own test API key embedded in code samples.
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -27,14 +37,18 @@ interface Props {
 export default function ReservationForm({ hook, rooms, loadingRooms = false, singleRoomId }: Props) {
   const {
     formData,
+    step,
     submitting,
     confirmed,
     confirmationId,
+    paymentMethod,
+    clientSecret,
     reservationSummary,
     updateFormField,
     selectRoom,
     resetForm,
     submitReservation,
+    submitPayment,
     canSubmit,
   } = hook;
 
@@ -73,9 +87,97 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (canSubmit && selectedRoom) {
-      submitReservation(selectedRoom);
+      submitReservation();
     }
   };
+
+  if (step === 'payment') {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold text-center">Selecciona Método de Pago</h1>
+        <p className="text-muted-foreground text-center">
+          Elige cómo deseas pagar tu reserva de ${totalPrice}
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Zelle */}
+          <div className="border border-border rounded-lg p-6 space-y-4">
+            <h3 className="font-semibold text-lg">Zelle</h3>
+            <p className="text-sm text-muted-foreground">
+              Transfiere el monto total a la siguiente cuenta Zelle:
+            </p>
+            <div className="bg-muted/30 rounded p-3 text-sm">
+              <p><strong>Email:</strong> pagos@villad2.com</p>
+              <p><strong>Nombre:</strong> Villa D2</p>
+            </div>
+            <Button
+              onClick={() => submitPayment('zelle')}
+              disabled={submitting}
+              className="w-full"
+            >
+              {submitting ? 'Procesando...' : 'Confirmar con Zelle'}
+            </Button>
+          </div>
+
+          {/* Bizum */}
+          <div className="border border-border rounded-lg p-6 space-y-4">
+            <h3 className="font-semibold text-lg">Bizum</h3>
+            <p className="text-sm text-muted-foreground">
+              Envía el pago a través de Bizum al siguiente número:
+            </p>
+            <div className="bg-muted/30 rounded p-3 text-sm">
+              <p><strong>Número:</strong> +34 600 123 456</p>
+              <p><strong>Concepto:</strong> Reserva #{confirmationId}</p>
+            </div>
+            <Button
+              onClick={() => submitPayment('bizum')}
+              disabled={submitting}
+              className="w-full"
+            >
+              {submitting ? 'Procesando...' : 'Confirmar con Bizum'}
+            </Button>
+          </div>
+
+          {/* Stripe */}
+          <div className="border border-border rounded-lg p-6 space-y-4">
+            <h3 className="font-semibold text-lg">Tarjeta de Crédito/Débito</h3>
+            <p className="text-sm text-muted-foreground">
+              Paga de forma segura con Stripe
+            </p>
+            <Button
+              onClick={() => submitPayment('stripe')}
+              disabled={submitting}
+              className="w-full"
+            >
+              {submitting ? 'Procesando...' : 'Pagar con Stripe'}
+            </Button>
+          </div>
+        </div>
+
+        {/* Stripe Checkout Form */}
+        {paymentMethod === 'stripe' && clientSecret && (
+          <div className="border border-border rounded-lg p-6">
+            <CheckoutProvider
+              stripe={stripePromise}
+              options={{
+                clientSecret,
+                elementsOptions: { appearance: { theme: 'stripe' } },
+              }}
+            >
+              <CheckoutForm />
+            </CheckoutProvider>
+          </div>
+        )}
+
+        {/* Back button */}
+        <div className="text-center">
+          <Button variant="outline" onClick={() => hook.previousStep()}>
+            ← Volver a detalles
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (confirmed) {
     return (

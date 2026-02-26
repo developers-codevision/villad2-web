@@ -1,6 +1,6 @@
 // Client Reservation Hook - Business logic for client-side reservations
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { Room } from '@/modules/shared/types/api.types';
 import { ClientReservationFormData } from '@/modules/shared/types/reservations.types';
@@ -34,6 +34,8 @@ export function useClientReservation() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'zelle' | 'bizum' | 'stripe' | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   // Availability
   const { occupiedDates } = useAvailability(formData.roomId);
@@ -127,6 +129,8 @@ export function useClientReservation() {
     setStep('dates');
     setConfirmed(false);
     setConfirmationId(null);
+    setPaymentMethod(null);
+    setClientSecret(null);
   }, []);
 
   // ============================================
@@ -142,7 +146,7 @@ export function useClientReservation() {
       return;
     }
 
-    const steps: ClientReservationStep['current'][] = ['dates', 'room', 'details', 'confirmation'];
+    const steps: ClientReservationStep['current'][] = ['dates', 'room', 'details', 'payment', 'confirmation'];
     const currentIndex = steps.indexOf(step);
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
@@ -153,7 +157,7 @@ export function useClientReservation() {
    * Go to previous step
    */
   const previousStep = useCallback(() => {
-    const steps: ClientReservationStep['current'][] = ['dates', 'room', 'details', 'confirmation'];
+    const steps: ClientReservationStep['current'][] = ['dates', 'room', 'details', 'payment', 'confirmation'];
     const currentIndex = steps.indexOf(step);
     if (currentIndex > 0) {
       setStep(steps[currentIndex - 1]);
@@ -172,7 +176,7 @@ export function useClientReservation() {
   // ============================================
 
   /**
-   * Submit reservation
+   * Submit reservation (go to payment step)
    */
   const submitReservation = useCallback(
     async () => {
@@ -183,22 +187,39 @@ export function useClientReservation() {
         return;
       }
 
+      // Go to payment step
+      setStep('payment');
+    },
+    [formData]
+  );
+
+  /**
+   * Submit payment
+   */
+  const submitPayment = useCallback(
+    async (method: 'zelle' | 'bizum' | 'stripe') => {
+      setPaymentMethod(method);
       setSubmitting(true);
 
       try {
-        // Convert to DTO
         const createDto = clientFormDataToCreateDto(formData);
-
-        // Call API
-        const response = await reservationsService.create(createDto);
-        setConfirmationId(response.id);
-
-        toast.success('¡Reserva solicitada correctamente!');
-        setConfirmed(true);
-        setStep('confirmation');
+        console.log(createDto)
+        if (method === 'stripe') {
+          const response = await reservationsService.createWithPayment(createDto);
+          setConfirmationId(response.reservation.id);
+          setClientSecret(response.clientSecret);
+          // Stay on payment step to show Stripe form
+        } else {
+          // For Zelle/Bizum, create reservation normally
+          const response = await reservationsService.create(createDto);
+          setConfirmationId(response.id);
+          toast.success('¡Reserva solicitada correctamente!');
+          setConfirmed(true);
+          setStep('confirmation');
+        }
       } catch (error) {
-        console.error('Error submitting reservation:', error);
-        toast.error('Error al procesar la reserva. Por favor intenta de nuevo.');
+        console.error('Error processing payment:', error);
+        toast.error('Error al procesar el pago. Por favor intenta de nuevo.');
       } finally {
         setSubmitting(false);
       }
@@ -220,6 +241,8 @@ export function useClientReservation() {
     submitting,
     confirmed,
     confirmationId,
+    paymentMethod,
+    clientSecret,
     occupiedDates,
 
     // Computed
@@ -241,5 +264,6 @@ export function useClientReservation() {
 
     // Submission
     submitReservation,
+    submitPayment,
   };
 }
