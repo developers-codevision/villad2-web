@@ -17,7 +17,7 @@ export default function Reservations() {
   const [searchParams] = useSearchParams();
   const preselectedRoomId = searchParams.get("room");
 
-  const { rooms, loading: loadingRooms } = useRooms();
+  const { rooms, availableRooms, loading: loadingRooms } = useRooms();
   const reservationHook = useClientReservation();
   const {
     formData,
@@ -37,7 +37,7 @@ export default function Reservations() {
         reservationHook.selectRoom(roomId);
       }
     }
-  }, [preselectedRoomId, rooms]);
+  }, [preselectedRoomId, rooms, reservationHook]);
 
   // Get selected room
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
@@ -143,7 +143,7 @@ export default function Reservations() {
             </>
           )}
 
-          <ReservationForm hook={reservationHook} rooms={rooms} loadingRooms={loadingRooms} />
+          <ReservationForm hook={reservationHook} rooms={availableRooms} loadingRooms={loadingRooms} />
         </div>
       </main>
       <Footer />

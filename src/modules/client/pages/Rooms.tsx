@@ -3,7 +3,7 @@ import { RoomCard, RoomCardSkeleton } from "@/modules/client/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
 
 export default function Rooms() {
-  const { rooms, loading, error } = useRooms();
+  const { availableRooms, loading, error } = useRooms();
 
   return (
     <div className="min-h-screen bg-background">
@@ -32,15 +32,15 @@ export default function Rooms() {
             </div>
           )}
 
-          {!loading && !error && rooms.length === 0 && (
+          {!loading && !error && availableRooms.length === 0 && (
             <div className="text-center py-12">
               <p className="text-muted-foreground">No hay habitaciones disponibles en este momento.</p>
             </div>
           )}
 
-          {!loading && !error && rooms.length > 0 && (
+          {!loading && !error && availableRooms.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {rooms.map((room) => (
+              {availableRooms.map((room) => (
                 <RoomCard key={room.id} room={room} />
               ))}
             </div>

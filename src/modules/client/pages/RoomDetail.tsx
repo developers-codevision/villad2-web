@@ -14,6 +14,7 @@ import { roomsService } from "@/modules/shared/services/rooms.service";
 import ReservationForm from '@/modules/client/components/ReservationForm';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { RoomStatus } from "@/modules/shared/types/api.types";
 import { useEffect } from "react";
 
 export default function RoomDetail() {
@@ -29,7 +30,7 @@ export default function RoomDetail() {
     if (room) {
       reservationHook.selectRoom(room.id);
     }
-  }, [room, reservationHook.selectRoom]);
+  }, [room]);
 
   if (loading) {
     return (
@@ -49,6 +50,22 @@ export default function RoomDetail() {
           <div>
             <h1 className="text-2xl font-bold mb-4">{error || "Habitación no encontrada"}</h1>
             <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones</Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (room.status !== RoomStatus.AVAILABLE) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
+          <div>
+            <h1 className="text-2xl font-bold mb-4">Esta habitación no está disponible</h1>
+            <p className="text-muted-foreground mb-4">La habitación que buscas no se encuentra disponible en este momento.</p>
+            <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones disponibles</Button>
           </div>
         </main>
         <Footer />

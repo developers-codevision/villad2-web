@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { roomsService } from '@/modules/shared/services';
 import type { Room } from '@/modules/shared/types/api.types';
+import { RoomStatus } from '@/modules/shared/types/api.types';
 
 export const useRooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -25,7 +26,10 @@ export const useRooms = () => {
     fetchRooms();
   }, []);
 
-  return { rooms, loading, error };
+  // Filter only available rooms
+  const availableRooms = rooms.filter(room => room.status === RoomStatus.AVAILABLE);
+
+  return { rooms, availableRooms, loading, error };
 };
 
 export const useRoom = (id: number) => {
