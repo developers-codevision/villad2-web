@@ -21,7 +21,6 @@ export default function RoomDetail() {
   const navigate = useNavigate();
   const { room, loading, error } = useRoom(id ? parseInt(id) : 0);
 
-  const capacity = room.baseCapacity + room.extraCapacity
   // Usar el mismo hook de reservas para una única fuente de verdad
   const reservationHook = useClientReservation();
 
@@ -65,6 +64,7 @@ export default function RoomDetail() {
 
   // Parse additional photos and convert to full URLs
   const additionalPhotos = parsePhotos(room.additionalPhotos).map(photo => roomsService.getMediaUrl(photo));
+  const capacity = room.baseCapacity + room.extraCapacity
 
   return (
     <div className="min-h-screen bg-background">
