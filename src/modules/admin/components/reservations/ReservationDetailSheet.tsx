@@ -37,6 +37,7 @@ import {
   canCancelReservation,
 } from '../../types/reservations.types';
 import { ReservationStatus, GuestInfo } from '@/modules/shared/types/api.types';
+import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
 
 // ============================================
 // SUB-COMPONENTS
@@ -186,7 +187,7 @@ export function ReservationDetailSheet({
             <DetailRow
               icon={<BedDouble size={15} />}
               label="Tipo"
-              value={reservation.room.roomType}
+              value={ROOM_TYPE_LABELS[reservation.room.roomType]}
             />
           )}
         </div>

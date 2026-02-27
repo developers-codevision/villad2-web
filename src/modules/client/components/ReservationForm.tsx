@@ -14,6 +14,7 @@ import type { Room } from '@/modules/shared/types/api.types';
 import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
+import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -435,7 +436,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               })()}
               <p className="font-semibold">{selectedRoom.name}</p>
               <p className="text-sm text-muted-foreground mb-4">
-                {selectedRoom.roomType} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
+                {ROOM_TYPE_LABELS[selectedRoom.roomType]} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
               </p>
             </>
           ) : (

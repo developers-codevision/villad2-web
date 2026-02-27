@@ -60,7 +60,7 @@ export function RoomTable({
                 </TableCell>
                 <TableCell className="capitalize">{ROOM_TYPE_LABELS[room.roomType] || room.roomType}</TableCell>
                 <TableCell className="text-right">{room.pricePerNight}$</TableCell>
-                <TableCell className="text-center">{room.capacity}</TableCell>
+                <TableCell className="text-center">{(room.baseCapacity + room.extraCapacity)}</TableCell>
                 <TableCell>
                   <RoomStatusBadge status={room.status} />
                 </TableCell>
