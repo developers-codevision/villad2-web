@@ -16,6 +16,7 @@ import { useRooms } from "@/modules/client/hooks/useRooms";
 import logo from "@/assets/logo.png";
 import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
 import ReceptionSection from "@/modules/client/components/ReceptionSection";
+import ExchangeRateSection from "@/modules/client/components/ExchangeRateSection";
 
 const Index = () => {
   const { rooms, loading } = useRooms();
@@ -104,6 +105,7 @@ const Index = () => {
 
       <TerraceBarSection />
       <ReceptionSection />
+      <ExchangeRateSection />
 
       {/* Services */}
       <section className="py-20 px-4 bg-accent/30">
