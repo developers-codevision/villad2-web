@@ -7,3 +7,6 @@ export { default as Reviews } from './Reviews';
 export { default as Login } from './Login';
 export { default as InterestPlaces } from './InterestPlaces';
 export { default as StripeReturn } from './StripeReturn';
+export { default as RefundPolicies } from './RefundPolicies';
+export { default as TermsAndConditions } from './TermsAndConditions';
+export { default as FAQ } from './FAQ';

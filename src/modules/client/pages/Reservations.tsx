@@ -1,6 +1,3 @@
-// Client Reservations Page - Clean Architecture
-// All business logic moved to hooks, utils, and types
-
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -11,12 +8,9 @@ import { Calendar } from "@/modules/shared/components/ui/calendar";
 import { Label } from "@/modules/shared/components/ui/label";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
-import { ImageWithPlaceholder } from "@/modules/shared/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
 import { useClientReservation } from "@/modules/client/hooks/useClientReservation";
 import ReservationForm from "@/modules/client/components/ReservationForm";
-import { parsePhotos } from "@/modules/client/utils/roomHelpers";
-import { roomsService } from "@/modules/shared/services/rooms.service";
 import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
@@ -43,13 +37,11 @@ export default function Reservations() {
         reservationHook.selectRoom(roomId);
       }
     }
-  }, [preselectedRoomId, rooms, reservationHook.selectRoom]);
+  }, [preselectedRoomId, rooms]);
 
   // Get selected room
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
 
-  // Get max capacity for selected room
-  const maxCapacity = selectedRoom ? selectedRoom.baseCapacity + selectedRoom.extraCapacity : 0;
 
   // Get reservation summary
   const { nights, totalPrice } = reservationSummary(selectedRoom);
@@ -114,38 +106,42 @@ export default function Reservations() {
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-3">
             Haz tu <span className="text-primary">Reserva</span>
           </h1>
-          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Selecciona tus fechas, elige la habitación y completa tus datos.
-          </p>
-
-          {/* Date range calendar - full width */}
-          <div className="space-y-2">
-            <Label className="text-base">Fechas de estancia</Label>
-            <div className="border border-border rounded-lg p-6 flex justify-center">
-              <Calendar
-                mode="range"
-                selected={{
-                  from: formData.checkIn,
-                  to: formData.checkOut,
-                }}
-                onSelect={(range: DateRange | undefined) => {
-                  setDateRange(range?.from, range?.to);
-                }}
-                numberOfMonths={2}
-                disabled={(d) =>
-                  !selectedRoom || d < new Date(new Date().setHours(0, 0, 0, 0)) ||
-                  (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
-                }
-                locale={es}
-                className="pointer-events-auto"
-              />
-            </div>
-            {formData.checkIn && formData.checkOut && (
-              <p className="text-sm text-muted-foreground text-center">
-                {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+          {reservationHook.step !== 'payment' && (
+            <>
+              <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+                Selecciona tus fechas, elige la habitación y completa tus datos.
               </p>
-            )}
-          </div>
+
+              {/* Date range calendar - full width */}
+              <div className="space-y-2">
+                <Label className="text-base">Fechas de estancia</Label>
+                <div className="border border-border rounded-lg p-6 flex justify-center">
+                  <Calendar
+                    mode="range"
+                    selected={{
+                      from: formData.checkIn,
+                      to: formData.checkOut,
+                    }}
+                    onSelect={(range: DateRange | undefined) => {
+                      setDateRange(range?.from, range?.to);
+                    }}
+                    numberOfMonths={2}
+                    disabled={(d) =>
+                      !selectedRoom || d < new Date(new Date().setHours(0, 0, 0, 0)) ||
+                      (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
+                    }
+                    locale={es}
+                    className="pointer-events-auto"
+                  />
+                </div>
+                {formData.checkIn && formData.checkOut && (
+                  <p className="text-sm text-muted-foreground text-center">
+                    {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
 
           <ReservationForm hook={reservationHook} rooms={rooms} loadingRooms={loadingRooms} />
         </div>

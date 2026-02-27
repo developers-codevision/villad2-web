@@ -81,61 +81,79 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
 
   if (step === 'payment') {
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-center">Selecciona Método de Pago</h1>
-        <p className="text-muted-foreground text-center">
-          Elige cómo deseas pagar tu reserva de ${totalPrice}
-        </p>
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="space-y-3">
+          <h1 className="text-4xl font-bold text-center">Selecciona Método de Pago</h1>
+          <p className="text-muted-foreground text-center text-lg">
+            Elige cómo deseas pagar tu reserva de <span className="font-bold text-primary text-2xl">${totalPrice}</span>
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Zelle */}
-          <div className="border border-border rounded-lg p-6 space-y-4">
-            <h3 className="font-semibold text-lg">Zelle</h3>
-            <p className="text-sm text-muted-foreground">
-              Transfiere el monto total a la siguiente cuenta Zelle:
-            </p>
-            <div className="bg-muted/30 rounded p-3 text-sm">
-              <p><strong>Email:</strong> pagos@villad2.com</p>
-              <p><strong>Nombre:</strong> Villa D2</p>
+          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col">
+            <div className="space-y-2 flex-1">
+              <div className="inline-flex items-center gap-2 mb-2">
+                <h3 className="font-bold text-lg">Zelle</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Transfiere el monto total a la siguiente cuenta Zelle:
+              </p>
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 rounded-lg p-4 text-sm space-y-2 border border-blue-200/50 dark:border-blue-800/50">
+                <p><span className="text-muted-foreground">Email:</span> <strong>pagos@villad2.com</strong></p>
+                <p><span className="text-muted-foreground">Nombre:</span> <strong>Villa D2</strong></p>
+              </div>
             </div>
             <Button
               onClick={() => submitPayment('zelle')}
               disabled={submitting}
-              className="w-full"
+              className="w-full font-semibold"
             >
               {submitting ? 'Procesando...' : 'Confirmar con Zelle'}
             </Button>
           </div>
 
           {/* Bizum */}
-          <div className="border border-border rounded-lg p-6 space-y-4">
-            <h3 className="font-semibold text-lg">Bizum</h3>
-            <p className="text-sm text-muted-foreground">
-              Envía el pago a través de Bizum al siguiente número:
-            </p>
-            <div className="bg-muted/30 rounded p-3 text-sm">
-              <p><strong>Número:</strong> +34 600 123 456</p>
-              <p><strong>Concepto:</strong> Reserva #{confirmationId}</p>
+          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col">
+            <div className="space-y-2 flex-1">
+              <div className="inline-flex items-center gap-2 mb-2">
+                <h3 className="font-bold text-lg">Bizum</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Envía el pago a través de Bizum al siguiente número:
+              </p>
+              <div className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20 rounded-lg p-4 text-sm space-y-2 border border-green-200/50 dark:border-green-800/50">
+                <p><span className="text-muted-foreground">Número:</span> <strong>+34 600 123 456</strong></p>
+                <p><span className="text-muted-foreground">Concepto:</span> <strong>Reserva #{confirmationId}</strong></p>
+              </div>
             </div>
             <Button
               onClick={() => submitPayment('bizum')}
               disabled={submitting}
-              className="w-full"
+              className="w-full font-semibold"
             >
               {submitting ? 'Procesando...' : 'Confirmar con Bizum'}
             </Button>
           </div>
 
           {/* Stripe */}
-          <div className="border border-border rounded-lg p-6 space-y-4">
-            <h3 className="font-semibold text-lg">Tarjeta de Crédito/Débito</h3>
-            <p className="text-sm text-muted-foreground">
-              Paga de forma segura con Stripe
-            </p>
+          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col bg-gradient-to-br from-purple-50/30 to-transparent dark:from-purple-950/10">
+            <div className="space-y-2 flex-1">
+              <div className="inline-flex items-center gap-2 mb-2">
+                <h3 className="font-bold text-lg">Tarjeta de Crédito</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Paga de forma segura con Stripe. Acepta todas las tarjetas principales.
+              </p>
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 rounded-lg p-4 text-sm space-y-2 border border-purple-200/50 dark:border-purple-800/50">
+                <p className="text-xs text-muted-foreground">Procesamiento instantáneo</p>
+              </div>
+            </div>
             <Button
               onClick={() => submitPayment('stripe')}
               disabled={submitting}
-              className="w-full"
+              className="w-full font-semibold bg-primary hover:bg-primary/90"
             >
               {submitting ? 'Procesando...' : 'Pagar con Stripe'}
             </Button>
@@ -143,7 +161,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
         </div>
 
         {/* Back button */}
-        <div className="text-center">
+        <div className="text-center pt-4">
           <Button variant="outline" onClick={() => hook.previousStep()}>
             ← Volver a detalles
           </Button>

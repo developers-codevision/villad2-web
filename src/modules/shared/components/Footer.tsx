@@ -22,6 +22,9 @@ export default function Footer() {
               <li><Link to="/habitaciones" className="hover:text-primary transition-colors">Habitaciones</Link></li>
               <li><Link to="/servicios" className="hover:text-primary transition-colors">Servicios</Link></li>
               <li><Link to="/reservas" className="hover:text-primary transition-colors">Reservas</Link></li>
+              <li><Link to="/preguntas-frecuentes" className="hover:text-primary transition-colors">Preguntas Frecuentes</Link></li>
+              <li><Link to="/politicas-reembolso" className="hover:text-primary transition-colors">Política de Reembolsos</Link></li>
+              <li><Link to="/terminos-condiciones" className="hover:text-primary transition-colors">Términos y Condiciones</Link></li>
             </ul>
           </div>
 

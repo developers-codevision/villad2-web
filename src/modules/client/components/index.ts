@@ -3,3 +3,6 @@ export { default as ImageUploader } from './ImageUploader';
 export { NavLink } from './NavLink';
 export { default as RoomCardSkeleton } from './RoomCardSkeleton';
 export { default as RoomDetailSkeleton } from './RoomDetailSkeleton';
+export { default as RefundPoliciesSection } from './RefundPoliciesSection';
+export { default as TermsAndConditionsSection } from './TermsAndConditionsSection';
+export { default as FAQSection } from './FAQSection';
