@@ -21,6 +21,7 @@ export default function RoomDetail() {
   const navigate = useNavigate();
   const { room, loading, error } = useRoom(id ? parseInt(id) : 0);
 
+  const capacity = room.baseCapacity + room.extraCapacity
   // Usar el mismo hook de reservas para una única fuente de verdad
   const reservationHook = useClientReservation();
 
@@ -93,7 +94,7 @@ export default function RoomDetail() {
               <div className="flex items-center gap-4 mt-4">
 
                 <span className="flex items-center gap-1 text-white/80">
-                  <Users size={16} /> Hasta {room.capacity} {room.capacity === 1 ? "persona" : "personas"}
+                  <Users size={16} /> Hasta {capacity} {capacity === 1 ? "persona" : "personas"}
                 </span>
               </div>
             </div>
