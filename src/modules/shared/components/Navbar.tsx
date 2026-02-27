@@ -44,7 +44,7 @@ export default function Navbar() {
 				</Link>
 				<div className="hidden md:flex items-center ml-4">
 					<SocialLinks
-						facebookUrl="https://facebook.com/villad2"
+						facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
 						twitterUrl="https://x.com/villad2"
 						youtubeUrl="https://youtube.com/villad2"
 						whatsappUrl="https://wa.me/1234567890"
