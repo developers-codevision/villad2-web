@@ -13,7 +13,7 @@ import {
  */
 export const reviewsService = {
   /**
-   * Get all reviews with optional filters (admin only)
+   * Get all reviews with optional filters (public for ACTIVE reviews, admin for others)
    */
   async getAll(
     status?: ReviewStatus,
@@ -30,7 +30,10 @@ export const reviewsService = {
     params.append('page', page.toString());
     params.append('limit', limit.toString());
 
-    return authenticatedApiClient.get<{
+    // Use public client for ACTIVE reviews, authenticated client for others
+    const client = status === ReviewStatus.ACTIVE ? apiClient : authenticatedApiClient;
+
+    return client.get<{
       reviews: Review[];
       total: number;
       page: number;
@@ -49,7 +52,11 @@ export const reviewsService = {
    * Create a new review (public)
    */
   async create(dto: CreateReviewDto): Promise<Review> {
-    return apiClient.post<Review>('/reviews', dto);
+    // Asegurar que las nuevas reseñas comienzan como INACTIVE
+    return apiClient.post<Review>('/reviews', {
+      ...dto,
+      status: ReviewStatus.INACTIVE,
+    });
   },
 
   /**
@@ -72,7 +79,7 @@ export const reviewsService = {
    * Add response to a review (admin only)
    */
   async addResponse(id: number, response: string): Promise<Review> {
-    return authenticatedApiClient.put<Review>(`/reviews/${id}/response`, {
+    return authenticatedApiClient.patch<Review>(`/reviews/${id}/response`, {
       response,
     });
   },

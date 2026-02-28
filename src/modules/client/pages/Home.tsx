@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import {useEffect, useState} from 'react'
 import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import {
@@ -10,16 +11,35 @@ import {
 } from "@/modules/shared/components/ui/carousel";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
-import RoomCard from "@/modules/client/components/RoomCard";
-import { HOSTAL, SERVICES_BASIC, SERVICES_TOURIST, SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
-import { useRooms } from "@/modules/client/hooks/useRooms";
+import { HOSTAL } from "@/modules/shared/data/hostal";
+import { reviewsService } from "@/modules/shared/services";
+import { Review, ReviewStatus } from "@/modules/shared/types/api.types";
 import logo from "@/assets/logo.png";
 import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
 import ReceptionSection from "@/modules/client/components/ReceptionSection";
 import ExchangeRateSection from "@/modules/client/components/ExchangeRateSection";
 
 const Index = () => {
-  const { rooms, loading } = useRooms();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+
+  // Cargar reseñas aprobadas desde la API
+  useEffect(() => {
+    const loadApprovedReviews = async () => {
+      try {
+        const response = await reviewsService.getAll(ReviewStatus.ACTIVE, 1, 100);
+        setReviews(response.reviews);
+      } catch (error) {
+        console.error("Error loading reviews:", error);
+        // Fallback a reseñas por defecto si hay error
+        setReviews([]);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+
+    loadApprovedReviews();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -136,35 +156,45 @@ const Index = () => {
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
             Experiencias reales de quienes ya nos visitaron.
           </p>
-          <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
-            <CarouselContent className="-ml-4">
-              {[
-                { name: "María González", country: "España", rating: 5, text: "Una estancia maravillosa. El personal fue increíblemente amable y la habitación estaba impecable. ¡Volveremos seguro!" },
-                { name: "Carlos Méndez", country: "México", rating: 4, text: "Excelente relación calidad-precio. La ubicación es perfecta para explorar la ciudad. El desayuno muy completo." },
-                { name: "Ana Rodríguez", country: "Argentina", rating: 5, text: "El mejor hostal en el que me he hospedado. Las habitaciones son cómodas y el ambiente es muy acogedor." },
-                { name: "Pierre Dupont", country: "Francia", rating: 5, text: "Magnifique! Un lugar encantador con un servicio excepcional. Las excursiones organizadas fueron fantásticas." },
-                { name: "Laura Fernández", country: "Colombia", rating: 4, text: "Muy buena experiencia. Habitación limpia, buena ubicación y el equipo siempre dispuesto a ayudar." },
-                { name: "James Wilson", country: "Estados Unidos", rating: 5, text: "Amazing place! The staff went above and beyond to make our stay special. Highly recommended!" },
-              ].map((r, i) => (
-                <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-                    <div className="flex items-center gap-1 mb-3">
-                      {Array.from({ length: 5 }).map((_, s) => (
-                        <Star key={s} className={`h-4 w-4 ${s < r.rating ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
-                      ))}
+          {loadingReviews ? (
+            <div className="text-center py-12">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+              <p className="mt-4 text-muted-foreground">Cargando reseñas...</p>
+            </div>
+          ) : reviews.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No hay reseñas aprobadas aún. ¡Sé el primero en dejar una!</p>
+            </div>
+          ) : (
+            <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
+              <CarouselContent className="-ml-4">
+                {reviews.map((review) => (
+                  <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                    <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                      <div className="flex items-center gap-1 mb-3">
+                        {Array.from({ length: 5 }).map((_, s) => (
+                          <Star key={s} className={`h-4 w-4 ${s < review.stars ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
+                        ))}
+                      </div>
+                      <p className="text-sm text-muted-foreground italic flex-1 mb-4">"{review.content}"</p>
+                      {review.response && (
+                        <div className="bg-primary/5 border border-primary/20 p-3 rounded mb-4">
+                          <p className="text-xs font-semibold text-primary mb-2">Respuesta del hostal:</p>
+                          <p className="text-xs text-foreground">{review.response}</p>
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold text-sm">{review.name}</p>
+                        <p className="text-xs text-muted-foreground">{review.country}</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground italic flex-1 mb-4">"{r.text}"</p>
-                    <div>
-                      <p className="font-semibold text-sm">{r.name}</p>
-                      <p className="text-xs text-muted-foreground">{r.country}</p>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          )}
         </div>
       </section>
 

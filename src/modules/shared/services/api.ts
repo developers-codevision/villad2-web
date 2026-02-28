@@ -181,6 +181,25 @@ export const authenticatedApiClient = {
     return response.json();
   },
 
+  patch: async <T>(endpoint: string, data: unknown): Promise<T> => {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+
+    if (response.status === 401) {
+      authService.logout();
+      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+    }
+
+    if (!response.ok) {
+      await parseError(response);
+    }
+
+    return response.json();
+  },
+
   delete: async <T>(endpoint: string): Promise<T> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'DELETE',

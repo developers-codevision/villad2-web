@@ -218,6 +218,7 @@ export interface Review {
   name: string;
   country: string;
   content: string;
+  stars: number;
   response?: string;
   status: ReviewStatus;
   createdAt: string;
@@ -228,6 +229,7 @@ export interface CreateReviewDto {
   name: string;
   country: string;
   content: string;
+  stars: number;
   response?: string;
   status?: ReviewStatus;
 }
@@ -236,6 +238,7 @@ export interface UpdateReviewDto {
   name?: string;
   country?: string;
   content?: string;
+  stars?: number;
   response?: string;
   status?: ReviewStatus;
 }
