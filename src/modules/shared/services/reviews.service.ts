@@ -63,14 +63,14 @@ export const reviewsService = {
    * Update a review (admin only)
    */
   async update(id: number, dto: UpdateReviewDto): Promise<Review> {
-    return authenticatedApiClient.put<Review>(`/reviews/${id}`, dto);
+    return authenticatedApiClient.patch<Review>(`/reviews/${id}`, dto);
   },
 
   /**
    * Change review status (admin only)
    */
   async changeStatus(id: number, status: ReviewStatus): Promise<Review> {
-    return authenticatedApiClient.put<Review>(`/reviews/${id}/status`, {
+    return authenticatedApiClient.patch<Review>(`/reviews/${id}/status`, {
       status,
     });
   },

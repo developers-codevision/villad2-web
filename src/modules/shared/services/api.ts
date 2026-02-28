@@ -280,6 +280,32 @@ export const authenticatedApiClient = {
 
     return response.json();
   },
+
+  patchFormData: async <T>(endpoint: string, formData: FormData): Promise<T> => {
+    const token = authService.getToken();
+    if (!token) {
+      throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+    }
+
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (response.status === 401) {
+      authService.logout();
+      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+    }
+
+    if (!response.ok) {
+      await parseError(response);
+    }
+
+    return response.json();
+  },
 };
 
 export default apiClient;

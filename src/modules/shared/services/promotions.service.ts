@@ -54,14 +54,14 @@ export const promotionsService = {
    * Update a promotion (admin only)
    */
   async update(id: number, dto: FormData): Promise<Promotion> {
-    return authenticatedApiClient.putFormData<Promotion>(`/promotions/${id}`, dto);
+    return authenticatedApiClient.patchFormData<Promotion>(`/promotions/${id}`, dto);
   },
 
   /**
    * Change promotion status (admin only)
    */
   async changeStatus(id: number, status: PromotionStatus): Promise<Promotion> {
-    return authenticatedApiClient.put<Promotion>(
+    return authenticatedApiClient.patch<Promotion>(
       `/promotions/${id}/status`,
       { status }
     );
