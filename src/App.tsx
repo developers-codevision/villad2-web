@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/modules/shared/components/ui/sonner";
 import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Rooms, RoomDetail, Services, Reservations, Reviews, Login, InterestPlaces, StripeReturn, RefundPolicies, TermsAndConditions, FAQ } from "@/modules/client/pages";
+import { Home, Rooms, RoomDetail, Services, Reservations, Reviews, Promociones, Login, InterestPlaces, StripeReturn, RefundPolicies, TermsAndConditions, FAQ } from "@/modules/client/pages";
 import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas, AdminSelector, GestionHome } from "@/modules/admin/pages";
 import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
@@ -24,6 +24,7 @@ const App = () => (
             <Route path="/servicios" element={<Services />} />
             <Route path="/reservas" element={<Reservations />} />
             <Route path="/resenas" element={<Reviews />} />
+            <Route path="/promociones" element={<Promociones />} />
             <Route path="/login" element={<Login />} />
             <Route path="/lugares-interes" element={<InterestPlaces />} />
             <Route path="/payment/success" element={<StripeReturn />} />

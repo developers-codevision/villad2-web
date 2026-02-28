@@ -98,6 +98,7 @@ const Reviews = () => {
                       placeholder="Tu nombre"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div className="space-y-2">
@@ -106,39 +107,8 @@ const Reviews = () => {
                       placeholder="Tu país (opcional)"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
+                      disabled={isSubmitting}
                     />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Puntuación *</label>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => {
-                      const starValue = i + 1;
-                      return (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => setRating(starValue)}
-                          onMouseEnter={() => setHoveredStar(starValue)}
-                          onMouseLeave={() => setHoveredStar(0)}
-                          className="p-1 transition-transform hover:scale-110"
-                        >
-                          <Star
-                            className={`h-7 w-7 transition-colors ${
-                              starValue <= (hoveredStar || rating)
-                                ? "text-primary fill-primary"
-                                : "text-muted-foreground/30"
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
-                    {rating > 0 && (
-                      <span className="ml-2 text-sm text-muted-foreground">
-                        {rating}/5
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -146,9 +116,10 @@ const Reviews = () => {
                   <label className="text-sm font-medium">Comentario *</label>
                   <Textarea
                     placeholder="Cuéntanos sobre tu experiencia en Villa D2..."
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
                     rows={4}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -164,7 +135,55 @@ const Reviews = () => {
             </CardContent>
           </Card>
 
+          {/* Approved Reviews */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Reseñas Aprobadas</h2>
 
+            {isLoadingReviews ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Cargando reseñas...</p>
+              </div>
+            ) : approvedReviews.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <Star className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" />
+                  <p className="text-muted-foreground">
+                    Aún no hay reseñas aprobadas. ¡Sé el primero en dejar una!
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {approvedReviews.map((review) => (
+                  <Card key={review.id}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-lg">{review.name}</CardTitle>
+                          <CardDescription className="text-xs">
+                            {review.country} • {new Date(review.createdAt).toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm leading-relaxed">{review.content}</p>
+                      {review.response && (
+                        <div className="bg-primary/5 border border-primary/20 p-4 rounded-lg">
+                          <p className="text-xs font-semibold text-primary mb-2">Respuesta del hostal:</p>
+                          <p className="text-sm text-foreground">{review.response}</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </main>
 

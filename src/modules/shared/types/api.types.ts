@@ -205,6 +205,93 @@ export interface UpdateReservationDto {
 }
 
 // ============================================
+// REVIEW INTERFACES
+// ============================================
+
+export enum ReviewStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export interface Review {
+  id: number;
+  name: string;
+  country: string;
+  content: string;
+  response?: string;
+  status: ReviewStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateReviewDto {
+  name: string;
+  country: string;
+  content: string;
+  response?: string;
+  status?: ReviewStatus;
+}
+
+export interface UpdateReviewDto {
+  name?: string;
+  country?: string;
+  content?: string;
+  response?: string;
+  status?: ReviewStatus;
+}
+
+// ============================================
+// PROMOTION INTERFACES
+// ============================================
+
+export enum PromotionStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export interface Promotion {
+  id: number;
+  title: string;
+  maxPeople?: number;
+  minPeople?: number;
+  time?: string;
+  services?: string[];
+  description?: string;
+  checkInTime?: string;
+  checkOutTime?: string;
+  photo?: string;
+  status: PromotionStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePromotionDto {
+  title: string;
+  maxPeople?: number;
+  minPeople?: number;
+  time?: string;
+  services?: string[];
+  description?: string;
+  checkInTime?: string;
+  checkOutTime?: string;
+  photo?: string;
+  status?: PromotionStatus;
+}
+
+export interface UpdatePromotionDto {
+  title?: string;
+  maxPeople?: number;
+  minPeople?: number;
+  time?: string;
+  services?: string[];
+  description?: string;
+  checkInTime?: string;
+  checkOutTime?: string;
+  photo?: string;
+  status?: PromotionStatus;
+}
+
+// ============================================
 // API ERROR INTERFACE
 // ============================================
 
