@@ -175,6 +175,9 @@ export interface Reservation {
   additionalGuests?: GuestInfo[];
   earlyCheckIn: boolean;
   lateCheckOut: boolean;
+  transferOneWay: boolean;
+  transferRoundTrip: boolean;
+  breakfasts: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -191,6 +194,9 @@ export interface CreateReservationDto {
   additionalGuests?: GuestInfo[];
   earlyCheckIn?: boolean;
   lateCheckOut?: boolean;
+  transferOneWay?: boolean;
+  transferRoundTrip?: boolean;
+  breakfasts?: number;
 }
 
 export interface UpdateReservationDto {
@@ -202,6 +208,9 @@ export interface UpdateReservationDto {
   extraGuestsCount?: number;
   earlyCheckIn?: boolean;
   lateCheckOut?: boolean;
+  transferOneWay?: boolean;
+  transferRoundTrip?: boolean;
+  breakfasts?: number;
 }
 
 // ============================================

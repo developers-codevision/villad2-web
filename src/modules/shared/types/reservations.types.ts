@@ -21,6 +21,9 @@ export interface ReservationFormDataBase {
   additionalGuests: GuestInfo[];
   earlyCheckIn: boolean;
   lateCheckOut: boolean;
+  transferOneWay: boolean;
+  transferRoundTrip: boolean;
+  breakfasts: number;
   notes: string;
 }
 

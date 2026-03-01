@@ -396,6 +396,48 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             </Label>
           </div>
         </div>
+        <div className="space-y-3">
+          <h3 className="font-semibold text-lg">Servicios de Transporte</h3>
+          <div className="flex items-center gap-3">
+            <Checkbox
+              id="transferOneWay"
+              checked={formData.transferOneWay}
+              onCheckedChange={(checked) => updateFormField('transferOneWay', !!checked)}
+            />
+            <Label htmlFor="transferOneWay" className="cursor-pointer font-normal">
+              Recogida de el aereopuerto <span className="text-muted-foreground text-sm"></span>
+            </Label>
+          </div>
+          <div className="flex items-center gap-3">
+            <Checkbox
+              id="transferRoundTrip"
+              checked={formData.transferRoundTrip}
+              onCheckedChange={(checked) => updateFormField('transferRoundTrip', !!checked)}
+            />
+            <Label htmlFor="transferRoundTrip" className="cursor-pointer font-normal">
+              Retorno al aereopuerto <span className="text-muted-foreground text-sm"></span>
+            </Label>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="breakfasts">Desayunos Incluidos</Label>
+          <Select
+            value={formData.breakfasts.toString()}
+            onValueChange={(value) => updateFormField('breakfasts', parseInt(value))}
+          >
+            <SelectTrigger id="breakfasts">
+              <SelectValue placeholder="Seleccionar cantidad de desayunos" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">Sin desayunos</SelectItem>
+              {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => (
+                <SelectItem key={n} value={String(n)}>
+                  {n} {n === 1 ? "desayuno" : "desayunos"}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="requests">Notas o Peticiones Especiales (Opcional)</Label>
           <Textarea
@@ -459,6 +501,36 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               <span className="text-muted-foreground">Huéspedes</span>
               <span>{formData.totalGuests}</span>
             </div>
+            {formData.earlyCheckIn && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Check-in anticipado</span>
+                <span className="text-primary">✓</span>
+              </div>
+            )}
+            {formData.lateCheckOut && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Check-out tardío</span>
+                <span className="text-primary">✓</span>
+              </div>
+            )}
+            {formData.transferOneWay && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Transporte ida</span>
+                <span className="text-primary">✓</span>
+              </div>
+            )}
+            {formData.transferRoundTrip && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Transporte ida y vuelta</span>
+                <span className="text-primary">✓</span>
+              </div>
+            )}
+            {formData.breakfasts > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Desayunos</span>
+                <span>{formData.breakfasts}</span>
+              </div>
+            )}
             {selectedRoom && (
               <>
                 <div className="flex justify-between">

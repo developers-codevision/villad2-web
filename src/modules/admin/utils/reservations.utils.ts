@@ -10,6 +10,7 @@ import {
   ReservationFormData,
   ReservationWithDetails,
 } from '../types/reservations.types';
+import { ClientReservationFormData } from '@/modules/shared/types/reservations.types';
 
 // ============================================
 // FORM INITIALIZATION
@@ -36,6 +37,9 @@ export function createEmptyReservationForm(): ReservationFormData {
     status: ReservationStatus.PENDING,
     earlyCheckIn: false,
     lateCheckOut: false,
+    transferOneWay: false,
+    transferRoundTrip: false,
+    breakfasts: 0,
   };
 }
 
@@ -59,6 +63,9 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
     notes: '',
     earlyCheckIn: false,
     lateCheckOut: false,
+    transferOneWay: false,
+    transferRoundTrip: false,
+    breakfasts: 0,
   };
 }
 
@@ -70,16 +77,16 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
  * Normalize reservation data from backend
  * Handles both old and new formats
  */
-export function normalizeReservation(reservation: any): ReservationWithDetails {
+export function normalizeReservation(reservation: Record<string, unknown>): ReservationWithDetails {
   // Nuevo formato: siempre hay client
   return {
     ...reservation,
     mainGuest: {
-      firstName: reservation.client.firstName,
-      lastName: reservation.client.lastName,
-      sex: reservation.client.sex,
-      email: reservation.client.email,
-      phone: reservation.client.phone,
+      firstName: (reservation.client as any).firstName,
+      lastName: (reservation.client as any).lastName,
+      sex: (reservation.client as any).sex,
+      email: (reservation.client as any).email,
+      phone: (reservation.client as any).phone,
     },
     checkInDate: reservation.checkInDate,
     checkOutDate: reservation.checkOutDate,
@@ -116,6 +123,9 @@ export function reservationToFormData(
     status: reservation.status,
     earlyCheckIn: reservation.earlyCheckIn,
     lateCheckOut: reservation.lateCheckOut,
+    transferOneWay: reservation.transferOneWay || false,
+    transferRoundTrip: reservation.transferRoundTrip || false,
+    breakfasts: reservation.breakfasts || 0,
   };
 }
 
@@ -147,6 +157,9 @@ export function formDataToCreateDto(
     additionalGuests: formData.additionalGuests.length > 0 ? formData.additionalGuests : undefined,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
+    transferOneWay: formData.transferOneWay,
+    transferRoundTrip: formData.transferRoundTrip,
+    breakfasts: formData.breakfasts || undefined,
   };
 }
 
@@ -179,6 +192,9 @@ export function clientFormDataToCreateDto(
     additionalGuests: formData.additionalGuests.length > 0 ? formData.additionalGuests : undefined,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
+    transferOneWay: formData.transferOneWay,
+    transferRoundTrip: formData.transferRoundTrip,
+    breakfasts: formData.breakfasts || undefined,
   };
 }
 
@@ -197,6 +213,9 @@ export function formDataToUpdateDto(
     extraGuestsCount: formData.extraGuestsCount,
     earlyCheckIn: formData.earlyCheckIn,
     lateCheckOut: formData.lateCheckOut,
+    transferOneWay: formData.transferOneWay,
+    transferRoundTrip: formData.transferRoundTrip,
+    breakfasts: formData.breakfasts || undefined,
   };
 }
 
