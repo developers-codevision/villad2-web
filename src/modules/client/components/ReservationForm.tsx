@@ -80,91 +80,207 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
     }
   };
 
+  // Payment method selection step
   if (step === 'payment') {
     return (
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-2xl mx-auto space-y-8">
         <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-center">Selecciona Método de Pago</h1>
-          <p className="text-muted-foreground text-center text-lg">
-            Elige cómo deseas pagar tu reserva de <span className="font-bold text-primary text-2xl">${totalPrice}</span>
+          <h1 className="text-3xl font-bold">Selecciona Método de Pago</h1>
+          <p className="text-muted-foreground text-lg">
+            Total a pagar: <span className="font-bold text-primary text-2xl">${totalPrice}</span>
           </p>
         </div>
 
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-3">
           {/* Zelle */}
-          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col">
-            <div className="space-y-2 flex-1">
-              <div className="inline-flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-lg">Zelle</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Transfiere el monto total a la siguiente cuenta Zelle:
-              </p>
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 rounded-lg p-4 text-sm space-y-2 border border-blue-200/50 dark:border-blue-800/50">
-                <p><span className="text-muted-foreground">Email:</span> <strong>pagos@villad2.com</strong></p>
-                <p><span className="text-muted-foreground">Nombre:</span> <strong>Villa D2</strong></p>
-              </div>
+          <button
+            onClick={() => hook.goToStep('payment-zelle')}
+            className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
+          >
+            <span className="text-3xl">💸</span>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Zelle</h3>
+              <p className="text-sm text-muted-foreground">Transferencia bancaria en EE.UU.</p>
             </div>
-            <Button
-              onClick={() => submitPayment('zelle')}
-              disabled={submitting}
-              className="w-full font-semibold"
-            >
-              {submitting ? 'Procesando...' : 'Confirmar con Zelle'}
-            </Button>
-          </div>
+            <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
+          </button>
 
           {/* Bizum */}
-          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col">
-            <div className="space-y-2 flex-1">
-              <div className="inline-flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-lg">Bizum</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Envía el pago a través de Bizum al siguiente número:
-              </p>
-              <div className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20 rounded-lg p-4 text-sm space-y-2 border border-green-200/50 dark:border-green-800/50">
-                <p><span className="text-muted-foreground">Número:</span> <strong>+34 600 123 456</strong></p>
-                <p><span className="text-muted-foreground">Concepto:</span> <strong>Reserva #{confirmationId}</strong></p>
-              </div>
+          <button
+            onClick={() => hook.goToStep('payment-bizum')}
+            className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
+          >
+            <span className="text-3xl">📱</span>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Bizum</h3>
+              <p className="text-sm text-muted-foreground">Transferencia instantánea en España</p>
             </div>
-            <Button
-              onClick={() => submitPayment('bizum')}
-              disabled={submitting}
-              className="w-full font-semibold"
-            >
-              {submitting ? 'Procesando...' : 'Confirmar con Bizum'}
-            </Button>
-          </div>
+            <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
+          </button>
 
           {/* Stripe */}
-          <div className="border-2 border-border rounded-xl p-6 space-y-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300 flex flex-col bg-gradient-to-br from-purple-50/30 to-transparent dark:from-purple-950/10">
-            <div className="space-y-2 flex-1">
-              <div className="inline-flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-lg">Tarjeta de Crédito</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Paga de forma segura con Stripe. Acepta todas las tarjetas principales.
-              </p>
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 rounded-lg p-4 text-sm space-y-2 border border-purple-200/50 dark:border-purple-800/50">
-                <p className="text-xs text-muted-foreground">Procesamiento instantáneo</p>
-              </div>
+          <button
+            onClick={() => submitPayment('stripe')}
+            disabled={submitting}
+            className="w-full border-2 border-primary/50 rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/10 transition-all duration-300 group text-left bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span className="text-3xl">💳</span>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Tarjeta de Crédito</h3>
+              <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express (Stripe)</p>
             </div>
-            <Button
-              onClick={() => submitPayment('stripe')}
-              disabled={submitting}
-              className="w-full font-semibold bg-primary hover:bg-primary/90"
-            >
-              {submitting ? 'Procesando...' : 'Pagar con Stripe'}
-            </Button>
-          </div>
+            <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
+          </button>
+
+          {/* PayPal */}
+          <button
+            disabled
+            className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 opacity-50 cursor-not-allowed text-left"
+          >
+            <span className="text-3xl">🅿️</span>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg text-muted-foreground">PayPal</h3>
+              <p className="text-xs text-muted-foreground">Próximamente</p>
+            </div>
+          </button>
         </div>
 
         {/* Back button */}
-        <div className="text-center pt-4">
-          <Button variant="outline" onClick={() => hook.previousStep()}>
+        <div className="pt-4">
+          <Button variant="outline" onClick={() => hook.previousStep()} className="w-full">
             ← Volver a detalles
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Payment Zelle page
+  if (step === 'payment-zelle') {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="space-y-3">
+          <h1 className="text-3xl font-bold text-center">Pago con Zelle</h1>
+          <p className="text-muted-foreground text-center">Total a pagar: <span className="font-bold text-primary text-2xl">${totalPrice}</span></p>
+        </div>
+
+        <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 space-y-4">
+          <h2 className="font-semibold text-lg">Información de la Cuenta</h2>
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm text-muted-foreground">Email Zelle:</p>
+              <p className="font-bold text-lg">pagos@villad2.com</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Nombre del titular:</p>
+              <p className="font-bold text-lg">Villa D2</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Monto a transferir:</p>
+              <p className="font-bold text-lg text-primary">${totalPrice}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 space-y-4">
+          <h3 className="font-semibold">Instrucciones:</h3>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+            <li>Abre tu aplicación bancaria o Zelle</li>
+            <li>Envía una transferencia a <strong>pagos@villad2.com</strong></li>
+            <li>Monto <strong>${totalPrice}</strong> como monto</li>
+            <li>Incluye tu número de reserva en el concepto (si es posible)</li>
+            <li>Haz clic en el botón "Confirmar Pago" abajo</li>
+          </ol>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4 space-y-2">
+          <p className="text-sm font-semibold">Recuerda:</p>
+          <p className="text-sm text-muted-foreground">
+            Recibirás un email de confirmación en menos de 24 horas. Si no lo recibes, contacta a nuestro equipo en los teléfonos del hostal.
+          </p>
+        </div>
+
+        <div className="flex gap-4">
+          <Button
+            variant="outline"
+            onClick={() => hook.goToStep('payment')}
+            className="flex-1"
+          >
+            ← Atrás
+          </Button>
+          <Button
+            onClick={() => submitPayment('zelle')}
+            disabled={submitting}
+            className="flex-1 font-semibold"
+          >
+            {submitting ? 'Procesando...' : 'Confirmar Pago'}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Payment Bizum page
+  if (step === 'payment-bizum') {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="space-y-3">
+          <h1 className="text-3xl font-bold text-center">Pago con Bizum</h1>
+          <p className="text-muted-foreground text-center">Total a pagar: <span className="font-bold text-primary text-2xl">${totalPrice}</span></p>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-6 space-y-4">
+          <h2 className="font-semibold text-lg">Información de Bizum</h2>
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm text-muted-foreground">Número de teléfono:</p>
+              <p className="font-bold text-lg">+34 600 123 456</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Nombre del receptor:</p>
+              <p className="font-bold text-lg">Villa D2</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Monto a transferir:</p>
+              <p className="font-bold text-lg text-primary">${totalPrice}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 space-y-4">
+          <h3 className="font-semibold">Instrucciones:</h3>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+            <li>Abre tu aplicación bancaria y ve a Bizum</li>
+            <li>Selecciona "Enviar dinero"</li>
+            <li>Ingresa el número <strong>+34 600 123 456</strong></li>
+            <li>Monto: <strong>${totalPrice}</strong></li>
+            <li>En el concepto, incluye tu número de reserva (si es posible)</li>
+            <li>Confirma la transacción</li>
+            <li>Haz clic en "Confirmar Pago" abajo</li>
+          </ol>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4 space-y-2">
+          <p className="text-sm font-semibold">Recuerda:</p>
+          <p className="text-sm text-muted-foreground">
+            Recibirás un email de confirmación en menos de 24 horas. Si no lo recibes, contacta a nuestro equipo en los teléfonos del hostal.
+          </p>
+        </div>
+
+        <div className="flex gap-4">
+          <Button
+            variant="outline"
+            onClick={() => hook.goToStep('payment')}
+            className="flex-1"
+          >
+            ← Atrás
+          </Button>
+          <Button
+            onClick={() => submitPayment('bizum')}
+            disabled={submitting}
+            className="flex-1 font-semibold"
+          >
+            {submitting ? 'Procesando...' : 'Confirmar Pago'}
           </Button>
         </div>
       </div>
@@ -208,6 +324,11 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
         <Button className="font-semibold" onClick={resetForm}>Nueva Reserva</Button>
       </div>
     );
+  }
+
+  // Don't show calendar/form for payment method pages
+  if (step === 'payment-zelle' || step === 'payment-bizum') {
+    return null;
   }
 
   return (
@@ -555,3 +676,5 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
     </form>
   );
 }
+
+

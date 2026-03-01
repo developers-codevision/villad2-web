@@ -68,7 +68,7 @@ export interface ReservationFilterState {
  * Client reservation step state
  */
 export interface ClientReservationStep {
-  current: 'dates' | 'room' | 'details' | 'payment' | 'confirmation';
+  current: 'dates' | 'room' | 'details' | 'payment' | 'payment-zelle' | 'payment-bizum' | 'confirmation';
   completed: boolean;
 }
 
