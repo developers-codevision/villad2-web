@@ -5,7 +5,7 @@ import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { promotionsService, getMediaUrl } from "@/modules/shared/services";
 import { Promotion, PromotionStatus } from "@/modules/shared/types/api.types";
-import { parseServices } from "@/modules/client/utils/promotionHelpers";
+import { parseServices, formatTimeToAmPm } from "@/modules/client/utils/promotionHelpers";
 
 export default function Promociones() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -97,7 +97,7 @@ export default function Promociones() {
                         {promo.time && (
                           <div>
                             <p className="text-muted-foreground">Duración</p>
-                            <p className="font-semibold">{promo.time}</p>
+                            <p className="font-semibold">{formatTimeToAmPm(promo.time) || promo.time}</p>
                           </div>
                         )}
                       </div>
@@ -107,13 +107,13 @@ export default function Promociones() {
                           {promo.checkInTime && (
                             <div>
                               <p className="text-muted-foreground">Entrada</p>
-                              <p className="font-semibold">{promo.checkInTime}</p>
+                              <p className="font-semibold">{formatTimeToAmPm(promo.checkInTime) || promo.checkInTime}</p>
                             </div>
                           )}
                           {promo.checkOutTime && (
                             <div>
                               <p className="text-muted-foreground">Salida</p>
-                              <p className="font-semibold">{promo.checkOutTime}</p>
+                              <p className="font-semibold">{formatTimeToAmPm(promo.checkOutTime) || promo.checkOutTime}</p>
                             </div>
                           )}
                         </div>
@@ -151,4 +151,3 @@ export default function Promociones() {
     </div>
   );
 }
-

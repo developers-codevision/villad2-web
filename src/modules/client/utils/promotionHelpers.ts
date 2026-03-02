@@ -49,3 +49,26 @@ export function parseServices(services: string[] | string | null | undefined): s
   return [];
 }
 
+/**
+ * Convert 24h time string to 12h format with AM/PM
+ * - "15:00" -> "3:00 PM"
+ * - "09:30" -> "9:30 AM"
+ * - "12:00" -> "12:00 PM"
+ * - "00:00" -> "12:00 AM"
+ * Returns original string for unknown formats
+ */
+export function formatTimeToAmPm(time?: string | null): string {
+  if (!time) return '';
+
+  // Accept formats like "HH:mm" or "HH:mm:ss" or "H:mm"
+  const match = time.trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  if (!match) return time; // return as-is if we can't parse
+
+  let hour = parseInt(match[1], 10);
+  const minute = match[2];
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+
+  return `${hour}:${minute} ${ampm}`;
+}
