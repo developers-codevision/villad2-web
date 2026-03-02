@@ -34,7 +34,7 @@ export function useClientReservation() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'zelle' | 'bizum' | 'stripe' | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'zelle' | 'bizum' | 'stripe' | 'paypal' | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   // Availability

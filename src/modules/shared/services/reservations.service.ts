@@ -1,7 +1,7 @@
 // Reservations API Service
 
 import { apiClient, authenticatedApiClient } from './api';
-import { Reservation, CreateReservationDto, UpdateReservationDto, ReservationStatus } from '../types/api.types';
+import { Reservation, CreateReservationDto, UpdateReservationDto, ReservationStatus, OccupiedDay } from '../types/api.types';
 
 /**
  * Get occupied dates for reservations
@@ -79,5 +79,13 @@ export const reservationsService = {
       reservation: Reservation;
       paymentSession: { sessionId: string; url: string }
     }>('/reservations/with-payment', dto);
+  },
+
+  /**
+   * Get occupied hours for a specific room
+   * Returns an array of days with their occupied hour ranges
+   */
+  async getOccupiedHoursForRoom(roomId: number): Promise<OccupiedDay[]> {
+    return apiClient.get<OccupiedDay[]>(`/reservations/occupied-hours/${roomId}`);
   },
 };

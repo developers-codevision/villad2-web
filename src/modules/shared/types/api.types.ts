@@ -78,7 +78,7 @@ export interface CreateRoomDto {
   isPetFriendly?: boolean;
 }
 
-export interface UpdateRoomDto extends Partial<CreateRoomDto> {}
+export type UpdateRoomDto = Partial<CreateRoomDto>;
 
 // ============================================
 // USER INTERFACES
@@ -311,4 +311,14 @@ export interface ApiError {
   statusCode: number;
   message: string | string[];
   error: string;
+}
+
+export interface OccupiedRange {
+  start: string; // e.g. "14:00" or full ISO timestamp
+  end: string;   // e.g. "18:00" or full ISO timestamp
+}
+
+export interface OccupiedDay {
+  date: string; // YYYY-MM-DD
+  occupiedRanges: OccupiedRange[];
 }
