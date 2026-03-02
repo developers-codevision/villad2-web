@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
+import PayPalCheckout from './PayPalCheckout';
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -133,16 +134,16 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
           </button>
 
           {/* PayPal */}
-          <button
-            disabled
-            className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 opacity-50 cursor-not-allowed text-left"
-          >
-            <span className="text-3xl">🅿️</span>
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg text-muted-foreground">PayPal</h3>
-              <p className="text-xs text-muted-foreground">Próximamente</p>
+          <div className="w-full border-2 border-border rounded-lg p-4">
+            <div className="flex items-center gap-4 mb-3">
+              <span className="text-3xl">🅿️</span>
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg">PayPal</h3>
+                <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
+              </div>
             </div>
-          </button>
+            <PayPalCheckout hook={hook} room={selectedRoom} />
+          </div>
         </div>
 
         {/* Back button */}

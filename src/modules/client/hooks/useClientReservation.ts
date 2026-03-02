@@ -237,6 +237,17 @@ export function useClientReservation() {
     [formData]
   );
 
+  // Finalize reservation after an external payment provider confirms payment
+  const finalizeReservationAfterPayment = useCallback(
+    (reservationId: number, method: 'paypal' | 'stripe' | 'zelle' | 'bizum') => {
+      setConfirmationId(reservationId);
+      setPaymentMethod(method);
+      setConfirmed(true);
+      setStep('confirmation');
+    },
+    []
+  );
+
   // ============================================
   // RETURN
   // ============================================
@@ -275,5 +286,8 @@ export function useClientReservation() {
     // Submission
     submitReservation,
     submitPayment,
+
+    // Finalize helper for external payment flows
+    finalizeReservationAfterPayment,
   };
 }
