@@ -98,7 +98,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             onClick={() => hook.goToStep('payment-zelle')}
             className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
           >
-            <span className="text-3xl">💸</span>
+            <img src="/zelle.svg" alt="Zelle" className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Zelle</h3>
               <p className="text-sm text-muted-foreground">Transferencia bancaria en EE.UU.</p>
@@ -111,7 +111,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             onClick={() => hook.goToStep('payment-bizum')}
             className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
           >
-            <span className="text-3xl">📱</span>
+            <img src="/bizum.svg" alt="Bizum" className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Bizum</h3>
               <p className="text-sm text-muted-foreground">Transferencia instantánea en España</p>
@@ -125,10 +125,10 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             disabled={submitting}
             className="w-full border-2 border-primary/50 rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/10 transition-all duration-300 group text-left bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span className="text-3xl">💳</span>
+            <img src="/stripe.svg" alt="Stripe" className="w-8 h-8 object-contain" />
             <div className="flex-1">
-              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Tarjeta de Crédito</h3>
-              <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express (Stripe)</p>
+              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Stripe</h3>
+              <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express </p>
             </div>
             <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
           </button>
@@ -136,14 +136,14 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
           {/* PayPal */}
           <div className="w-full border-2 border-border rounded-lg p-4">
             <div className="flex items-center gap-4 mb-3">
-              <span className="text-3xl">🅿️</span>
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">PayPal</h3>
-                <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
-              </div>
-            </div>
-            <PayPalCheckout hook={hook} room={selectedRoom} />
-          </div>
+              <img src="/paypal.svg" alt="PayPal" className="w-8 h-8 object-contain" />
+               <div className="flex-1">
+                 <h3 className="font-semibold text-lg">PayPal</h3>
+                 <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
+               </div>
+             </div>
+             <PayPalCheckout hook={hook} room={selectedRoom} />
+           </div>
         </div>
 
         {/* Back button */}
@@ -328,7 +328,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
   }
 
   // Don't show calendar/form for payment method pages
-  if (step === 'payment-zelle' || step === 'payment-bizum') {
+  if (['payment-zelle', 'payment-bizum'].includes(step as string)) {
     return null;
   }
 
@@ -677,5 +677,4 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
     </form>
   );
 }
-
 
