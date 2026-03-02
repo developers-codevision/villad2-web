@@ -3,6 +3,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { toast } from 'sonner';
 import type { Room } from '@/modules/shared/types/api.types';
 import type { ReservationHook } from './ReservationForm';
+import { clientFormDataToCreateDto } from '@/modules/admin/utils/reservations.utils';
 
 interface Props {
   hook: any; // useClientReservation return type (loosely-typed to avoid circular imports)
@@ -34,20 +35,15 @@ export default function PayPalCheckout({ hook, room }: Props) {
           createOrder={async () => {
             try {
               setLoading(true);
-              const body = {
-                reservationId: formData.roomId ? Number(formData.roomId) : undefined,
-                amount: totalPrice,
-                currency,
-                metadata: {
-                  guestEmail: formData.guestEmail,
-                  guestName: `${formData.guestFirstName} ${formData.guestLastName}`,
-                },
-              };
 
-              const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/paypal/create-order`, {
+              // Build the same DTO that Stripe flow uses
+              const createDto = clientFormDataToCreateDto(formData as any);
+
+              // Send the full reservation DTO to the backend endpoint that creates both reservation and PayPal order
+              const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/paypal/create-order-with-reservation`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
+                body: JSON.stringify(createDto),
               });
 
               if (!res.ok) {
@@ -112,4 +108,3 @@ export default function PayPalCheckout({ hook, room }: Props) {
     </PayPalScriptProvider>
   );
 }
-
