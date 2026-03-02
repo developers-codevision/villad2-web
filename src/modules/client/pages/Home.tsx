@@ -71,8 +71,8 @@ const Index = () => {
           <img src={logo} alt="Villa D2" className="h-16 md:h-24 lg:h-28 w-auto drop-shadow-2xl" />
         </div>
 
-        {/* Descripción - Esquina inferior izquierda */}
-        <div className="absolute bottom-8 md:bottom-12 left-4 md:left-8 z-10 max-w-md md:max-w-xl">
+        {/* Descripción - Mismo vertical pero en la derecha; oculto en móvil */}
+        <div className="absolute bottom-8 md:bottom-12 right-4 md:right-8 z-10 max-w-md md:max-w-xl hidden md:block">
           <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
             <p className="text-base md:text-lg lg:text-xl">
               {HOSTAL.tagline} — {HOSTAL.description}
