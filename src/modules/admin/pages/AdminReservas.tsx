@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { CalendarCheck, Plus, Calendar as CalendarIcon, List } from "lucide-react";
 import { useReservationManagement } from "../hooks/reservations/useReservationManagement";
 import { useRoomManagement } from "../hooks/rooms/useRoomManagement";
-import { PageHeader } from "../components/common/PageHeader";
 import { EmptyState } from "../components/common/EmptyState";
 import { DeleteConfirmDialog } from "../components/common/DeleteConfirmDialog";
 import { Button } from "@/modules/shared/components/ui/button";

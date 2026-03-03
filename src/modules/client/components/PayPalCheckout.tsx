@@ -38,7 +38,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
 
               // Build the same DTO that Stripe flow uses
               const createDto = clientFormDataToCreateDto(formData as any);
-
+              console.log(createDto)
               // Send the full reservation DTO to the backend endpoint that creates both reservation and PayPal order
               const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/paypal/create-order-with-reservation`, {
                 method: 'POST',
