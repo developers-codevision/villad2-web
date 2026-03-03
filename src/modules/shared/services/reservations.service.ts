@@ -1,7 +1,7 @@
 // Reservations API Service
 
 import { apiClient, authenticatedApiClient } from './api';
-import { Reservation, CreateReservationDto, UpdateReservationDto, ReservationStatus, OccupiedDay } from '../types/api.types';
+import { Reservation, CreateReservationDto, UpdateReservationDto, OccupiedDay, OccupiedRange } from '../types/api.types';
 
 /**
  * Get occupied dates for reservations
@@ -53,19 +53,11 @@ export const reservationsService = {
   },
 
   /**
-   * Get all occupied dates grouped by room ID
-   * Returns an object with room IDs as keys and arrays of date strings in YYYY-MM-DD format as values
+   * Get occupied hours grouped by room ID
+   * Returns an object with room IDs as keys and arrays of occupied ranges {start,end}
    */
-  async getOccupiedDatesGrouped(): Promise<{ [key: number]: string[] }> {
-    return apiClient.get<{ [key: number]: string[] }>('/reservations/occupied-dates');
-  },
-
-  /**
-   * Get occupied dates for a specific room
-   * Returns an array of date strings in YYYY-MM-DD format
-   */
-  async getOccupiedDatesForRoom(roomId: number): Promise<string[]> {
-    return apiClient.get<string[]>(`/reservations/occupied-dates/${roomId}`);
+  async getOccupiedHoursGrouped(): Promise<{ [key: number]: OccupiedRange[] }> {
+    return apiClient.get<{ [key: number]: OccupiedRange[] }>('/reservations/occupied-hours');
   },
 
   /**

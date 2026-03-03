@@ -1,6 +1,6 @@
 // Admin Reservations Utils - Transformation and validation functions
 
-import { format } from 'date-fns';
+import { format, setHours, setMinutes } from 'date-fns';
 import {
   CreateReservationDto,
   UpdateReservationDto,
@@ -77,26 +77,34 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
  * Normalize reservation data from backend
  * Handles both old and new formats
  */
-export function normalizeReservation(reservation: Record<string, unknown>): ReservationWithDetails {
-  // Nuevo formato: siempre hay client
+export function normalizeReservation(reservation: unknown): ReservationWithDetails {
+  const r = reservation as Record<string, unknown>;
+
+  // Extract client safely
+  const clientRaw = r['client'];
+  const client = clientRaw && typeof clientRaw === 'object' ? (clientRaw as Record<string, unknown>) : undefined;
+
+  const mainGuest = {
+    firstName: client && typeof client['firstName'] === 'string' ? (client['firstName'] as string) : '',
+    lastName: client && typeof client['lastName'] === 'string' ? (client['lastName'] as string) : '',
+    sex: client && typeof client['sex'] === 'string' ? (client['sex'] as 'M' | 'F' | 'otro') : 'M',
+    email: client && typeof client['email'] === 'string' ? (client['email'] as string) : '',
+    phone: client && typeof client['phone'] === 'string' ? (client['phone'] as string) : '',
+  };
+
   return {
-    ...reservation,
-    mainGuest: {
-      firstName: (reservation.client as any).firstName,
-      lastName: (reservation.client as any).lastName,
-      sex: (reservation.client as any).sex,
-      email: (reservation.client as any).email,
-      phone: (reservation.client as any).phone,
-    },
-    checkInDate: reservation.checkInDate,
-    checkOutDate: reservation.checkOutDate,
-    baseGuestsCount: reservation.baseGuestsCount,
-    extraGuestsCount: reservation.extraGuestsCount,
-    totalPrice: reservation.totalPrice,
-    notes: reservation.notes || '',
-    earlyCheckIn: reservation.earlyCheckIn,
-    lateCheckOut: reservation.lateCheckOut,
-    additionalGuests: reservation.additionalGuests || [],
+    // spread any other properties returned by the backend
+    ...(r as Record<string, unknown>),
+    mainGuest,
+    checkInDate: (r['checkInDate'] as string) || '',
+    checkOutDate: (r['checkOutDate'] as string) || '',
+    baseGuestsCount: (r['baseGuestsCount'] as number) || 0,
+    extraGuestsCount: (r['extraGuestsCount'] as number) || 0,
+    totalPrice: (r['totalPrice'] as number) || 0,
+    notes: (r['notes'] as string) || '',
+    earlyCheckIn: (r['earlyCheckIn'] as boolean) || false,
+    lateCheckOut: (r['lateCheckOut'] as boolean) || false,
+    additionalGuests: Array.isArray(r['additionalGuests']) ? (r['additionalGuests'] as unknown[]) : [],
   } as ReservationWithDetails;
 }
 
@@ -139,10 +147,14 @@ export function formDataToCreateDto(
     throw new Error('Missing required fields');
   }
 
+  // Attach times: check-in at 16:00, check-out at 12:00
+  const checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
+  const checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+
   return {
     roomId: formData.roomId,
-    checkInDate: format(formData.checkIn, 'yyyy-MM-dd'),
-    checkOutDate: format(formData.checkOut, 'yyyy-MM-dd'),
+    checkInDate: format(checkInDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
+    checkOutDate: format(checkOutDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
     mainGuest: {
       firstName: formData.guestFirstName.trim(),
       lastName: formData.guestLastName.trim(),
@@ -173,10 +185,14 @@ export function clientFormDataToCreateDto(
     throw new Error('Missing required fields');
   }
 
+  // For client reservations, check-in 16:00 and check-out 12:00
+  const checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
+  const checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+
   return {
     roomId: formData.roomId,
-    checkInDate: format(formData.checkIn, 'yyyy-MM-dd'),
-    checkOutDate: format(formData.checkOut, 'yyyy-MM-dd'),
+    checkInDate: format(checkInDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
+    checkOutDate: format(checkOutDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
     mainGuest: {
       firstName: formData.guestFirstName.trim(),
       lastName: formData.guestLastName.trim(),
@@ -207,8 +223,8 @@ export function formDataToUpdateDto(
   return {
     status: formData.status,
     notes: formData.notes.trim() || undefined,
-    checkInDate: formData.checkIn ? format(formData.checkIn, 'yyyy-MM-dd') : undefined,
-    checkOutDate: formData.checkOut ? format(formData.checkOut, 'yyyy-MM-dd') : undefined,
+    checkInDate: formData.checkIn ? format(setMinutes(setHours(formData.checkIn, 16), 0), "yyyy-MM-dd'T'HH:mm:ss") : undefined,
+    checkOutDate: formData.checkOut ? format(setMinutes(setHours(formData.checkOut, 12), 0), "yyyy-MM-dd'T'HH:mm:ss") : undefined,
     baseGuestsCount: formData.baseGuestsCount,
     extraGuestsCount: formData.extraGuestsCount,
     earlyCheckIn: formData.earlyCheckIn,

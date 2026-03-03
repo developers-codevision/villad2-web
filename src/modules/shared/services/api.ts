@@ -49,7 +49,18 @@ export const apiClient = {
       await parseError(response);
     }
 
-    return response.json();
+    // Handle empty/no-content responses
+    if (response.status === 204) return undefined as T;
+
+    // Read body as text first so we can parse JSON even if Content-Type header is missing
+    const text = await response.text();
+    if (!text) return undefined as T;
+    try {
+      return JSON.parse(text) as T;
+    } catch (e) {
+      // If it's not JSON, throw a parse error
+      throw new Error('Invalid JSON response from server');
+    }
   },
 
   post: async <T>(endpoint: string, data: unknown): Promise<T> => {
@@ -140,7 +151,14 @@ export const authenticatedApiClient = {
       await parseError(response);
     }
 
-    return response.json();
+    if (response.status === 204) return undefined as T;
+    const text = await response.text();
+    if (!text) return undefined as T;
+    try {
+      return JSON.parse(text) as T;
+    } catch (e) {
+      throw new Error('Invalid JSON response from server');
+    }
   },
 
   post: async <T>(endpoint: string, data: unknown): Promise<T> => {
