@@ -295,11 +295,18 @@ export default function AdminPromociones() {
                   // When user selects new images via uploader
                   if (urls.length > 0) {
                     handleFormChange('photoPreview', urls[0]);
+                  } else {
+                    // removed all images -> clear preview and file
+                    handleFormChange('photoPreview', '');
+                    handlePhotoChange(null);
                   }
                 }}
                 onFilesChange={(files) => {
                   if (files.length > 0) {
                     handlePhotoChange(files[0]);
+                  } else {
+                    // cleared files from uploader
+                    handlePhotoChange(null);
                   }
                 }}
                 maxImages={1}

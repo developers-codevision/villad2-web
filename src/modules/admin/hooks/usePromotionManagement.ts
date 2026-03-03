@@ -187,10 +187,12 @@ export function usePromotionManagement() {
         };
         reader.readAsDataURL(file);
       } else {
+        // Clear the selected file and preview. Do NOT revert to the existing editing photo;
+        // when the user removes the image we want the preview cleared.
         setFormData((prev) => ({
           ...prev,
           photo: null,
-          photoPreview: formState.editing?.photo || '',
+          photoPreview: '',
         }));
       }
     },
