@@ -213,14 +213,7 @@ export default function AdminPromociones() {
               </div>
             </div>
 
-            <div>
-              <label className="text-sm font-medium">Duración</label>
-              <Input
-                value={formData.time}
-                onChange={(e) => handleFormChange("time", e.target.value)}
-                placeholder="Ej: 7 días"
-              />
-            </div>
+
 
             <div>
               <label className="text-sm font-medium">Servicios incluidos</label>

@@ -111,7 +111,7 @@ export function usePromotionManagement() {
       description: '',
       maxPeople: 0,
       minPeople: 0,
-      time: '',
+      time: '', // will be computed from checkInTime/checkOutTime before save
       services: [],
       checkInTime: '',
       checkOutTime: '',
@@ -131,7 +131,7 @@ export function usePromotionManagement() {
       description: promotion.description || '',
       maxPeople: promotion.maxPeople || 0,
       minPeople: promotion.minPeople || 0,
-      time: promotion.time || '',
+      time: promotion.time || '', // keep existing value but user won't edit it
       services: promotion.services || [],
       checkInTime: promotion.checkInTime || '',
       checkOutTime: promotion.checkOutTime || '',
@@ -235,7 +235,30 @@ export function usePromotionManagement() {
         formDataObj.append('maxPeople', formData.maxPeople.toString());
       if (formData.minPeople > 0)
         formDataObj.append('minPeople', formData.minPeople.toString());
-      if (formData.time) formDataObj.append('time', formData.time);
+      // Compute duration (time) automatically from checkInTime and checkOutTime
+      const computeDuration = (inTime: string, outTime: string) => {
+        // Expect times as HH:MM
+        if (!inTime || !outTime) return '';
+        const [inH, inM] = inTime.split(':').map((s) => parseInt(s, 10));
+        const [outH, outM] = outTime.split(':').map((s) => parseInt(s, 10));
+        if (Number.isNaN(inH) || Number.isNaN(inM) || Number.isNaN(outH) || Number.isNaN(outM)) return '';
+
+        // Convert to minutes since midnight
+        const inTotal = inH * 60 + inM;
+        const outTotal = outH * 60 + outM;
+
+        // If out <= in, assume next day
+        let diff = outTotal - inTotal;
+        if (diff <= 0) diff += 24 * 60;
+
+        const hours = Math.floor(diff / 60);
+        const minutes = diff % 60;
+        if (minutes === 0) return `${hours}h`;
+        return `${hours}h ${minutes}m`;
+      };
+
+      const duration = computeDuration(formData.checkInTime, formData.checkOutTime);
+      if (duration) formDataObj.append('time', duration);
       if (formData.services && formData.services.length > 0)
         formDataObj.append('services', JSON.stringify(formData.services));
       if (formData.checkInTime)
