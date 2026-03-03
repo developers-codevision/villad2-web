@@ -118,6 +118,9 @@ export function normalizeReservation(reservation: unknown): ReservationWithDetai
 export function reservationToFormData(
   reservation: ReservationWithDetails
 ): ReservationFormData {
+  const inDate = reservation.checkInDate ? new Date(reservation.checkInDate) : undefined;
+  const outDate = reservation.checkOutDate ? new Date(reservation.checkOutDate) : undefined;
+
   return {
     roomId: reservation.roomId,
     guestFirstName: reservation.mainGuest.firstName,
@@ -125,8 +128,10 @@ export function reservationToFormData(
     guestSex: reservation.mainGuest.sex,
     guestEmail: reservation.mainGuest.email,
     guestPhone: reservation.mainGuest.phone || '',
-    checkIn: new Date(reservation.checkInDate),
-    checkOut: new Date(reservation.checkOutDate),
+    checkIn: inDate,
+    checkOut: outDate,
+    checkInTime: inDate ? format(inDate, 'HH:mm') : '',
+    checkOutTime: outDate ? format(outDate, 'HH:mm') : '',
     totalGuests: reservation.baseGuestsCount + reservation.extraGuestsCount,
     baseGuestsCount: reservation.baseGuestsCount,
     extraGuestsCount: reservation.extraGuestsCount,
