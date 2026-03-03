@@ -27,6 +27,7 @@ export default function Reservations() {
     setDateRange,
     resetForm,
     occupiedDates,
+    selectRoom,
   } = reservationHook;
 
   // Set preselected room if available
@@ -34,10 +35,10 @@ export default function Reservations() {
     if (preselectedRoomId && rooms.length > 0) {
       const roomId = parseInt(preselectedRoomId);
       if (!isNaN(roomId)) {
-        reservationHook.selectRoom(roomId);
+        selectRoom(roomId);
       }
     }
-  }, [preselectedRoomId, rooms, reservationHook]);
+  }, [preselectedRoomId, rooms, selectRoom]);
 
   // Get selected room
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
@@ -150,4 +151,3 @@ export default function Reservations() {
     </div>
   );
 }
-
