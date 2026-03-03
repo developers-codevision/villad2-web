@@ -10,6 +10,8 @@ export interface ReservationFormDataBase {
   roomId: number | null;
   checkIn: Date | null;
   checkOut: Date | null;
+  checkInTime?: string;
+  checkOutTime?: string;
   guestFirstName: string;
   guestLastName: string;
   guestEmail: string;
@@ -31,4 +33,4 @@ export interface ReservationFormDataBase {
  * Client reservation form data
  * Same as base but for client-side booking
  */
-export interface ClientReservationFormData extends ReservationFormDataBase {}
+export type ClientReservationFormData = ReservationFormDataBase;

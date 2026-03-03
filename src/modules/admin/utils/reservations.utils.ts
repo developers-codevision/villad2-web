@@ -29,6 +29,8 @@ export function createEmptyReservationForm(): ReservationFormData {
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
+    checkInTime: '',
+    checkOutTime: '',
     totalGuests: 1,
     baseGuestsCount: 1,
     extraGuestsCount: 0,
@@ -56,6 +58,8 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
     guestPhone: '',
     checkIn: undefined,
     checkOut: undefined,
+    checkInTime: '',
+    checkOutTime: '',
     totalGuests: 1,
     baseGuestsCount: 1,
     extraGuestsCount: 0,
@@ -147,9 +151,23 @@ export function formDataToCreateDto(
     throw new Error('Missing required fields');
   }
 
-  // Attach times: check-in at 16:00, check-out at 12:00
-  const checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
-  const checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+  // Determine check-in time: prefer explicit form time, fallback to 16:00
+  let checkInDateTime = formData.checkIn;
+  if (formData.checkInTime) {
+    const [h, m] = formData.checkInTime.split(':').map(v => parseInt(v, 10));
+    checkInDateTime = setMinutes(setHours(formData.checkIn, isNaN(h) ? 16 : h), isNaN(m) ? 0 : m);
+  } else {
+    checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
+  }
+
+  // Determine check-out time: prefer explicit form time, fallback to 12:00
+  let checkOutDateTime = formData.checkOut;
+  if (formData.checkOutTime) {
+    const [h, m] = formData.checkOutTime.split(':').map(v => parseInt(v, 10));
+    checkOutDateTime = setMinutes(setHours(formData.checkOut, isNaN(h) ? 12 : h), isNaN(m) ? 0 : m);
+  } else {
+    checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+  }
 
   return {
     roomId: formData.roomId,
@@ -185,9 +203,22 @@ export function clientFormDataToCreateDto(
     throw new Error('Missing required fields');
   }
 
-  // For client reservations, check-in 16:00 and check-out 12:00
-  const checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
-  const checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+  // Determine check-in/out times for client: prefer explicit, fall back to defaults
+  let checkInDateTime = formData.checkIn;
+  if (formData.checkInTime) {
+    const [h, m] = formData.checkInTime.split(':').map(v => parseInt(v, 10));
+    checkInDateTime = setMinutes(setHours(formData.checkIn, isNaN(h) ? 16 : h), isNaN(m) ? 0 : m);
+  } else {
+    checkInDateTime = setMinutes(setHours(formData.checkIn, 16), 0);
+  }
+
+  let checkOutDateTime = formData.checkOut;
+  if (formData.checkOutTime) {
+    const [h, m] = formData.checkOutTime.split(':').map(v => parseInt(v, 10));
+    checkOutDateTime = setMinutes(setHours(formData.checkOut, isNaN(h) ? 12 : h), isNaN(m) ? 0 : m);
+  } else {
+    checkOutDateTime = setMinutes(setHours(formData.checkOut, 12), 0);
+  }
 
   return {
     roomId: formData.roomId,
@@ -220,11 +251,19 @@ export function clientFormDataToCreateDto(
 export function formDataToUpdateDto(
   formData: ReservationFormData
 ): UpdateReservationDto {
+  // If explicit times present, use them; otherwise fall back to defaults as before
+  const checkInDate = formData.checkIn
+    ? (formData.checkInTime ? format(setMinutes(setHours(formData.checkIn, parseInt(formData.checkInTime.split(':')[0] || '16', 10)), parseInt(formData.checkInTime.split(':')[1] || '0', 10)), "yyyy-MM-dd'T'HH:mm:ss") : format(setMinutes(setHours(formData.checkIn, 16), 0), "yyyy-MM-dd'T'HH:mm:ss"))
+    : undefined;
+  const checkOutDate = formData.checkOut
+    ? (formData.checkOutTime ? format(setMinutes(setHours(formData.checkOut, parseInt(formData.checkOutTime.split(':')[0] || '12', 10)), parseInt(formData.checkOutTime.split(':')[1] || '0', 10)), "yyyy-MM-dd'T'HH:mm:ss") : format(setMinutes(setHours(formData.checkOut, 12), 0), "yyyy-MM-dd'T'HH:mm:ss"))
+    : undefined;
+
   return {
     status: formData.status,
     notes: formData.notes.trim() || undefined,
-    checkInDate: formData.checkIn ? format(setMinutes(setHours(formData.checkIn, 16), 0), "yyyy-MM-dd'T'HH:mm:ss") : undefined,
-    checkOutDate: formData.checkOut ? format(setMinutes(setHours(formData.checkOut, 12), 0), "yyyy-MM-dd'T'HH:mm:ss") : undefined,
+    checkInDate,
+    checkOutDate,
     baseGuestsCount: formData.baseGuestsCount,
     extraGuestsCount: formData.extraGuestsCount,
     earlyCheckIn: formData.earlyCheckIn,

@@ -18,6 +18,7 @@ import {
 import { Calendar } from '@/modules/shared/components/ui/calendar';
 import { ReservationFormData, getReservationStatuses, RESERVATION_STATUS_LABELS } from '../../types/reservations.types';
 import { Room } from '@/modules/shared/types/api.types';
+import { ReservationStatus } from '@/modules/shared/types/api.types';
 import type { DateRange } from "react-day-picker";
 
 interface ReservationFormDialogProps {
@@ -144,6 +145,26 @@ export function ReservationFormDialog({
                 {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
               </p>
             )}
+
+            {/* New: check-in/check-out time inputs */}
+            <div className="grid grid-cols-2 gap-4 mt-2">
+              <div className="space-y-2">
+                <Label>Hora de llegada (Check-in)</Label>
+                <Input
+                  type="time"
+                  value={formData.checkInTime || ''}
+                  onChange={(e) => onFormChange('checkInTime', e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Hora de salida (Check-out)</Label>
+                <Input
+                  type="time"
+                  value={formData.checkOutTime || ''}
+                  onChange={(e) => onFormChange('checkOutTime', e.target.value)}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Guest Information */}
@@ -293,7 +314,7 @@ export function ReservationFormDialog({
               <Label>Estado</Label>
               <Select
                 value={formData.status}
-                onValueChange={value => onFormChange('status', value as any)}
+                onValueChange={value => onFormChange('status', value as ReservationStatus)}
               >
                 <SelectTrigger>
                   <SelectValue />
