@@ -171,14 +171,11 @@ const Index = () => {
                 {reviews.map((review) => (
                   <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
                     <div className="relative rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden bg-card">
-                      {/* Background respuesta si existe - con gradiente para no superponer */}
                       {review.response && (
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent from-50% to-primary/5 pointer-events-none"></div>
                       )}
-                      
-                      {/* Contenido principal */}
+
                       <div className="relative p-6 flex flex-col h-full z-10">
-                        {/* Header: Nombre/País izquierda, Estrellas derecha */}
                         <div className="flex items-start justify-between mb-4">
                           <div>
                             <p className="font-semibold text-sm">{review.name}</p>
@@ -190,11 +187,14 @@ const Index = () => {
                             ))}
                           </div>
                         </div>
-                        
-                        {/* Centro: Texto de la reseña */}
+
+                        {/* Title (if any) */}
+                        {review.title && (
+                          <p className="text-sm font-semibold text-primary mb-2">{review.title}</p>
+                        )}
+
                         <p className="text-sm text-foreground italic flex-1 mb-4">"{review.content}"</p>
 
-                        {/* Respuesta del hostal - en el fondo */}
                         {review.response && (
                           <div className="border-t border-primary/20 pt-4 mt-2">
                             <p className="text-xs font-semibold text-primary mb-2">Respuesta del hostal:</p>

@@ -13,6 +13,7 @@ const Reviews = () => {
   const { toast } = useToast();
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [stars, setStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
@@ -36,12 +37,14 @@ const Reviews = () => {
       const newReview = await reviewsService.create({
         name: name.trim(),
         country: country.trim() || "Sin especificar",
+        title: title.trim() || "Sin título",
         content: content.trim(),
         stars,
       });
 
       setName("");
       setCountry("");
+      setTitle("");
       setContent("");
       setStars(0);
 
@@ -101,6 +104,16 @@ const Reviews = () => {
                       disabled={isSubmitting}
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Título</label>
+                  <Input
+                    placeholder="Un breve título para tu reseña"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    disabled={isSubmitting}
+                  />
                 </div>
 
                 <div className="space-y-2">

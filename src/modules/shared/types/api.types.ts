@@ -236,6 +236,7 @@ export interface Review {
 
 export interface CreateReviewDto {
   name: string;
+  title:string;
   country: string;
   content: string;
   stars: number;
