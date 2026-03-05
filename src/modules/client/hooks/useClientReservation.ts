@@ -54,16 +54,53 @@ export function useClientReservation() {
       }
 
       const nights = calculateNights(formData.checkIn, formData.checkOut);
-      const totalPrice = calculateTotalPrice(
+      const baseTotal = calculateTotalPrice(
         room.pricePerNight,
         formData.checkIn,
         formData.checkOut,
-        formData.extraGuestsCount
+        formData.extraGuestsCount,
+        room.extraGuestCharge
       );
 
-      return { nights, totalPrice };
+      // Optional services prices (must match UI):
+      const PRICE_BREAKFAST = 8; // per breakfast
+      const PRICE_EARLY_CHECKIN = 5;
+      const PRICE_LATE_CHECKOUT = 5;
+      const PRICE_TRANSFER_IDA = 35;
+      const PRICE_TRANSFER_VUELTA = 40;
+
+      const breakfastsCost = (formData.breakfasts || 0) * PRICE_BREAKFAST;
+      const earlyCheckInCost = formData.earlyCheckIn ? PRICE_EARLY_CHECKIN : 0;
+      const lateCheckOutCost = formData.lateCheckOut ? PRICE_LATE_CHECKOUT : 0;
+      const transferOneWayCost = formData.transferOneWay ? PRICE_TRANSFER_IDA : 0;
+      const transferReturnCost = formData.transferRoundTrip ? PRICE_TRANSFER_VUELTA : 0;
+
+      const totalPrice = baseTotal + breakfastsCost + earlyCheckInCost + lateCheckOutCost + transferOneWayCost + transferReturnCost;
+
+      // Return a detailed breakdown so the UI can present subtotals and avoid duplicating logic
+      return {
+        nights,
+        totalPrice,
+        breakdown: {
+          baseTotal,
+          breakfastsCost,
+          earlyCheckInCost,
+          lateCheckOutCost,
+          transferOneWayCost,
+          transferReturnCost,
+        },
+      };
     },
-    [formData.checkIn, formData.checkOut, formData.extraGuestsCount]
+    [
+      formData.checkIn,
+      formData.checkOut,
+      formData.extraGuestsCount,
+      formData.breakfasts,
+      formData.earlyCheckIn,
+      formData.lateCheckOut,
+      formData.transferOneWay,
+      formData.transferRoundTrip,
+    ]
   );
 
   /**

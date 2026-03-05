@@ -126,12 +126,12 @@ export function calculateTotalPrice(
   pricePerNight: number,
   checkIn: Date,
   checkOut: Date,
-  extraGuestsCount: number = 0
+  extraGuestsCount: number = 0,
+  extraGuestPricePerNight: number = 5
 ): number {
-  const EXTRA_GUEST_PRICE_PER_NIGHT = 5;
   const nights = calculateNights(checkIn, checkOut);
   const basePrice = nights * pricePerNight;
-  const extraGuestsPrice = nights * extraGuestsCount * EXTRA_GUEST_PRICE_PER_NIGHT;
+  const extraGuestsPrice = nights * extraGuestsCount * extraGuestPricePerNight;
   return basePrice + extraGuestsPrice;
 }
 

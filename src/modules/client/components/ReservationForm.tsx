@@ -50,7 +50,24 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
 
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
   const maxCapacity = selectedRoom ? selectedRoom.baseCapacity + selectedRoom.extraCapacity : 0;
-  const { nights, totalPrice } = reservationSummary(selectedRoom);
+  const { nights, totalPrice, breakdown } = reservationSummary(selectedRoom) as {
+    nights: number;
+    totalPrice: number;
+    breakdown?: {
+      baseTotal?: number;
+      breakfastsCost?: number;
+      earlyCheckInCost?: number;
+      lateCheckOutCost?: number;
+      transferOneWayCost?: number;
+      transferReturnCost?: number;
+    };
+  };
+
+  const breakfastsCost = breakdown?.breakfastsCost ?? 0;
+  const earlyCheckInCost = breakdown?.earlyCheckInCost ?? 0;
+  const lateCheckOutCost = breakdown?.lateCheckOutCost ?? 0;
+  const transferOneWayCost = breakdown?.transferOneWayCost ?? 0;
+  const transferReturnCost = breakdown?.transferReturnCost ?? 0;
 
   const handleTotalGuestsChange = (total: number) => {
     if (!selectedRoom) return;
@@ -623,34 +640,36 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               <span className="text-muted-foreground">Huéspedes</span>
               <span>{formData.totalGuests}</span>
             </div>
-            {formData.earlyCheckIn && (
+            {formData.breakfasts > 0 && (
+            <div className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Desayunos ({formData.breakfasts})</span>
+                <span>${breakfastsCost}</span>
+              </div>
+            </div>
+            )}
+            {earlyCheckInCost > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Check-in anticipado</span>
-                <span className="text-primary">✓</span>
+                <span>${earlyCheckInCost}</span>
               </div>
             )}
-            {formData.lateCheckOut && (
+            {lateCheckOutCost > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Check-out tardío</span>
-                <span className="text-primary">✓</span>
+                <span>${lateCheckOutCost}</span>
               </div>
             )}
-            {formData.transferOneWay && (
+            {transferOneWayCost > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Transporte ida</span>
-                <span className="text-primary">✓</span>
+                <span>${transferOneWayCost}</span>
               </div>
             )}
-            {formData.transferRoundTrip && (
+            {transferReturnCost > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Transporte ida y vuelta</span>
-                <span className="text-primary">✓</span>
-              </div>
-            )}
-            {formData.breakfasts > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Desayunos</span>
-                <span>{formData.breakfasts}</span>
+                <span className="text-muted-foreground">Transporte vuelta</span>
+                <span>${transferReturnCost}</span>
               </div>
             )}
             {selectedRoom && (
