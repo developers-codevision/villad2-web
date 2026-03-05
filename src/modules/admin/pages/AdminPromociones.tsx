@@ -213,45 +213,14 @@ export default function AdminPromociones() {
               </div>
             </div>
 
-
-
             <div>
               <label className="text-sm font-medium">Servicios incluidos</label>
-              <div className="space-y-2">
-                {formData.services.map((service, index) => (
-                  <div key={index} className="flex gap-2">
-                    <Input
-                      value={service}
-                      onChange={(e) => {
-                        const newServices = [...formData.services];
-                        newServices[index] = e.target.value;
-                        handleFormChange("services", newServices);
-                      }}
-                      placeholder="Ej: Desayuno incluido"
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const newServices = formData.services.filter((_, i) => i !== index);
-                        handleFormChange("services", newServices);
-                      }}
-                    >
-                      Quitar
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    const newServices = [...formData.services, ''];
-                    handleFormChange("services", newServices);
-                  }}
-                >
-                  + Agregar servicio
-                </Button>
-              </div>
+              <Input
+                value={formData.servicesInput}
+                onChange={(e) => handleFormChange("servicesInput", e.target.value)}
+                placeholder="Desayuno incluido, Traslado al aeropuerto, Masaje relajante"
+              />
+              <p className="text-xs text-muted-foreground mt-1">Separados por coma</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">

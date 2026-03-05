@@ -14,7 +14,7 @@ export interface PromotionFormData {
   maxPeople: number;
   minPeople: number;
   time: string;
-  services: string[];
+  servicesInput: string;
   checkInTime: string;
   checkOutTime: string;
   photo: File | null;
@@ -57,7 +57,7 @@ export function usePromotionManagement() {
     maxPeople: 0,
     minPeople: 0,
     time: '',
-    services: [],
+    servicesInput: '',
     checkInTime: '',
     checkOutTime: '',
     photo: null,
@@ -112,7 +112,7 @@ export function usePromotionManagement() {
       maxPeople: 0,
       minPeople: 0,
       time: '', // will be computed from checkInTime/checkOutTime before save
-      services: [],
+      servicesInput: '',
       checkInTime: '',
       checkOutTime: '',
       photo: null,
@@ -132,7 +132,7 @@ export function usePromotionManagement() {
       maxPeople: promotion.maxPeople || 0,
       minPeople: promotion.minPeople || 0,
       time: promotion.time || '', // keep existing value but user won't edit it
-      services: promotion.services || [],
+      servicesInput: promotion.services ? promotion.services.join(', ') : '',
       checkInTime: promotion.checkInTime || '',
       checkOutTime: promotion.checkOutTime || '',
       photo: null,
@@ -152,7 +152,7 @@ export function usePromotionManagement() {
       maxPeople: 0,
       minPeople: 0,
       time: '',
-      services: [],
+      servicesInput: '',
       checkInTime: '',
       checkOutTime: '',
       photo: null,
@@ -165,7 +165,7 @@ export function usePromotionManagement() {
    * Handle form field changes
    */
   const handleFormChange = useCallback(
-    (field: keyof PromotionFormData, value: any) => {
+    (field: keyof PromotionFormData, value: string | number | File | null | PromotionStatus) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
     },
     []
@@ -196,7 +196,7 @@ export function usePromotionManagement() {
         }));
       }
     },
-    [formState.editing]
+    []
   );
 
   /**
@@ -261,8 +261,15 @@ export function usePromotionManagement() {
 
       const duration = computeDuration(formData.checkInTime, formData.checkOutTime);
       if (duration) formDataObj.append('time', duration);
-      if (formData.services && formData.services.length > 0)
-        formDataObj.append('services', JSON.stringify(formData.services));
+
+      // Convert servicesInput (comma-separated string) to array
+      const servicesArray = formData.servicesInput
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+
+      if (servicesArray.length > 0)
+        formDataObj.append('services', JSON.stringify(servicesArray));
       if (formData.checkInTime)
         formDataObj.append('checkInTime', formData.checkInTime);
       if (formData.checkOutTime)
