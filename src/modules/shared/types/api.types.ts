@@ -12,9 +12,10 @@ export enum RoomType {
 }
 
 export enum RoomStatus {
-  AVAILABLE = 'available',
-  OCCUPIED = 'occupied',
-  MAINTENANCE = 'maintenance',
+  VACIA_LIMPIA = 'vacia_limpia',
+  VACIA_SUCIA = 'vacia_sucia',
+  FUERA_DE_SERVICIO = 'fuera_de_servicio',
+  OCUPADA = 'ocupada',
 }
 
 export enum UserRole {
@@ -26,9 +27,8 @@ export enum ReservationStatus {
   PENDING = 'pendiente',
   CONFIRMED = 'confirmada',
   CANCELLED = 'cancelada',
-  COMPLETED = 'completada',
+  FINISHED = 'terminada',
 }
-
 // ============================================
 // ROOM INTERFACES
 // ============================================
