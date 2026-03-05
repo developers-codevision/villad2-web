@@ -26,8 +26,8 @@ export const useRooms = () => {
     fetchRooms();
   }, []);
 
-  // Filter only available rooms
-  const availableRooms = rooms.filter(room => room.status === RoomStatus.AVAILABLE);
+  // Filter only available rooms (VACIA_LIMPIA is the new "available" state)
+  const availableRooms = rooms.filter(room => room.status === RoomStatus.VACIA_LIMPIA);
 
   return { rooms, availableRooms, loading, error };
 };
@@ -59,4 +59,3 @@ export const useRoom = (id: number) => {
 
   return { room, loading, error };
 };
-

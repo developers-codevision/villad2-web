@@ -70,10 +70,11 @@ export interface RoomFormState {
 /**
  * Spanish labels for room statuses (for display in admin UI)
  */
-export const ROOM_STATUS_LABELS: Record<RoomStatus, string> = {
-  [RoomStatus.AVAILABLE]: 'Disponible',
-  [RoomStatus.OCCUPIED]: 'Ocupada',
-  [RoomStatus.MAINTENANCE]: 'Mantenimiento',
+export const ROOM_STATUS_LABELS: Partial<Record<RoomStatus, string>> = {
+  [RoomStatus.VACIA_LIMPIA]: 'Vacia Limpia',
+  [RoomStatus.VACIA_SUCIA]: 'Vacia Sucia ',
+  [RoomStatus.OCUPADA]: 'Ocupada',
+  [RoomStatus.FUERA_DE_ORDEN]: 'Fuera de Orden',
 };
 
 /**
@@ -89,10 +90,11 @@ export const ROOM_TYPE_LABELS: Record<RoomType, string> = {
 /**
  * Badge variants for room statuses (for UI styling)
  */
-export const ROOM_STATUS_VARIANTS: Record<RoomStatus, 'default' | 'destructive' | 'secondary'> = {
-  [RoomStatus.AVAILABLE]: 'default',
-  [RoomStatus.OCCUPIED]: 'destructive',
-  [RoomStatus.MAINTENANCE]: 'secondary',
+export const ROOM_STATUS_VARIANTS: Partial<Record<RoomStatus, 'default' | 'destructive' | 'secondary'>> = {
+  [RoomStatus.VACIA_LIMPIA]: 'default',
+  [RoomStatus.VACIA_SUCIA]: 'secondary',
+  [RoomStatus.OCUPADA]: 'destructive',
+  [RoomStatus.FUERA_DE_ORDEN]: 'secondary',
 };
 
 // ============================================

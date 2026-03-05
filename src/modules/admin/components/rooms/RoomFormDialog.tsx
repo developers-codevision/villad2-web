@@ -8,7 +8,13 @@ import { Textarea } from '@/modules/shared/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/modules/shared/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
 import { RoomType, RoomStatus } from '@/modules/shared/types/api.types';
-import { RoomFormData, getRoomTypes, getRoomStatuses, ROOM_TYPE_LABELS } from '../../types/rooms.types';
+import {
+  RoomFormData,
+  getRoomTypes,
+  getRoomStatuses,
+  ROOM_TYPE_LABELS,
+  ROOM_STATUS_LABELS
+} from '../../types/rooms.types';
 
 interface RoomFormDialogProps {
   open: boolean;
@@ -159,7 +165,7 @@ export function RoomFormDialog({
               <SelectContent>
                 {getRoomStatuses().map(status => (
                   <SelectItem key={status} value={status} className="capitalize">
-                    {status}
+                    {ROOM_STATUS_LABELS[status]}
                   </SelectItem>
                 ))}
               </SelectContent>

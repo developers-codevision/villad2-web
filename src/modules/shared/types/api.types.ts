@@ -14,7 +14,7 @@ export enum RoomType {
 export enum RoomStatus {
   VACIA_LIMPIA = 'vacia_limpia',
   VACIA_SUCIA = 'vacia_sucia',
-  FUERA_DE_SERVICIO = 'fuera_de_servicio',
+  FUERA_DE_ORDEN = 'fuera_de_orden',
   OCUPADA = 'ocupada',
 }
 

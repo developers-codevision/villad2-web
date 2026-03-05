@@ -57,7 +57,7 @@ export default function RoomDetail() {
     );
   }
 
-  if (room.status !== RoomStatus.AVAILABLE) {
+  if (room.status !== RoomStatus.VACIA_LIMPIA) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
