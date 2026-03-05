@@ -1,7 +1,9 @@
 // Reservation Form Dialog Component
 
-import { format } from 'date-fns';
+import { useState, useEffect } from 'react';
+import { format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Moon, Clock } from 'lucide-react';
 import { Button } from '@/modules/shared/components/ui/button';
 import { Input } from '@/modules/shared/components/ui/input';
 import { Label } from '@/modules/shared/components/ui/label';
@@ -19,7 +21,9 @@ import { Calendar } from '@/modules/shared/components/ui/calendar';
 import { ReservationFormData, getReservationStatuses, RESERVATION_STATUS_LABELS } from '../../types/reservations.types';
 import { Room } from '@/modules/shared/types/api.types';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
-import type { DateRange } from "react-day-picker";
+import type { DateRange } from 'react-day-picker';
+
+type BookingMode = 'range' | 'single';
 
 interface ReservationFormDialogProps {
   open: boolean;
@@ -48,14 +52,44 @@ export function ReservationFormDialog({
   onFormChange,
   canSubmit,
 }: ReservationFormDialogProps & { canSubmit: boolean }) {
+
+  // Booking mode: 'range' = multi-night, 'single' = same-day by hours
+  const [bookingMode, setBookingMode] = useState<BookingMode>('range');
+
+  // Auto-detect mode from existing reservation data when editing
+  useEffect(() => {
+    if (open && isEditing && formData.checkIn && formData.checkOut) {
+      setBookingMode(isSameDay(formData.checkIn, formData.checkOut) ? 'single' : 'range');
+    }
+    if (!open) {
+      setBookingMode('range');
+    }
+  }, [open, isEditing]);
+
+  // Switch mode and clear date fields
+  const handleModeChange = (mode: BookingMode) => {
+    if (mode === bookingMode) return;
+    setBookingMode(mode);
+    onFormChange('checkIn', undefined);
+    onFormChange('checkOut', undefined);
+    onFormChange('checkInTime', '');
+    onFormChange('checkOutTime', '');
+  };
+
   // Get selected room to calculate max capacity
   const selectedRoom = availableRooms.find(r => r.id === formData.roomId);
   const maxCapacity = selectedRoom
     ? selectedRoom.baseCapacity + selectedRoom.extraCapacity
     : 0;
 
-  // Calculate nights
-  const nights = formData.checkIn && formData.checkOut ? Math.ceil((formData.checkOut.getTime() - formData.checkIn.getTime()) / (1000 * 60 * 60 * 24)) : 0;
+  // Calculate nights (range mode only)
+  const nights =
+    bookingMode === 'range' && formData.checkIn && formData.checkOut
+      ? Math.ceil(
+          (formData.checkOut.getTime() - formData.checkIn.getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
+      : 0;
 
   // Handle total guests change (mirrors client logic)
   const handleTotalGuestsChange = (total: number) => {
@@ -93,6 +127,34 @@ export function ReservationFormDialog({
           <DialogTitle>
             {isEditing ? 'Editar Reserva' : 'Nueva Reserva'}
           </DialogTitle>
+
+          {/* Booking mode toggle */}
+          <div className="flex items-center gap-1 mt-2 border rounded-lg p-1 w-fit">
+            <button
+              type="button"
+              onClick={() => handleModeChange('range')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                bookingMode === 'range'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+            >
+              <Moon size={14} />
+              Por noches
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange('single')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                bookingMode === 'single'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+            >
+              <Clock size={14} />
+              Por horas (un día)
+            </button>
+          </div>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
@@ -117,55 +179,111 @@ export function ReservationFormDialog({
             </Select>
           </div>
 
-          {/* Date range calendar - full width */}
-          <div className="space-y-2">
-            <Label className="text-base">Fechas de estancia</Label>
-            <div className="border border-border rounded-lg p-6 flex justify-center">
-              <Calendar
-                mode="range"
-                selected={{
-                  from: formData.checkIn,
-                  to: formData.checkOut,
-                }}
-                onSelect={(range: DateRange | undefined) => {
-                  onFormChange('checkIn', range?.from);
-                  onFormChange('checkOut', range?.to);
-                }}
-                numberOfMonths={2}
-                disabled={(d) =>
-                  !selectedRoom || d < new Date(new Date().setHours(0, 0, 0, 0)) ||
-                  (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
-                }
-                locale={es}
-                className="pointer-events-auto"
-              />
+          {/* ── RANGE MODE: multi-night calendar ── */}
+          {bookingMode === 'range' && (
+            <div className="space-y-2">
+              <Label className="text-base">Fechas de estancia</Label>
+              <div className="border border-border rounded-lg p-6 flex justify-center">
+                <Calendar
+                  mode="range"
+                  selected={{
+                    from: formData.checkIn ?? undefined,
+                    to: formData.checkOut ?? undefined,
+                  }}
+                  onSelect={(range: DateRange | undefined) => {
+                    onFormChange('checkIn', range?.from);
+                    onFormChange('checkOut', range?.to);
+                  }}
+                  numberOfMonths={2}
+                  disabled={(d) =>
+                    !selectedRoom ||
+                    d < new Date(new Date().setHours(0, 0, 0, 0)) ||
+                    (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
+                  }
+                  locale={es}
+                  className="pointer-events-auto"
+                />
+              </div>
+              {formData.checkIn && formData.checkOut && (
+                <p className="text-sm text-muted-foreground text-center">
+                  {format(formData.checkIn, 'dd MMM yyyy', { locale: es })} —{' '}
+                  {format(formData.checkOut, 'dd MMM yyyy', { locale: es })} ·{' '}
+                  {nights} {nights === 1 ? 'noche' : 'noches'}
+                </p>
+              )}
+              {/* Optional arrival / departure times */}
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="space-y-2">
+                  <Label>Hora de llegada (Check-in)</Label>
+                  <Input
+                    type="time"
+                    value={formData.checkInTime || ''}
+                    onChange={(e) => onFormChange('checkInTime', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Hora de salida (Check-out)</Label>
+                  <Input
+                    type="time"
+                    value={formData.checkOutTime || ''}
+                    onChange={(e) => onFormChange('checkOutTime', e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
-            {formData.checkIn && formData.checkOut && (
-              <p className="text-sm text-muted-foreground text-center">
-                {format(formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(formData.checkOut, "dd MMM yyyy", { locale: es })} · {nights} {nights === 1 ? "noche" : "noches"}
-              </p>
-            )}
+          )}
 
-            {/* New: check-in/check-out time inputs */}
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="space-y-2">
-                <Label>Hora de llegada (Check-in)</Label>
-                <Input
-                  type="time"
-                  value={formData.checkInTime || ''}
-                  onChange={(e) => onFormChange('checkInTime', e.target.value)}
+          {/* ── SINGLE MODE: one-day calendar + required times ── */}
+          {bookingMode === 'single' && (
+            <div className="space-y-2">
+              <Label className="text-base">Fecha de la reserva</Label>
+              <div className="border border-border rounded-lg p-4 flex justify-center">
+                <Calendar
+                  mode="single"
+                  selected={formData.checkIn ?? undefined}
+                  onSelect={(day: Date | undefined) => {
+                    onFormChange('checkIn', day);
+                    onFormChange('checkOut', day);
+                  }}
+                  disabled={(d) =>
+                    !selectedRoom ||
+                    d < new Date(new Date().setHours(0, 0, 0, 0))
+                  }
+                  locale={es}
+                  className="pointer-events-auto"
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Hora de salida (Check-out)</Label>
-                <Input
-                  type="time"
-                  value={formData.checkOutTime || ''}
-                  onChange={(e) => onFormChange('checkOutTime', e.target.value)}
-                />
+              {formData.checkIn && (
+                <p className="text-sm text-muted-foreground text-center">
+                  {format(formData.checkIn, "EEEE, dd 'de' MMMM 'de' yyyy", { locale: es })}
+                </p>
+              )}
+              {/* Required times */}
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="space-y-2">
+                  <Label>Hora de entrada *</Label>
+                  <Input
+                    type="time"
+                    value={formData.checkInTime || ''}
+                    onChange={(e) => onFormChange('checkInTime', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Hora de salida *</Label>
+                  <Input
+                    type="time"
+                    value={formData.checkOutTime || ''}
+                    onChange={(e) => onFormChange('checkOutTime', e.target.value)}
+                  />
+                </div>
               </div>
+              {formData.checkInTime && formData.checkOutTime && (
+                <p className="text-sm text-muted-foreground text-center">
+                  {formData.checkInTime} — {formData.checkOutTime} · Reserva por horas
+                </p>
+              )}
             </div>
-          </div>
+          )}
 
           {/* Guest Information */}
           <div className="space-y-4">

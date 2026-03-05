@@ -4,6 +4,26 @@ import { ReservationFormDataBase, ClientReservationFormData } from '@/modules/sh
 import { ReservationFormData } from '@/modules/admin/types/reservations.types';
 
 /**
+ * Check if two dates refer to the same calendar day
+ */
+function isSameDay(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+/**
+ * Parse a "HH:mm" string into total minutes from midnight
+ */
+function timeToMinutes(time: string): number | null {
+  const parts = time.split(':').map(Number);
+  if (parts.length < 2 || parts.some(isNaN)) return null;
+  return parts[0] * 60 + parts[1];
+}
+
+/**
  * Validate reservation form data
  */
 export function validateReservationForm(
@@ -27,11 +47,26 @@ export function validateReservationForm(
     errors.push('Email inválido');
   }
 
-  // Date validation
+  // Date / time validation
   if (formData.checkIn && formData.checkOut) {
-    if (formData.checkOut <= formData.checkIn) {
+    const sameDay = isSameDay(formData.checkIn, formData.checkOut);
+
+    if (sameDay) {
+      // Same-day reservation: require explicit times and validate order
+      if (!formData.checkInTime) errors.push('La hora de entrada es requerida para reservas de un día');
+      if (!formData.checkOutTime) errors.push('La hora de salida es requerida para reservas de un día');
+
+      if (formData.checkInTime && formData.checkOutTime) {
+        const inMinutes = timeToMinutes(formData.checkInTime);
+        const outMinutes = timeToMinutes(formData.checkOutTime);
+        if (inMinutes !== null && outMinutes !== null && outMinutes <= inMinutes) {
+          errors.push('La hora de salida debe ser posterior a la hora de entrada');
+        }
+      }
+    } else if (formData.checkOut < formData.checkIn) {
       errors.push('La fecha de salida debe ser posterior a la de entrada');
     }
+
     if (formData.checkIn < new Date(new Date().setHours(0, 0, 0, 0))) {
       errors.push('La fecha de entrada no puede ser en el pasado');
     }
