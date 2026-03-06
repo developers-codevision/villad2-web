@@ -148,8 +148,13 @@ const Index = () => {
       </section>
 
       {/* Reviews */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-gradient-to-b from-background via-accent/20 to-background">
         <div className="container mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-12 bg-primary/40" />
+            <Star className="h-5 w-5 text-primary fill-primary" />
+            <div className="h-px w-12 bg-primary/40" />
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
             Lo que dicen nuestros <span className="text-primary">Huéspedes</span>
           </h2>
@@ -168,46 +173,70 @@ const Index = () => {
           ) : (
             <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
               <CarouselContent className="-ml-4">
-                {reviews.map((review) => (
-                  <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                    <div className="relative rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden bg-card">
-                      {review.response && (
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-50% to-primary/5 pointer-events-none"></div>
-                      )}
+                {reviews.map((review, index) => {
+                  const accentStyles = [
+                    "from-primary/10 to-primary/5 border-l-primary",
+                    "from-secondary/20 to-secondary/5 border-l-secondary",
+                    "from-accent to-accent/40 border-l-primary/60",
+                  ];
+                  const style = accentStyles[index % accentStyles.length];
 
-                      <div className="relative p-6 flex flex-col h-full z-10">
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <p className="font-semibold text-sm">{review.name}</p>
-                            <p className="text-xs text-muted-foreground">{review.country}</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            {Array.from({ length: 5 }).map((_, s) => (
-                              <Star key={s} className={`h-4 w-4 ${s < review.stars ? "text-primary fill-primary" : "text-muted-foreground/30"}`} />
-                            ))}
-                          </div>
+                  return (
+                    <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                      <div className={`group relative rounded-2xl border-l-4 bg-gradient-to-br ${style} backdrop-blur-sm shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden`}>
+                        {/* Decorative quote */}
+                        <div className="absolute top-4 right-4 text-6xl font-serif text-primary/10 leading-none select-none pointer-events-none group-hover:text-primary/20 transition-colors">
+                          "
                         </div>
 
-                        {/* Title (if any) */}
-                        {review.title && (
-                          <p className="text-sm font-semibold text-primary mb-2">{review.title}</p>
-                        )}
-
-                        <p className="text-sm text-foreground italic flex-1 mb-4">"{review.content}"</p>
-
-                        {review.response && (
-                          <div className="border-t border-primary/20 pt-4 mt-2">
-                            <p className="text-xs font-semibold text-primary mb-2">Respuesta del hostal:</p>
-                            <p className="text-xs text-foreground line-clamp-2">{review.response}</p>
+                        <div className="relative p-6 flex flex-col h-full z-10">
+                          {/* Stars - top */}
+                          <div className="flex items-center gap-0.5 mb-4">
+                            {Array.from({ length: 5 }).map((_, s) => (
+                              <Star
+                                key={s}
+                                className={`h-4 w-4 transition-transform group-hover:scale-110 ${
+                                  s < review.stars
+                                    ? "text-primary fill-primary drop-shadow-sm"
+                                    : "text-muted-foreground/20"
+                                }`}
+                                style={{ transitionDelay: `${s * 40}ms` }}
+                              />
+                            ))}
+                            <span className="ml-2 text-xs font-medium text-muted-foreground">{review.stars}/5</span>
                           </div>
-                        )}
+
+                          {/* Content */}
+                          <p className="text-sm leading-relaxed text-foreground/90 flex-1 mb-5 line-clamp-4">
+                            "{review.content}"
+                          </p>
+
+                          {/* Response */}
+                          {review.response && (
+                            <div className="bg-primary/5 rounded-lg p-3 mb-4 border border-primary/10">
+                              <p className="text-xs font-semibold text-primary mb-1">💬 Respuesta del hostal</p>
+                              <p className="text-xs text-foreground/80 line-clamp-2">{review.response}</p>
+                            </div>
+                          )}
+
+                          {/* Author */}
+                          <div className="flex items-center gap-3 pt-4 border-t border-border/50">
+                            <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                              {review.name?.charAt(0)?.toUpperCase() || "?"}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-sm truncate">{review.name}</p>
+                              <p className="text-xs text-muted-foreground truncate">{review.country}</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </CarouselItem>
-                ))}
+                    </CarouselItem>
+                  );
+                })}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              <CarouselPrevious className="border-primary/30 hover:bg-primary hover:text-primary-foreground" />
+              <CarouselNext className="border-primary/30 hover:bg-primary hover:text-primary-foreground" />
             </Carousel>
           )}
         </div>
