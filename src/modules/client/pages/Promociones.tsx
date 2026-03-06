@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Tag } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/components/ui/card";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
-import { promotionsService, getMediaUrl } from "@/modules/shared/services";
+import { promotionsService } from "@/modules/shared/services";
 import { Promotion, PromotionStatus } from "@/modules/shared/types/api.types";
-import { parseServices, formatTimeToAmPm } from "@/modules/client/utils/promotionHelpers";
+import { PromotionHeroCard, PromotionGlassCard, PromotionHorizontalCard } from "@/modules/client/components/promotions";
 
 export default function Promociones() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -30,6 +29,60 @@ export default function Promociones() {
     loadPromotions();
   }, []);
 
+  /**
+   * Renders promotions in a varied, magazine-style layout:
+   * - 1st promotion: full-width hero card
+   * - 2nd & 3rd: glass cards side by side
+   * - 4th: horizontal card (left image)
+   * - 5th & 6th: glass cards side by side
+   * - 7th: horizontal card (right image / reversed)
+   * ...and repeats the pattern
+   */
+  const renderPromotions = () => {
+    const elements: React.ReactNode[] = [];
+    let i = 0;
+
+    while (i < promotions.length) {
+      // Hero card for the first item
+      if (i === 0) {
+        elements.push(
+          <PromotionHeroCard key={promotions[i].id} promotion={promotions[i]} />
+        );
+        i++;
+        continue;
+      }
+
+      // Pair of glass cards
+      const glassStart = i;
+      const glassItems = promotions.slice(glassStart, glassStart + 2);
+      if (glassItems.length > 0) {
+        elements.push(
+          <div key={`glass-${glassStart}`} className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6">
+            {glassItems.map((promo) => (
+              <PromotionGlassCard key={promo.id} promotion={promo} />
+            ))}
+          </div>
+        );
+        i += glassItems.length;
+      }
+
+      // Horizontal card (alternating direction)
+      if (i < promotions.length) {
+        const isReversed = Math.floor(i / 3) % 2 === 1;
+        elements.push(
+          <PromotionHorizontalCard
+            key={promotions[i].id}
+            promotion={promotions[i]}
+            reverse={isReversed}
+          />
+        );
+        i++;
+      }
+    }
+
+    return elements;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -37,111 +90,37 @@ export default function Promociones() {
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">
+          <div className="text-center mb-14">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
+              Ofertas exclusivas
+            </span>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
               Promociones Especiales
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Descubre nuestras ofertas exclusivas diseñadas para brindarte la mejor experiencia.
-              Aprovecha estas promociones limitadas y vive momentos inolvidables en nuestro hostal.
+            <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+              Descubre nuestras ofertas diseñadas para brindarte la mejor experiencia.
+              Aprovecha estas promociones limitadas y vive momentos inolvidables.
             </p>
           </div>
 
           {loading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Cargando promociones...</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`${i === 0 ? 'col-span-full h-[400px]' : 'h-[350px]'} rounded-2xl bg-muted animate-pulse`}
+                />
+              ))}
             </div>
           ) : promotions.length === 0 ? (
-            <div className="border border-dashed border-border rounded-lg p-12 flex flex-col items-center justify-center text-muted-foreground">
-              <Tag size={48} className="mb-4 opacity-30" />
-              <p className="font-medium">Sin promociones disponibles</p>
-              <p className="text-sm mt-1">Vuelve más tarde para ver nuestras nuevas ofertas.</p>
+            <div className="border border-dashed border-border rounded-2xl p-16 flex flex-col items-center justify-center text-muted-foreground">
+              <Tag size={56} className="mb-5 opacity-20" />
+              <p className="font-semibold text-lg">Sin promociones disponibles</p>
+              <p className="text-sm mt-2">Vuelve más tarde para ver nuestras nuevas ofertas.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {promotions.map((promo) => {
-                // Parse services using the helper function
-                const services = parseServices(promo.services);
-
-                return (
-                  <Card key={promo.id} className="overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-                    {promo.photo && (
-                      <div className="h-48 overflow-hidden">
-                        <img
-                          src={getMediaUrl(promo.photo)}
-                          alt={promo.title}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform"
-                        />
-                      </div>
-                    )}
-                    <CardHeader>
-                      <CardTitle className="text-xl">{promo.title}</CardTitle>
-                      {promo.description && (
-                        <p className="text-sm text-muted-foreground mt-2">{promo.description}</p>
-                      )}
-                    </CardHeader>
-                    <CardContent className="space-y-3 flex-1 flex flex-col">
-                      <div className="grid grid-cols-2 gap-3 text-sm">
-                        {promo.minPeople !== undefined && promo.minPeople > 0 && (
-                          <div>
-                            <p className="text-muted-foreground">Mín. personas</p>
-                            <p className="font-semibold">{promo.minPeople}</p>
-                          </div>
-                        )}
-                        {promo.maxPeople !== undefined && promo.maxPeople > 0 && (
-                          <div>
-                            <p className="text-muted-foreground">Máx. personas</p>
-                            <p className="font-semibold">{promo.maxPeople}</p>
-                          </div>
-                        )}
-                        {promo.time && (
-                          <div>
-                            <p className="text-muted-foreground">Duración</p>
-                            <p className="font-semibold">{formatTimeToAmPm(promo.time) || promo.time}</p>
-                          </div>
-                        )}
-                      </div>
-
-                      {(promo.checkInTime || promo.checkOutTime) && (
-                        <div className="border-t pt-3 grid grid-cols-2 gap-3 text-sm">
-                          {promo.checkInTime && (
-                            <div>
-                              <p className="text-muted-foreground">Entrada</p>
-                              <p className="font-semibold">{formatTimeToAmPm(promo.checkInTime) || promo.checkInTime}</p>
-                            </div>
-                          )}
-                          {promo.checkOutTime && (
-                            <div>
-                              <p className="text-muted-foreground">Salida</p>
-                              <p className="font-semibold">{formatTimeToAmPm(promo.checkOutTime) || promo.checkOutTime}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {services && services.length > 0 && (
-                        <div className="border-t pt-3 mt-auto">
-                          <p className="text-sm font-medium mb-2">Servicios incluidos</p>
-                          <ul className="space-y-1">
-                            {services.map((service, idx) => {
-                              // Clean up the service string if it contains JSON characters
-                              const cleanService = typeof service === 'string'
-                                ? service.replace(/[\[\]"]/g, '').trim()
-                                : service;
-                              return (
-                                <li key={idx} className="text-sm text-muted-foreground flex items-center gap-2">
-                                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span>
-                                  {cleanService}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
+            <div className="grid grid-cols-1 gap-8">
+              {renderPromotions()}
             </div>
           )}
         </div>
