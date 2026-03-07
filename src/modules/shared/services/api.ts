@@ -215,7 +215,14 @@ export const authenticatedApiClient = {
       await parseError(response);
     }
 
-    return response.json();
+    if (response.status === 204) return undefined as T;
+    const text = await response.text();
+    if (!text) return undefined as T;
+    try {
+      return JSON.parse(text) as T;
+    } catch (e) {
+      throw new Error('Invalid JSON response from server');
+    }
   },
 
   delete: async <T>(endpoint: string): Promise<T> => {

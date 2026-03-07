@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home, Rooms, RoomDetail, Services, Reservations, Reviews, Promociones, Login, InterestPlaces, StripeReturn, RefundPolicies, TermsAndConditions, FAQ } from "@/modules/client/pages";
-import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas, AdminSelector, GestionHome } from "@/modules/admin/pages";
+import { AdminLayout, AdminReservas, AdminHabitaciones, AdminPromociones, AdminResenas, AdminSettings, AdminSelector, GestionHome } from "@/modules/admin/pages";
 import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
 
@@ -38,6 +38,7 @@ const App = () => (
               <Route path="habitaciones" element={<AdminHabitaciones />} />
               <Route path="promociones" element={<AdminPromociones />} />
               <Route path="resenas" element={<AdminResenas />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

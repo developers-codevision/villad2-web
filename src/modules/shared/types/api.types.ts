@@ -305,6 +305,27 @@ export interface UpdatePromotionDto {
 }
 
 // ============================================
+// SETTINGS INTERFACES
+// ============================================
+
+export interface Settings {
+  id: number;
+  earlyCheckInPrice: string;
+  lateCheckOutPrice: string;
+  transferOneWayPrice: string;
+  transferRoundTripPrice: string;
+  breakfastPrice: string;
+}
+
+export interface UpdateSettingsDto {
+  earlyCheckInPrice?: string;
+  lateCheckOutPrice?: string;
+  transferOneWayPrice?: string;
+  transferRoundTripPrice?: string;
+  breakfastPrice?: string;
+}
+
+// ============================================
 // API ERROR INTERFACE
 // ============================================
 
