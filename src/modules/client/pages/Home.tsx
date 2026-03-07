@@ -46,42 +46,71 @@ const Index = () => {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative min-h-[100vh]  flex items-center ">
+      {/* MOBILE hero */}
+      <div className="desk:hidden flex flex-col pt-16">
+        {/* Imagen con título superpuesto */}
+        <div className="relative w-full">
+          <img
+            src="/Foto-portada-no1-editada-scaled.jpg"
+            alt="Hostal Villa D2"
+            className="w-full object-cover object-center"
+            style={{ height: "55vw", minHeight: "220px", maxHeight: "420px" }}
+          />
+          {/* Título sobre la imagen */}
+          <div className="absolute inset-0 flex items-start p-4 pt-3">
+            <h1 className="text-2xl font-extrabold leading-tight text-white drop-shadow-2xl">
+              Hostal Boutique{" "}
+              <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
+            </h1>
+          </div>
+        </div>
+        {/* Botón debajo de la imagen */}
+        <div className="flex justify-center py-5 bg-background">
+          <Link to="/reservas">
+            <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
+              Reservar Ahora
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* DESK hero */}
+      <section className="relative min-h-[100vh] hidden desk:flex items-center">
         {/* Imagen de fondo completa sin overlay */}
         <div
-          className="absolute inset-0 bg-center mt-10 "
+          className="absolute inset-0 bg-center mt-10"
           style={{
             backgroundImage: "url('/Foto-portada-no1-editada-scaled.jpg')",
-             backgroundSize: "100% 100%",
+            backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
           }}
         />
 
         {/* Título - Esquina superior izquierda */}
-        <div className="absolute top-20 left-4 desk:top-24 desk:left-8 z-10">
-          <h1 className="text-3xl desk:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
+        <div className="absolute top-24 left-8 z-10">
+          <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
             Hostal Boutique{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
         </div>
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
-        <div className="absolute top-20 right-4 desk:top-24 desk:right-8 z-10 hidden desk:block">
+        <div className="absolute top-24 right-8 z-10">
           <img src={logo} alt="Villa D2" className="h-24 lg:h-28 w-auto drop-shadow-2xl" />
         </div>
 
-        {/* Descripción - Mismo vertical pero en la derecha; oculto en móvil */}
-        <div className="absolute bottom-8 desk:bottom-12 right-4 desk:right-8 z-10 max-w-md desk:max-w-xl hidden desk:block">
+        {/* Descripción */}
+        <div className="absolute bottom-12 right-8 z-10 max-w-xl">
           <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
-            <p className="text-base desk:text-lg lg:text-xl">
+            <p className="text-lg lg:text-xl">
               {HOSTAL.tagline} — {HOSTAL.description}
             </p>
           </div>
         </div>
 
         {/* Botón - Centro inferior */}
-        <div className="absolute bottom-8 desk:bottom-12 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
           <Link to="/reservas">
             <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
               Reservar Ahora

@@ -85,6 +85,14 @@ export default function Navbar() {
 								<Button className="w-full font-semibold">Reservar Ahora</Button>
 							</Link>
 						</li>
+						<li className="flex justify-center pt-2">
+							<SocialLinks
+								facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
+								twitterUrl="https://x.com/villad2"
+								youtubeUrl="https://youtube.com/villad2"
+								whatsappUrl="https://wa.me/1234567890"
+							/>
+						</li>
 					</ul>
 				</div>
 			)}
