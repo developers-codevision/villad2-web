@@ -67,8 +67,8 @@ const Index = () => {
         </div>
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
-        <div className="absolute top-20 right-4 md:top-24 md:right-8 z-10">
-          <img src={logo} alt="Villa D2" className="h-16 md:h-24 lg:h-28 w-auto drop-shadow-2xl" />
+        <div className="absolute top-20 right-4 md:top-24 md:right-8 z-10 hidden md:block">
+          <img src={logo} alt="Villa D2" className="h-24 lg:h-28 w-auto drop-shadow-2xl" />
         </div>
 
         {/* Descripción - Mismo vertical pero en la derecha; oculto en móvil */}
