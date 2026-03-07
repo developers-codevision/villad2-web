@@ -60,7 +60,7 @@ const Index = () => {
 
         {/* Título - Esquina superior izquierda */}
         <div className="absolute top-20 left-4 md:top-24 md:left-8 z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
+          <h1 className="text-3xl md:s lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
             Hostal Boutique{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
