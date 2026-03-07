@@ -23,12 +23,12 @@ export default function Navbar() {
 		<header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
 		<nav className="container mx-auto flex items-center justify-between h-16 px-4">
 			{/* Mobile logo */}
-			<Link to="/" className="md:hidden">
+			<Link to="/" className="desk:hidden">
 				<img src={logo} alt={HOSTAL.name} className="h-10 w-auto" />
 			</Link>
 
 			{/* Desktop */}
-				<ul className="hidden md:flex justify-center items-center w-1/2 gap-8">
+				<ul className="hidden desk:flex justify-center items-center w-1/2 gap-8">
 					{links.map((l) => (
 						<li key={l.to}>
 							<Link
@@ -44,10 +44,10 @@ export default function Navbar() {
 				</ul>
 
 				<div className={'flex justify-between gap-2'}>
-					<Link to="/reservas" className="hidden md:block">
+					<Link to="/reservas" className="hidden desk:block">
 					<Button className="font-semibold">Reservar Ahora</Button>
 				</Link>
-				<div className="hidden md:flex items-center ml-4">
+				<div className="hidden desk:flex items-center ml-4">
 					<SocialLinks
 						facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
 						twitterUrl="https://x.com/villad2"
@@ -58,14 +58,14 @@ export default function Navbar() {
 				</div>
 
 				{/* Mobile toggle */}
-				<button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menú">
+				<button className="desk:hidden" onClick={() => setOpen(!open)} aria-label="Menú">
 					{open ? <X size={24} /> : <Menu size={24} />}
 				</button>
 			</nav>
 
 			{/* Mobile menu */}
 			{open && (
-				<div className="md:hidden bg-background border-b border-border px-4 pb-4">
+				<div className="desk:hidden bg-background border-b border-border px-4 pb-4">
 					<ul className="flex flex-col gap-3">
 						{links.map((l) => (
 							<li key={l.to}>

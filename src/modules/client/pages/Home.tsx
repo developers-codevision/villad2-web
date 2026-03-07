@@ -59,29 +59,29 @@ const Index = () => {
         />
 
         {/* Título - Esquina superior izquierda */}
-        <div className="absolute top-20 left-4 md:top-24 md:left-8 z-10">
-          <h1 className="text-3xl md:s lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
+        <div className="absolute top-20 left-4 desk:top-24 desk:left-8 z-10">
+          <h1 className="text-3xl desk:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
             Hostal Boutique{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
         </div>
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
-        <div className="absolute top-20 right-4 md:top-24 md:right-8 z-10 hidden md:block">
+        <div className="absolute top-20 right-4 desk:top-24 desk:right-8 z-10 hidden desk:block">
           <img src={logo} alt="Villa D2" className="h-24 lg:h-28 w-auto drop-shadow-2xl" />
         </div>
 
         {/* Descripción - Mismo vertical pero en la derecha; oculto en móvil */}
-        <div className="absolute bottom-8 md:bottom-12 right-4 md:right-8 z-10 max-w-md md:max-w-xl hidden md:block">
+        <div className="absolute bottom-8 desk:bottom-12 right-4 desk:right-8 z-10 max-w-md desk:max-w-xl hidden desk:block">
           <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
-            <p className="text-base md:text-lg lg:text-xl">
+            <p className="text-base desk:text-lg lg:text-xl">
               {HOSTAL.tagline} — {HOSTAL.description}
             </p>
           </div>
         </div>
 
         {/* Botón - Centro inferior */}
-        <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute bottom-8 desk:bottom-12 left-1/2 -translate-x-1/2 z-10">
           <Link to="/reservas">
             <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
               Reservar Ahora
