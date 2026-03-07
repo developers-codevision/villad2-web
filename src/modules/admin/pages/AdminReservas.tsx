@@ -69,21 +69,21 @@ export default function AdminReservas() {
   return (
     <div>
       {/* Page Header with View Toggle */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold mb-1">Reservas</h1>
-          <p className="text-muted-foreground">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex-1">
+          <h1 className="text-xl sm:text-2xl font-bold mb-1">Reservas</h1>
+          <p className="text-sm text-muted-foreground">
             Gestiona las reservas del hostal y crea reservas manuales.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           {/* View Mode Toggle */}
           <div className="flex items-center gap-1 border rounded-lg p-1">
             <Button
               variant={viewMode === 'list' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('list')}
-              className="gap-2"
+              className="flex-1 sm:flex-none gap-2"
             >
               <List size={16} />
               Lista
@@ -92,7 +92,7 @@ export default function AdminReservas() {
               variant={viewMode === 'calendar' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('calendar')}
-              className="gap-2"
+              className="flex-1 sm:flex-none gap-2"
             >
               <CalendarIcon size={16} />
               Calendario
@@ -100,7 +100,7 @@ export default function AdminReservas() {
           </div>
 
           {/* Create Button */}
-          <Button onClick={openCreate}>
+          <Button onClick={openCreate} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Nueva Reserva
           </Button>

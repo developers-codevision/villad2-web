@@ -46,7 +46,8 @@ export function ReservationTable({
 
   return (
     <>
-      <div className="border rounded-lg overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden lg:block border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -177,6 +178,122 @@ export function ReservationTable({
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="lg:hidden space-y-4">
+        {reservations.map(reservation => (
+          <div
+            key={reservation.id}
+            className="border rounded-lg p-4 bg-card hover:bg-muted/60 transition-colors cursor-pointer"
+            onClick={() => setSelectedReservation(reservation)}
+          >
+            {/* Room and Status */}
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <BedDouble size={18} className="text-muted-foreground shrink-0" />
+                <div>
+                  <p className="font-semibold text-base">
+                    {reservation.room?.number || `#${reservation.roomId}`}
+                  </p>
+                  {reservation.room?.name && (
+                    <p className="text-sm text-muted-foreground">
+                      {reservation.room.name}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <Badge variant={RESERVATION_STATUS_VARIANTS[reservation.status]}>
+                {RESERVATION_STATUS_LABELS[reservation.status]}
+              </Badge>
+            </div>
+
+            {/* Dates */}
+            <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Calendar size={14} className="text-muted-foreground" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Entrada</p>
+                  <p className="font-medium">
+                    {format(parseISO(reservation.checkInDate), 'dd MMM yyyy', { locale: es })}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar size={14} className="text-muted-foreground" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Salida</p>
+                  <p className="font-medium">
+                    {format(parseISO(reservation.checkOutDate), 'dd MMM yyyy', { locale: es })}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Guests and Price */}
+            <div className="flex items-center justify-between mb-3 pb-3 border-b">
+              <div>
+                <p className="text-xs text-muted-foreground">Huéspedes</p>
+                <p className="font-medium">
+                  {reservation.baseGuestsCount + reservation.extraGuestsCount}
+                  {reservation.extraGuestsCount > 0 && (
+                    <span className="text-xs text-muted-foreground ml-1">
+                      ({reservation.baseGuestsCount} + {reservation.extraGuestsCount})
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground">Total</p>
+                <p className="font-bold text-lg">
+                  ${(Number(reservation.totalPrice) || 0).toFixed(2)}
+                </p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+              {canConfirmReservation(reservation.status) && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onStatusChange(reservation.id, ReservationStatus.CONFIRMED)}
+                  className="flex-1"
+                >
+                  <CheckCircle size={16} className="text-green-600 mr-2" />
+                  Confirmar
+                </Button>
+              )}
+              {canCancelReservation(reservation.status) && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onStatusChange(reservation.id, ReservationStatus.CANCELLED)}
+                  className="flex-1"
+                >
+                  <XCircle size={16} className="text-red-600 mr-2" />
+                  Cancelar
+                </Button>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => onEdit(reservation)}
+                title="Editar"
+              >
+                <Edit size={16} />
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => onDelete(reservation.id)}
+                title="Eliminar"
+              >
+                <Trash2 size={16} className="text-destructive" />
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <ReservationDetailSheet

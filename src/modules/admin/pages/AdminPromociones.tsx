@@ -44,12 +44,12 @@ export default function AdminPromociones() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold mb-1">Promociones</h1>
-          <p className="text-muted-foreground">Crea y gestiona ofertas especiales para tus huéspedes.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex-1">
+          <h1 className="text-xl sm:text-2xl font-bold mb-1">Promociones</h1>
+          <p className="text-sm text-muted-foreground">Crea y gestiona ofertas especiales para tus huéspedes.</p>
         </div>
-        <Button onClick={openCreate}><Plus className="mr-1 h-4 w-4" />Nueva promoción</Button>
+        <Button onClick={openCreate} className="w-full sm:w-auto"><Plus className="mr-1 h-4 w-4" />Nueva promoción</Button>
       </div>
 
       {/* Filters */}
@@ -78,7 +78,8 @@ export default function AdminPromociones() {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="rounded-md border">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -129,6 +130,47 @@ export default function AdminPromociones() {
                 ))}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden space-y-4">
+            {promotions.map((p) => (
+              <div key={p.id} className="border rounded-lg p-4 bg-card space-y-3">
+                {/* Header with image and title */}
+                <div className="flex items-start gap-3">
+                  {p.photo ? (
+                    <img src={getMediaUrl(p.photo)} alt={p.title} className="h-16 w-20 rounded object-cover shrink-0" />
+                  ) : (
+                    <div className="h-16 w-20 rounded bg-muted flex items-center justify-center shrink-0">
+                      <Tag className="h-6 w-6 text-muted-foreground/40" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-base mb-1">{p.title}</h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{p.description}</p>
+                  </div>
+                </div>
+
+                {/* Status and Actions */}
+                <div className="flex items-center gap-2 pt-2 border-t">
+                  <Button
+                    size="sm"
+                    variant={p.status === PromotionStatus.ACTIVE ? "default" : "outline"}
+                    onClick={() => toggleStatus(p)}
+                    disabled={formState.saving}
+                    className="flex-1"
+                  >
+                    {p.status === PromotionStatus.ACTIVE ? "Activa" : "Inactiva"}
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => openEdit(p)} disabled={formState.saving}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => deletePromotion(p.id)} disabled={formState.saving}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Pagination */}

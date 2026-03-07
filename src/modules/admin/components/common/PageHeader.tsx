@@ -19,15 +19,15 @@ export function PageHeader({
   onAction
 }: PageHeaderProps) {
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-1">{title}</h1>
-        <p className="text-muted-foreground">{description}</p>
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex-1">
+        <h1 className="text-xl sm:text-2xl font-bold mb-1">{title}</h1>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
       {actionLabel && onAction && (
-        <Button onClick={onAction}>
+        <Button onClick={onAction} className="w-full sm:w-auto">
           <Icon className="mr-2 h-4 w-4" />
-          {actionLabel}
+          <span className="sm:inline">{actionLabel}</span>
         </Button>
       )}
     </div>
