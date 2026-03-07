@@ -85,6 +85,15 @@ export const reviewsService = {
   },
 
   /**
+   * Delete response from a review (admin only)
+   */
+  async deleteResponse(id: number): Promise<Review> {
+    return authenticatedApiClient.patch<Review>(`/reviews/${id}/response`, {
+      response: null,
+    });
+  },
+
+  /**
    * Delete a review (admin only)
    */
   async delete(id: number): Promise<void> {

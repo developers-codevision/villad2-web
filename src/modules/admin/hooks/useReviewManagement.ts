@@ -11,6 +11,7 @@ export interface ReviewFormState {
   saving: boolean;
   deleteConfirm: number | null;
   responseDialog: number | null;
+  deleteResponseConfirm: number | null;
 }
 
 export interface ReviewFormData {
@@ -37,6 +38,7 @@ export function useReviewManagement() {
     saving: false,
     deleteConfirm: null,
     responseDialog: null,
+    deleteResponseConfirm: null,
   });
 
   // Form data for response
@@ -177,6 +179,24 @@ export function useReviewManagement() {
     }
   }, [loadReviews, closeReviewDetails]);
 
+  /**
+   * Delete response from a review
+   */
+  const deleteResponse = useCallback(async (reviewId: number) => {
+    setFormState((prev) => ({ ...prev, deleteResponseConfirm: null, saving: true }));
+
+    try {
+      await reviewsService.deleteResponse(reviewId);
+      toast.success('Respuesta eliminada correctamente');
+      await loadReviews();
+    } catch (error) {
+      console.error('Error deleting response:', error);
+      toast.error('Error al eliminar la respuesta');
+    } finally {
+      setFormState((prev) => ({ ...prev, saving: false }));
+    }
+  }, [loadReviews]);
+
   return {
     // State
     reviews,
@@ -204,6 +224,13 @@ export function useReviewManagement() {
     confirmDelete: () => {
       if (formState.deleteConfirm !== null) {
         deleteReview(formState.deleteConfirm);
+      }
+    },
+    deleteResponse: (id: number) =>
+      setFormState((prev) => ({ ...prev, deleteResponseConfirm: id })),
+    confirmDeleteResponse: () => {
+      if (formState.deleteResponseConfirm !== null) {
+        deleteResponse(formState.deleteResponseConfirm);
       }
     },
   };

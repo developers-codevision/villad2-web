@@ -35,6 +35,8 @@ export default function AdminResenas() {
     changeStatus,
     deleteReview,
     confirmDelete,
+    deleteResponse,
+    confirmDeleteResponse,
   } = useReviewManagement();
 
   return (
@@ -71,7 +73,7 @@ export default function AdminResenas() {
           <p className="text-sm mt-1">Las reseñas de tus huéspedes aparecerán aquí.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
           {reviews.map((review) => (
             <Card key={review.id} className="cursor-pointer hover:shadow-md transition-shadow">
               <CardHeader onClick={() => openReviewDetails(review)}>
@@ -100,12 +102,44 @@ export default function AdminResenas() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent onClick={() => openReviewDetails(review)} className="space-y-3">
-                <p className="text-sm text-foreground leading-relaxed">{review.content}</p>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-foreground leading-relaxed" onClick={() => openReviewDetails(review)}>{review.content}</p>
                 {review.response && (
                   <div className="bg-muted p-3 rounded-md border-l-2 border-primary">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">Tu respuesta:</p>
-                    <p className="text-sm">{review.response}</p>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-muted-foreground mb-1">Tu respuesta:</p>
+                        <p className="text-sm">{review.response}</p>
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 px-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openResponseDialog(review.id, review.response);
+                          }}
+                          disabled={formState.saving}
+                          title="Editar respuesta"
+                        >
+                          <MessageSquare className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 px-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteResponse(review.id);
+                          }}
+                          disabled={formState.saving}
+                          title="Eliminar respuesta"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -122,20 +156,6 @@ export default function AdminResenas() {
                   >
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Responder
-                  </Button>
-                )}
-                {review.response && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openResponseDialog(review.id, review.response);
-                    }}
-                    disabled={formState.saving}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Editar respuesta
                   </Button>
                 )}
                 {review.status === ReviewStatus.INACTIVE && (
@@ -313,6 +333,36 @@ export default function AdminResenas() {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={formState.saving}>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} disabled={formState.saving}>
+              {formState.saving ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete response confirmation */}
+      <AlertDialog
+        open={formState.deleteResponseConfirm !== null}
+        onOpenChange={(v) => {
+          if (!v) setResponseFormData({ response: "" });
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar respuesta?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará tu respuesta a esta reseña. No se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              disabled={formState.saving}
+              onClick={() =>
+                setResponseFormData({ response: "" })
+              }
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteResponse} disabled={formState.saving}>
               {formState.saving ? "Eliminando..." : "Eliminar"}
             </AlertDialogAction>
           </AlertDialogFooter>
