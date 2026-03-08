@@ -49,12 +49,11 @@ const Index = () => {
       {/* MOBILE hero */}
       <div className="desk:hidden flex flex-col pt-16">
         {/* Imagen con título superpuesto */}
-        <div className="relative w-full">
+        <div className="relative w-full aspect-video">
           <img
             src="/Foto-portada-no1-editada-scaled.jpg"
             alt="Hostal Villa D2"
-            className="w-full object-cover object-center"
-            style={{ height: "55vw", minHeight: "220px", maxHeight: "420px" }}
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Título sobre la imagen */}
           <div className="absolute inset-0 flex items-start p-4 pt-3">
