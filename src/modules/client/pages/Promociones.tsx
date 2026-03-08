@@ -34,7 +34,7 @@ export default function Promociones() {
       <Navbar />
 
       <main className="pt-24 pb-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <div className="text-center mb-14">
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
@@ -62,7 +62,7 @@ export default function Promociones() {
               <p className="text-sm mt-2">Vuelve más tarde para ver nuestras nuevas ofertas.</p>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-10">
               {promotions.map((promo) => (
                 <PromotionHeroCard key={promo.id} promotion={promo} />
               ))}
