@@ -4,7 +4,7 @@ import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { promotionsService } from "@/modules/shared/services";
 import { Promotion, PromotionStatus } from "@/modules/shared/types/api.types";
-import { PromotionHeroCard, PromotionGlassCard, PromotionHorizontalCard } from "@/modules/client/components/promotions";
+import { PromotionHeroCard } from "@/modules/client/components/promotions";
 
 export default function Promociones() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -29,66 +29,12 @@ export default function Promociones() {
     loadPromotions();
   }, []);
 
-  /**
-   * Renders promotions in a varied, magazine-style layout:
-   * - 1st promotion: full-width hero card
-   * - 2nd & 3rd: glass cards side by side
-   * - 4th: horizontal card (left image)
-   * - 5th & 6th: glass cards side by side
-   * - 7th: horizontal card (right image / reversed)
-   * ...and repeats the pattern
-   */
-  const renderPromotions = () => {
-    const elements: React.ReactNode[] = [];
-    let i = 0;
-
-    while (i < promotions.length) {
-      // Hero card for the first item
-      if (i === 0) {
-        elements.push(
-          <PromotionHeroCard key={promotions[i].id} promotion={promotions[i]} />
-        );
-        i++;
-        continue;
-      }
-
-      // Pair of glass cards
-      const glassStart = i;
-      const glassItems = promotions.slice(glassStart, glassStart + 2);
-      if (glassItems.length > 0) {
-        elements.push(
-          <div key={`glass-${glassStart}`} className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6">
-            {glassItems.map((promo) => (
-              <PromotionGlassCard key={promo.id} promotion={promo} />
-            ))}
-          </div>
-        );
-        i += glassItems.length;
-      }
-
-      // Horizontal card (alternating direction)
-      if (i < promotions.length) {
-        const isReversed = Math.floor(i / 3) % 2 === 1;
-        elements.push(
-          <PromotionHorizontalCard
-            key={promotions[i].id}
-            promotion={promotions[i]}
-            reverse={isReversed}
-          />
-        );
-        i++;
-      }
-    }
-
-    return elements;
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
       <main className="pt-24 pb-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-4xl">
           {/* Header */}
           <div className="text-center mb-14">
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
@@ -104,12 +50,9 @@ export default function Promociones() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-8">
               {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`${i === 0 ? 'col-span-full h-[400px]' : 'h-[350px]'} rounded-2xl bg-muted animate-pulse`}
-                />
+                <div key={i} className="h-[460px] rounded-2xl bg-muted animate-pulse" />
               ))}
             </div>
           ) : promotions.length === 0 ? (
@@ -119,8 +62,10 @@ export default function Promociones() {
               <p className="text-sm mt-2">Vuelve más tarde para ver nuestras nuevas ofertas.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-8">
-              {renderPromotions()}
+            <div className="space-y-8">
+              {promotions.map((promo) => (
+                <PromotionHeroCard key={promo.id} promotion={promo} />
+              ))}
             </div>
           )}
         </div>

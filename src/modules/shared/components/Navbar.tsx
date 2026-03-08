@@ -10,9 +10,10 @@ const links = [
 	{ to: "/", label: "Inicio" },
 	{ to: "/habitaciones", label: "Habitaciones" },
 	{ to: "/servicios", label: "Servicios" },
+	{ to: "/promociones", label: "Promociones" },
 	{ to: "/reservas", label: "Reservas" },
 	{ to: "/resenas", label: "Reseñas" },
-	{ to: "/lugares-interes", label: "Lugares de Interés" }, // added
+	{ to: "/lugares-interes", label: "Lugares de Interés" },
 ];
 
 export default function Navbar() {
