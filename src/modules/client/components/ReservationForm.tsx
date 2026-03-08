@@ -14,6 +14,7 @@ import type { Room } from '@/modules/shared/types/api.types';
 import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
+import { usePrices } from '@/modules/shared/hooks';
 import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
 import PayPalCheckout from './PayPalCheckout';
 
@@ -27,6 +28,16 @@ interface Props {
 }
 
 export default function ReservationForm({ hook, rooms, loadingRooms = false, singleRoomId }: Props) {
+  const { prices: rawPrices } = usePrices();
+  // Force numeric conversion — API returns prices as strings ("20.00")
+  const prices = {
+    earlyCheckInPrice: Number(rawPrices.earlyCheckInPrice),
+    lateCheckOutPrice: Number(rawPrices.lateCheckOutPrice),
+    transferOneWayPrice: Number(rawPrices.transferOneWayPrice),
+    transferRoundTripPrice: Number(rawPrices.transferRoundTripPrice),
+    breakfastPrice: Number(rawPrices.breakfastPrice),
+  };
+
   const {
     formData,
     step,
@@ -50,7 +61,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
 
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
   const maxCapacity = selectedRoom ? selectedRoom.baseCapacity + selectedRoom.extraCapacity : 0;
-  const { nights, totalPrice, breakdown } = reservationSummary(selectedRoom) as {
+  const { nights, totalPrice, breakdown } = reservationSummary(selectedRoom, prices) as {
     nights: number;
     totalPrice: number;
     breakdown?: {
@@ -521,7 +532,9 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('earlyCheckIn', !!checked)}
             />
             <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
-              Check-in anticipado <span className="text-muted-foreground text-sm">(solicitar llegada antes del horario estándar)</span>
+              Check-in anticipado{' '}
+              <span className="text-muted-foreground text-sm">
+              </span>
             </Label>
           </div>
           <div className="flex items-center gap-3">
@@ -531,7 +544,9 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('lateCheckOut', !!checked)}
             />
             <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
-              Check-out tardío <span className="text-muted-foreground text-sm">(solicitar salida después del horario estándar)</span>
+              Check-out tardío{' '}
+              <span className="text-muted-foreground text-sm">
+              </span>
             </Label>
           </div>
         </div>
@@ -544,7 +559,9 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('transferOneWay', !!checked)}
             />
             <Label htmlFor="transferOneWay" className="cursor-pointer font-normal">
-              Recogida de el aereopuerto <span className="text-muted-foreground text-sm"></span>
+              Recogida del aeropuerto{' '}
+              <span className="text-muted-foreground text-sm">
+              </span>
             </Label>
           </div>
           <div className="flex items-center gap-3">
@@ -554,12 +571,21 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('transferRoundTrip', !!checked)}
             />
             <Label htmlFor="transferRoundTrip" className="cursor-pointer font-normal">
-              Retorno al aereopuerto <span className="text-muted-foreground text-sm"></span>
+              Retorno al aeropuerto{' '}
+              <span className="text-muted-foreground text-sm">
+              </span>
             </Label>
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="breakfasts">Desayunos Incluidos</Label>
+          <Label htmlFor="breakfasts">
+            Desayunos Incluidos{' '}
+            {prices.breakfastPrice > 0 && (
+              <span className="text-muted-foreground font-normal text-sm">
+
+              </span>
+            )}
+          </Label>
           <Select
             value={formData.breakfasts.toString()}
             onValueChange={(value) => updateFormField('breakfasts', parseInt(value))}
@@ -681,7 +707,6 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
                 {formData.extraGuestsCount > 0 && (
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Huéspedes adicionales</span>
-                    <span>+${formData.extraGuestsCount * selectedRoom.extraGuestCharge * nights}</span>
                   </div>
                 )}
               </>

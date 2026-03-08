@@ -13,6 +13,7 @@ import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers"
 import { roomsService } from "@/modules/shared/services/rooms.service";
 import ReservationForm from '@/modules/client/components/ReservationForm';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
+import { usePrices } from '@/modules/shared/hooks';
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { RoomStatus } from "@/modules/shared/types/api.types";
 import { useEffect } from "react";
@@ -23,7 +24,8 @@ export default function RoomDetail() {
   const { room, loading, error } = useRoom(id ? parseInt(id) : 0);
 
   // Usar el mismo hook de reservas para una única fuente de verdad
-  const reservationHook = useClientReservation();
+  const { prices } = usePrices();
+  const reservationHook = useClientReservation(prices);
 
   // Set the room when loaded
   useEffect(() => {

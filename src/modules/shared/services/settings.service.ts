@@ -1,6 +1,6 @@
 // Settings API Service
 
-import { authenticatedApiClient } from './api';
+import { apiClient, authenticatedApiClient } from './api';
 
 export interface SettingRow {
   id: number;
@@ -10,15 +10,30 @@ export interface SettingRow {
   type: string;
 }
 
+export interface PricesResponse {
+  earlyCheckInPrice: number;
+  lateCheckOutPrice: number;
+  transferOneWayPrice: number;
+  transferRoundTripPrice: number;
+  breakfastPrice: number;
+}
+
 /**
  * Settings Service - API calls for hostal settings management
  */
 export const settingsService = {
   /**
-   * Get all settings rows (each with id, key, value)
+   * Get all settings rows (each with id, key, value) — admin only
    */
   async getAll(): Promise<SettingRow[]> {
     return authenticatedApiClient.get<SettingRow[]>('/settings');
+  },
+
+  /**
+   * Get prices as a plain object — public endpoint
+   */
+  async getPrices(): Promise<PricesResponse> {
+    return apiClient.get<PricesResponse>('/settings/prices');
   },
 
   /**
@@ -28,4 +43,5 @@ export const settingsService = {
     return authenticatedApiClient.patch<void>(`/settings/key/${key}`, { value });
   },
 };
+
 

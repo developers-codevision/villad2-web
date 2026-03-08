@@ -11,19 +11,17 @@ import {
 import {
   createEmptyClientReservationForm,
   clientFormDataToCreateDto,
-
 } from '../../admin/utils/reservations.utils';
 import { validateReservationForm } from '@/modules/shared/validations/reservations.validation';
-
-import { calculateTotalPrice,
-  calculateNights} from '../../shared/utils/reservations.utils.ts'
+import { calculateTotalPrice, calculateNights } from '../../shared/utils/reservations.utils.ts';
 import { useAvailability } from '@/modules/shared/hooks';
+import { PricesResponse } from '@/modules/shared/services/settings.service';
 
 /**
  * Custom hook for managing client-side reservations
  * Handles the booking flow: dates → room selection → guest details → confirmation
  */
-export function useClientReservation() {
+export function useClientReservation(prices?: PricesResponse) {
   // Form state
   const [formData, setFormData] = useState<ClientReservationFormData>(
     createEmptyClientReservationForm()
@@ -48,11 +46,12 @@ export function useClientReservation() {
    * Calculate nights and total price
    */
   const reservationSummary = useCallback(
-    (room?: Room) => {
+    (room?: Room, overridePrices?: PricesResponse) => {
       if (!formData.checkIn || !formData.checkOut || !room) {
         return { nights: 0, totalPrice: 0 };
       }
 
+      const activePrices = overridePrices ?? prices;
       const nights = calculateNights(formData.checkIn, formData.checkOut);
       const baseTotal = calculateTotalPrice(
         room.pricePerNight,
@@ -62,12 +61,13 @@ export function useClientReservation() {
         room.extraGuestCharge
       );
 
-      // Optional services prices (must match UI):
-      const PRICE_BREAKFAST = 8; // per breakfast
-      const PRICE_EARLY_CHECKIN = 5;
-      const PRICE_LATE_CHECKOUT = 5;
-      const PRICE_TRANSFER_IDA = 35;
-      const PRICE_TRANSFER_VUELTA = 40;
+      // Use prices from settings, fallback to 0 if not loaded yet
+      // Force Number() to avoid string concatenation (API returns prices as strings)
+      const PRICE_BREAKFAST = Number(activePrices?.breakfastPrice ?? 0);
+      const PRICE_EARLY_CHECKIN = Number(activePrices?.earlyCheckInPrice ?? 0);
+      const PRICE_LATE_CHECKOUT = Number(activePrices?.lateCheckOutPrice ?? 0);
+      const PRICE_TRANSFER_IDA = Number(activePrices?.transferOneWayPrice ?? 0);
+      const PRICE_TRANSFER_VUELTA = Number(activePrices?.transferRoundTripPrice ?? 0);
 
       const breakfastsCost = (formData.breakfasts || 0) * PRICE_BREAKFAST;
       const earlyCheckInCost = formData.earlyCheckIn ? PRICE_EARLY_CHECKIN : 0;
@@ -100,6 +100,7 @@ export function useClientReservation() {
       formData.lateCheckOut,
       formData.transferOneWay,
       formData.transferRoundTrip,
+      prices,
     ]
   );
 

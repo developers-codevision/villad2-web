@@ -10,6 +10,7 @@ import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { useRooms } from "@/modules/client/hooks/useRooms";
 import { useClientReservation } from "@/modules/client/hooks/useClientReservation";
+import { usePrices } from "@/modules/shared/hooks";
 import ReservationForm from "@/modules/client/components/ReservationForm";
 import type { DateRange } from "react-day-picker";
 
@@ -18,7 +19,8 @@ export default function Reservations() {
   const preselectedRoomId = searchParams.get("room");
 
   const { rooms, availableRooms, loading: loadingRooms } = useRooms();
-  const reservationHook = useClientReservation();
+  const { prices } = usePrices();
+  const reservationHook = useClientReservation(prices);
   const {
     formData,
     confirmed,
