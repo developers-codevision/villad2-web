@@ -22,19 +22,25 @@ export default function Navbar() {
 
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-		<nav className="container mx-auto flex items-center justify-between h-16 px-4">
-			{/* Mobile logo */}
+		<nav className="container mx-auto flex items-center h-16 px-4">
+
+			{/* Logo — solo mobile */}
 			<Link to="/" className="desk:hidden">
 				<img src={logo} alt={HOSTAL.name} className="h-10 w-auto" />
 			</Link>
 
-			{/* Desktop */}
-				<ul className="hidden desk:flex justify-center items-center w-1/2 gap-8">
+			{/* Desktop: grid 3 columnas iguales */}
+			<div className="hidden desk:grid desk:grid-cols-3 desk:items-center desk:w-full">
+				{/* Columna izquierda — vacía (contrapeso) */}
+				<div />
+
+				{/* Columna centro — links */}
+				<ul className="flex items-center justify-center gap-6">
 					{links.map((l) => (
 						<li key={l.to}>
 							<Link
 								to={l.to}
-								className={`text-sm font-medium transition-colors hover:text-primary ${
+								className={`text-sm font-medium transition-colors hover:text-primary whitespace-nowrap ${
 									location.pathname === l.to ? "text-primary" : "text-foreground"
 								}`}
 							>
@@ -44,25 +50,25 @@ export default function Navbar() {
 					))}
 				</ul>
 
-				<div className={'flex justify-between gap-2'}>
-					<Link to="/reservas" className="hidden desk:block">
-					<Button className="font-semibold">Reservar Ahora</Button>
-				</Link>
-				<div className="hidden desk:flex items-center ml-4">
+				{/* Columna derecha — redes + botón */}
+				<div className="flex items-center justify-end gap-3">
 					<SocialLinks
 						facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
 						twitterUrl="https://x.com/villad2"
 						youtubeUrl="https://youtube.com/villad2"
 						whatsappUrl="https://wa.me/1234567890"
 					/>
+					<Link to="/reservas">
+						<Button className="font-semibold">Reservar Ahora</Button>
+					</Link>
 				</div>
-				</div>
+			</div>
 
-				{/* Mobile toggle */}
-				<button className="desk:hidden" onClick={() => setOpen(!open)} aria-label="Menú">
-					{open ? <X size={24} /> : <Menu size={24} />}
-				</button>
-			</nav>
+			{/* Mobile toggle */}
+			<button className="desk:hidden ml-auto" onClick={() => setOpen(!open)} aria-label="Menú">
+				{open ? <X size={24} /> : <Menu size={24} />}
+			</button>
+		</nav>
 
 			{/* Mobile menu */}
 			{open && (
