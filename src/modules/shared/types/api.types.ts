@@ -225,6 +225,7 @@ export enum ReviewStatus {
 export interface Review {
   id: number;
   name: string;
+  title?: string;
   country: string;
   content: string;
   stars: number;
