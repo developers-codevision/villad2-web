@@ -30,12 +30,12 @@ export default function Navbar() {
 			</Link>
 
 			{/* Desktop: grid 3 columnas iguales */}
-			<div className="hidden desk:grid desk:grid-cols-3 desk:items-center desk:w-full">
+			<div className="hidden desk:grid desk:grid-cols-[1fr_auto_1fr] desk:items-center desk:w-full">
 				{/* Columna izquierda — vacía (contrapeso) */}
 				<div />
 
 				{/* Columna centro — links */}
-				<ul className="flex items-center justify-center gap-6">
+				<ul className="flex items-center justify-center p-2 gap-6">
 					{links.map((l) => (
 						<li key={l.to}>
 							<Link
