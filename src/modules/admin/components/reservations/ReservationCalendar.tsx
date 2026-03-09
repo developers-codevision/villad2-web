@@ -1,18 +1,37 @@
-// Reservation Calendar Component - Compact visual calendar with inline reservations
+// Reservation Calendar Component - Gantt-style: rooms as rows, days as columns
 
-import { useState } from 'react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, addMonths, subMonths, getDay, isWithinInterval, parseISO } from 'date-fns';
+import { useState, useRef, useEffect } from 'react';
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isToday,
+  addMonths,
+  subMonths,
+  addDays,
+  subDays,
+  parseISO,
+  isBefore,
+  isAfter,
+  isSameDay,
+  startOfDay,
+} from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/modules/shared/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/modules/shared/components/ui/dialog';
 import { Badge } from '@/modules/shared/components/ui/badge';
-import { ReservationWithDetails, RESERVATION_STATUS_LABELS, RESERVATION_STATUS_VARIANTS } from '../../types/reservations.types';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/modules/shared/components/ui/tooltip';
+import {
+  ReservationWithDetails,
+  RESERVATION_STATUS_LABELS,
+  RESERVATION_STATUS_VARIANTS,
+} from '../../types/reservations.types';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
 
 interface ReservationCalendarProps {
@@ -21,230 +40,425 @@ interface ReservationCalendarProps {
   occupiedDates?: string[];
 }
 
+type ViewMode = '7d' | '14d' | 'month';
 
-export function ReservationCalendar({ reservations, onReservationClick, occupiedDates }: ReservationCalendarProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedReservations, setSelectedReservations] = useState<ReservationWithDetails[] | null>(null);
+// Status color scheme (Tailwind classes for the reservation bars)
+const STATUS_BAR_COLORS: Record<ReservationStatus, string> = {
+  [ReservationStatus.PENDING]: 'bg-yellow-400 border-yellow-500 text-yellow-900',
+  [ReservationStatus.CONFIRMED]: 'bg-green-400 border-green-500 text-green-900',
+  [ReservationStatus.FINISHED]: 'bg-blue-400 border-blue-500 text-blue-900',
+  [ReservationStatus.CANCELLED]: 'bg-red-300 border-red-400 text-red-900 opacity-60',
+};
 
-  // Get month boundaries
-  const start = startOfMonth(currentMonth);
-  const end = endOfMonth(currentMonth);
-  const days = eachDayOfInterval({ start, end });
+const ROW_HEIGHT = 68;
+const MIN_DAY_WIDTH = 40;
+const LABEL_WIDTH = 160;
 
-  // Padding for start of month
-  const startDay = getDay(start);
-  const padding = Array.from({ length: startDay === 0 ? 6 : startDay - 1 });
+const VIEW_OPTIONS: { value: ViewMode; label: string }[] = [
+  { value: '7d', label: '7 días' },
+  { value: '14d', label: '14 días' },
+  { value: 'month', label: 'Mes' },
+];
 
-  const dayNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+export function ReservationCalendar({
+  reservations,
+  onReservationClick,
+}: ReservationCalendarProps) {
+  const [viewMode, setViewMode] = useState<ViewMode>('month');
+  // anchor: first day of the visible window
+  const [anchorDate, setAnchorDate] = useState<Date>(startOfMonth(new Date()));
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  // Get reservations for a specific day (overlapping with that day)
-  const getReservationsForDay = (day: Date) => {
-    return reservations.filter((r) => {
+  // Measure scrollable container width and update on resize
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setContainerWidth(entry.contentRect.width);
+    });
+    ro.observe(el);
+    setContainerWidth(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+
+  // Compute the visible day range based on mode
+  const rangeStart =
+    viewMode === 'month' ? startOfMonth(anchorDate) : startOfDay(anchorDate);
+  const rangeEnd =
+    viewMode === 'month'
+      ? endOfMonth(anchorDate)
+      : viewMode === '14d'
+      ? addDays(anchorDate, 13)
+      : addDays(anchorDate, 6);
+
+  const days = eachDayOfInterval({ start: rangeStart, end: rangeEnd });
+
+  // Day column width: fill available space, never narrower than MIN_DAY_WIDTH
+  const dayWidth =
+    containerWidth > 0 && days.length > 0
+      ? Math.max(MIN_DAY_WIDTH, containerWidth / days.length)
+      : MIN_DAY_WIDTH;
+
+  // Navigation step depends on view mode
+  const goNext = () => {
+    if (viewMode === 'month') setAnchorDate((d) => startOfMonth(addMonths(d, 1)));
+    else if (viewMode === '14d') setAnchorDate((d) => addDays(d, 14));
+    else setAnchorDate((d) => addDays(d, 7));
+  };
+  const goPrev = () => {
+    if (viewMode === 'month') setAnchorDate((d) => startOfMonth(subMonths(d, 1)));
+    else if (viewMode === '14d') setAnchorDate((d) => subDays(d, 14));
+    else setAnchorDate((d) => subDays(d, 7));
+  };
+  const goToToday = () => {
+    const today = new Date();
+    setAnchorDate(viewMode === 'month' ? startOfMonth(today) : startOfDay(today));
+  };
+
+  // Label for the header
+  const rangeLabel =
+    viewMode === 'month'
+      ? format(rangeStart, 'MMMM yyyy', { locale: es })
+      : `${format(rangeStart, 'd MMM', { locale: es })} – ${format(rangeEnd, 'd MMM yyyy', { locale: es })}`;
+
+  // When view mode changes, re-anchor to today
+  const handleViewModeChange = (mode: ViewMode) => {
+    const today = new Date();
+    setAnchorDate(mode === 'month' ? startOfMonth(today) : startOfDay(today));
+    setViewMode(mode);
+  };
+
+  // Collect unique rooms present in any reservation, sorted by room number
+  const roomMap = new Map<number, { id: number; number: string; name: string }>();
+  reservations.forEach((r) => {
+    if (!roomMap.has(r.roomId)) {
+      roomMap.set(r.roomId, {
+        id: r.roomId,
+        number: r.room?.number ?? `#${r.roomId}`,
+        name: r.room?.name ?? '',
+      });
+    }
+  });
+  const rooms = Array.from(roomMap.values()).sort((a, b) =>
+    a.number.localeCompare(b.number, undefined, { numeric: true })
+  );
+
+  // Scroll so today is centred whenever the range or dayWidth changes
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    const todayIndex = days.findIndex((d) => isToday(d));
+    if (todayIndex !== -1) {
+      const offset =
+        todayIndex * dayWidth - (scrollRef.current.clientWidth / 2 - dayWidth / 2);
+      scrollRef.current.scrollLeft = Math.max(0, offset);
+    } else {
+      scrollRef.current.scrollLeft = 0;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchorDate, viewMode, dayWidth]);
+
+  // Non-cancelled reservations for a room that overlap the visible range
+  const getReservationsForRoom = (roomId: number) =>
+    reservations.filter((r) => {
+      if (r.roomId !== roomId) return false;
       if (r.status === ReservationStatus.CANCELLED) return false;
-
       const checkIn = parseISO(r.checkInDate);
       const checkOut = parseISO(r.checkOutDate);
-
-      return isWithinInterval(day, { start: checkIn, end: checkOut });
+      return !isAfter(checkIn, rangeEnd) && !isBefore(checkOut, rangeStart);
     });
+
+  // Column indices (clamped to this range) for a reservation bar
+  const getBarBounds = (r: ReservationWithDetails) => {
+    const checkIn = parseISO(r.checkInDate);
+    const checkOut = parseISO(r.checkOutDate);
+    const visibleStart = isBefore(checkIn, rangeStart) ? rangeStart : checkIn;
+    const visibleEnd = isAfter(checkOut, rangeEnd) ? rangeEnd : checkOut;
+    const startIdx = days.findIndex((d) => isSameDay(d, visibleStart));
+    const endIdx = days.findIndex((d) => isSameDay(d, visibleEnd));
+    return {
+      colStart: startIdx === -1 ? 0 : startIdx,
+      colEnd: endIdx === -1 ? days.length - 1 : endIdx,
+    };
   };
 
-  // Color mapping for reservation statuses
-  const statusColors: Record<ReservationStatus, string> = {
-    [ReservationStatus.PENDING]: "bg-yellow-500",
-    [ReservationStatus.CONFIRMED]: "bg-green-500",
-    [ReservationStatus.COMPLETED]: "bg-blue-500",
-    [ReservationStatus.CANCELLED]: "bg-red-500",
-  };
+  const totalGridWidth = days.length * dayWidth;
 
-  // Navigation
-  const previousMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
-  const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
-
-  // Handle clicking on a day's reservations
-  const handleDayClick = (dayReservations: ReservationWithDetails[]) => {
-    if (dayReservations.length > 0) {
-      setSelectedReservations(dayReservations);
-    }
+  // Extract HH:mm from an ISO string; fall back to a default if the time part is 00:00
+  const extractTime = (isoString: string, fallback: string): string => {
+    const d = parseISO(isoString);
+    const h = d.getHours();
+    const m = d.getMinutes();
+    if (h === 0 && m === 0) return fallback;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header with navigation */}
-      <div className="flex items-center justify-between">
-        <Button variant="outline" size="icon" onClick={previousMonth}>
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <h3 className="text-lg font-semibold capitalize">
-          {format(currentMonth, "MMMM yyyy", { locale: es })}
-        </h3>
-        <Button variant="outline" size="icon" onClick={nextMonth}>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-px bg-border rounded-lg overflow-hidden">
-        {/* Day headers */}
-        {dayNames.map((d) => (
-          <div
-            key={d}
-            className="bg-muted p-2 text-center text-xs font-medium text-muted-foreground"
-          >
-            {d}
+    <TooltipProvider>
+      <div className="space-y-4">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" onClick={goPrev}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <h3 className="text-lg font-semibold capitalize min-w-[200px] text-center">
+              {rangeLabel}
+            </h3>
+            <Button variant="outline" size="icon" onClick={goNext}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
-        ))}
 
-        {/* Padding days before month starts */}
-        {padding.map((_, i) => (
-          <div key={`p${i}`} className="bg-background p-2 min-h-[100px]" />
-        ))}
-
-        {/* Calendar days */}
-        {days.map((day) => {
-          const dayReservations = getReservationsForDay(day);
-          const isCurrentDay = isToday(day);
-          const dayString = format(day, 'yyyy-MM-dd');
-          const isOccupied = occupiedDates?.includes(dayString);
-
-          return (
-            <div
-              key={day.toISOString()}
-              className={`bg-background p-1.5 min-h-[100px] border-t ${
-                dayReservations.length > 0 ? 'cursor-pointer hover:bg-muted/50' : ''
-              } ${isOccupied ? 'bg-red-50' : ''}`}
-              onClick={() => handleDayClick(dayReservations)}
-            >
-              {/* Day number */}
-              <span
-                className={`text-xs font-medium ${
-                  isCurrentDay ? 'text-primary font-bold' : ''
-                }`}
-              >
-                {format(day, "d")}
-              </span>
-
-              {/* Reservations list */}
-              <div className="mt-1 space-y-0.5">
-                {dayReservations.slice(0, 3).map((reservation) => {
-                  const roomNumber = reservation.room?.number || `#${reservation.roomId}`;
-                  const guestName = `${reservation.mainGuest.firstName} ${reservation.mainGuest.lastName}`;
-
-                  return (
-                    <div
-                      key={reservation.id}
-                      className={`text-[10px] text-white px-1 py-0.5 rounded truncate ${
-                        statusColors[reservation.status] ?? "bg-muted"
-                      }`}
-                      title={`${guestName} - ${roomNumber}`}
-                    >
-                      {reservation.mainGuest.firstName} · {roomNumber}
-                    </div>
-                  );
-                })}
-
-                {/* Show count if more than 3 */}
-                {dayReservations.length > 3 && (
-                  <span className="text-[10px] text-muted-foreground">
-                    +{dayReservations.length - 3} más
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-yellow-500"></div>
-          <span>Pendiente</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-green-500"></div>
-          <span>Confirmada</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-blue-500"></div>
-          <span>Completada</span>
-        </div>
-      </div>
-
-      {/* Day Details Modal */}
-      {selectedReservations && (
-        <Dialog open={!!selectedReservations} onOpenChange={() => setSelectedReservations(null)}>
-          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                Reservas del día - {selectedReservations.length} {selectedReservations.length === 1 ? 'reserva' : 'reservas'}
-              </DialogTitle>
-            </DialogHeader>
-
-            <div className="space-y-3 mt-4">
-              {selectedReservations.map((reservation) => (
-                <div
-                  key={reservation.id}
-                  className="border rounded-lg p-4 cursor-pointer hover:bg-muted/50 transition-colors"
-                  onClick={() => {
-                    setSelectedReservations(null);
-                    onReservationClick?.(reservation);
-                  }}
+          <div className="flex items-center gap-2">
+            {/* View mode toggle */}
+            <div className="flex rounded-md border overflow-hidden">
+              {VIEW_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => handleViewModeChange(opt.value)}
+                  className={`px-3 py-1.5 text-xs font-medium transition-colors border-r last:border-r-0 ${
+                    viewMode === opt.value
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-background text-muted-foreground hover:bg-muted'
+                  }`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 space-y-2">
-                      {/* Guest and status */}
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">
-                          {reservation.mainGuest.firstName} {reservation.mainGuest.lastName}
-                        </span>
-                        <Badge variant={RESERVATION_STATUS_VARIANTS[reservation.status]} className="text-xs">
-                          {RESERVATION_STATUS_LABELS[reservation.status]}
-                        </Badge>
-                      </div>
-
-                      {/* Room info */}
-                      <div className="text-sm text-muted-foreground">
-                        <span className="font-medium">
-                          Habitación {reservation.room?.number || `#${reservation.roomId}`}
-                        </span>
-                        {reservation.room?.name && ` - ${reservation.room.name}`}
-                      </div>
-
-                      {/* Dates */}
-                      <div className="text-sm text-muted-foreground">
-                        📅 {format(parseISO(reservation.checkInDate), 'dd/MM/yyyy')} → {format(parseISO(reservation.checkOutDate), 'dd/MM/yyyy')}
-                      </div>
-
-                      {/* Contact */}
-                      <div className="text-xs text-muted-foreground">
-                        📧 {reservation.mainGuest.email}
-                        {reservation.mainGuest.phone && ` · 📞 ${reservation.mainGuest.phone}`}
-                      </div>
-
-                      {/* Special requests */}
-                      {reservation.notes && (
-                        <div className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
-                          {reservation.notes}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Price and guests */}
-                    <div className="text-right">
-                      <div className="text-xs text-muted-foreground">Total</div>
-                      <div className="font-semibold text-primary">${(Number(reservation.totalPrice) || 0).toFixed(2)}</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        👥 {reservation.baseGuestsCount + reservation.extraGuestsCount} {(reservation.baseGuestsCount + reservation.extraGuestsCount) === 1 ? 'huésped' : 'huéspedes'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  {opt.label}
+                </button>
               ))}
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
+            <Button variant="outline" size="sm" onClick={goToToday}>
+              Hoy
+            </Button>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          {(
+            [
+              ReservationStatus.PENDING,
+              ReservationStatus.CONFIRMED,
+              ReservationStatus.FINISHED,
+            ] as ReservationStatus[]
+          ).map((status) => (
+            <div key={status} className="flex items-center gap-1.5">
+              <div className={`w-3 h-3 rounded border ${STATUS_BAR_COLORS[status]}`} />
+              <span>{RESERVATION_STATUS_LABELS[status]}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Gantt grid */}
+        <div className="border rounded-lg overflow-hidden bg-background">
+          {rooms.length === 0 ? (
+            <div className="p-8 text-center text-sm text-muted-foreground">
+              No hay reservas activas en este período.
+            </div>
+          ) : (
+            <div className="flex">
+              {/* Fixed room-label column */}
+              <div
+                className="flex-shrink-0 border-r bg-muted/50"
+                style={{ width: LABEL_WIDTH }}
+              >
+                {/* Corner cell */}
+                <div
+                  className="border-b bg-muted flex items-center px-3"
+                  style={{ height: ROW_HEIGHT }}
+                >
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    Habitación
+                  </span>
+                </div>
+
+                {rooms.map((room, i) => (
+                  <div
+                    key={room.id}
+                    className={`flex flex-col justify-center px-3 border-b ${
+                      i % 2 === 0 ? 'bg-background' : 'bg-muted/20'
+                    }`}
+                    style={{ height: ROW_HEIGHT }}
+                  >
+                    <span className="text-sm font-medium leading-tight truncate">
+                      Hab. {room.number}
+                    </span>
+                    {room.name && (
+                      <span className="text-[11px] text-muted-foreground truncate leading-tight">
+                        {room.name}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Scrollable day columns */}
+              <div
+                ref={scrollRef}
+                className="overflow-x-auto flex-1"
+                style={{ scrollbarWidth: 'thin' }}
+              >
+                <div style={{ width: totalGridWidth, minWidth: totalGridWidth }}>
+                  {/* Day header row */}
+                  <div className="flex border-b bg-muted" style={{ height: ROW_HEIGHT }}>
+                    {days.map((day) => {
+                      const today = isToday(day);
+                      const isWeekend = [0, 6].includes(day.getDay());
+                      return (
+                        <div
+                          key={day.toISOString()}
+                          className={`flex-shrink-0 flex flex-col items-center justify-center border-r text-center select-none ${
+                            today
+                              ? 'bg-primary/10 text-primary font-bold'
+                              : isWeekend
+                              ? 'bg-muted/60 text-muted-foreground'
+                              : 'text-muted-foreground'
+                          }`}
+                          style={{ width: dayWidth }}
+                        >
+                          <span className="text-[10px] capitalize leading-none">
+                            {format(day, 'EEE', { locale: es }).slice(0, 2)}
+                          </span>
+                          <span className="text-xs font-semibold leading-tight">
+                            {format(day, 'd')}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* One row per room */}
+                  {rooms.map((room, i) => {
+                    const roomReservations = getReservationsForRoom(room.id);
+                    return (
+                      <div
+                        key={room.id}
+                        className={`relative border-b ${
+                          i % 2 === 0 ? 'bg-background' : 'bg-muted/20'
+                        }`}
+                        style={{ height: ROW_HEIGHT }}
+                      >
+                        {/* Grid lines + weekend/today shading */}
+                        <div className="absolute inset-0 flex pointer-events-none">
+                          {days.map((day) => {
+                            const today = isToday(day);
+                            const isWeekend = [0, 6].includes(day.getDay());
+                            return (
+                              <div
+                                key={day.toISOString()}
+                                className={`flex-shrink-0 h-full border-r ${
+                                  today ? 'bg-primary/5' : isWeekend ? 'bg-muted/30' : ''
+                                }`}
+                                style={{ width: dayWidth }}
+                              />
+                            );
+                          })}
+                        </div>
+
+                        {/* Reservation bars */}
+                        {roomReservations.map((r) => {
+                          const { colStart, colEnd } = getBarBounds(r);
+                          const barLeft = colStart * dayWidth + 2;
+                          const barWidth = (colEnd - colStart + 1) * dayWidth - 4;
+                          const guestName = `${r.mainGuest.firstName} ${r.mainGuest.lastName}`;
+                          const nights = colEnd - colStart + 1;
+                          const isOneNight = nights === 1;
+                          const checkInTime = isOneNight
+                            ? extractTime(r.checkInDate, '14:00')
+                            : null;
+                          const checkOutTime = isOneNight
+                            ? extractTime(r.checkOutDate, '11:00')
+                            : null;
+
+                          return (
+                            <Tooltip key={r.id}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className={`absolute top-1/2 -translate-y-1/2 rounded border text-[11px] font-medium
+                                    cursor-pointer overflow-hidden px-1.5
+                                    hover:brightness-95 transition-all ${STATUS_BAR_COLORS[r.status]}`}
+                                  style={{
+                                    left: barLeft,
+                                    width: barWidth,
+                                    height: ROW_HEIGHT - 14,
+                                  }}
+                                  onClick={() => onReservationClick?.(r)}
+                                  title={guestName}
+                                >
+                                  {isOneNight ? (
+                                    <div className="flex flex-col justify-center h-full leading-none gap-0.5 min-w-0">
+                                      <span className="truncate">
+                                        {barWidth > 60
+                                          ? `${r.mainGuest.firstName} ${r.mainGuest.lastName.charAt(0)}.`
+                                          : `${r.mainGuest.firstName.charAt(0)}.${r.mainGuest.lastName.charAt(0)}.`}
+                                      </span>
+                                      {barWidth > 72 && (
+                                        <span className="truncate opacity-80 text-[10px]">
+                                          {checkInTime} → {checkOutTime}
+                                        </span>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div className="flex items-center gap-1 h-full min-w-0">
+                                      <span className="truncate">
+                                        {r.mainGuest.firstName}{' '}
+                                        {r.mainGuest.lastName.charAt(0)}.
+                                      </span>
+                                      {barWidth > 80 && (
+                                        <span className="opacity-70 shrink-0">{nights}n</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="max-w-[260px]">
+                                <div className="space-y-1 text-xs">
+                                  <div className="font-semibold">{guestName}</div>
+                                  <div>
+                                    Hab. {room.number}
+                                    {room.name && ` – ${room.name}`}
+                                  </div>
+                                  {isOneNight ? (
+                                    <div className="space-y-0.5">
+                                      <div>
+                                        📅 {format(parseISO(r.checkInDate), 'dd/MM/yyyy')} →{' '}
+                                        {format(parseISO(r.checkOutDate), 'dd/MM/yyyy')}
+                                      </div>
+                                      <div className="text-muted-foreground">
+                                        🕐 Entrada: <span className="font-medium text-foreground">{checkInTime}</span>
+                                        {'  '}·{'  '}
+                                        Salida: <span className="font-medium text-foreground">{checkOutTime}</span>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div>
+                                      {format(parseISO(r.checkInDate), 'dd/MM/yyyy')} →{' '}
+                                      {format(parseISO(r.checkOutDate), 'dd/MM/yyyy')}
+                                    </div>
+                                  )}
+                                  <Badge
+                                    variant={RESERVATION_STATUS_VARIANTS[r.status]}
+                                    className="text-[10px] px-1 py-0"
+                                  >
+                                    {RESERVATION_STATUS_LABELS[r.status]}
+                                  </Badge>
+                                  <div className="font-medium text-primary">
+                                    ${(Number(r.totalPrice) || 0).toFixed(2)}
+                                  </div>
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </TooltipProvider>
   );
 }
