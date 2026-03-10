@@ -83,7 +83,7 @@ export const RESERVATION_STATUS_LABELS: Record<ReservationStatus, string> = {
   [ReservationStatus.PENDING]: 'Pendiente',
   [ReservationStatus.CONFIRMED]: 'Confirmada',
   [ReservationStatus.CANCELLED]: 'Cancelada',
-  [ReservationStatus.COMPLETED]: 'Completada',
+  [ReservationStatus.FINISHED]: 'Terminada',
 };
 
 /**
@@ -96,7 +96,7 @@ export const RESERVATION_STATUS_VARIANTS: Record<
   [ReservationStatus.PENDING]: 'pending',
   [ReservationStatus.CONFIRMED]: 'confirmed',
   [ReservationStatus.CANCELLED]: 'cancelled',
-  [ReservationStatus.COMPLETED]: 'completed',
+  [ReservationStatus.FINISHED]: 'completed',
 };
 
 /**
@@ -106,7 +106,7 @@ export const RESERVATION_STATUS_COLORS: Record<ReservationStatus, string> = {
   [ReservationStatus.PENDING]: 'text-yellow-500',
   [ReservationStatus.CONFIRMED]: 'text-green-500',
   [ReservationStatus.CANCELLED]: 'text-red-500',
-  [ReservationStatus.COMPLETED]: 'text-blue-500',
+  [ReservationStatus.FINISHED]: 'text-blue-500',
 };
 
 // ============================================
@@ -173,11 +173,11 @@ export function getAvailableStatusTransitions(
       ReservationStatus.CANCELLED,
     ],
     [ReservationStatus.CONFIRMED]: [
-      ReservationStatus.COMPLETED,
+      ReservationStatus.FINISHED,
       ReservationStatus.CANCELLED,
     ],
     [ReservationStatus.CANCELLED]: [],
-    [ReservationStatus.COMPLETED]: [],
+    [ReservationStatus.FINISHED]: [],
   };
 
   return transitions[currentStatus] || [];
