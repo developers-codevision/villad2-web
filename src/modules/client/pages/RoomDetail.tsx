@@ -128,7 +128,7 @@ export default function RoomDetail() {
               return roomAmenities.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <BedDouble size={22} className="text-primary" /> Amenities de la Habitación
+                    <BedDouble size={22} className="text-primary" /> La habitación cuenta con
                   </h2>
                   <div className="grid grid-cols-2 gap-3">
                     {roomAmenities.map((a, index) => (
@@ -146,7 +146,7 @@ export default function RoomDetail() {
               return bathroomAmenities.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <Bath size={22} className="text-primary" /> Amenities del Baño
+                    <Bath size={22} className="text-primary" /> El baño cuenta con
                   </h2>
                   <div className="grid grid-cols-2 gap-3">
                     {bathroomAmenities.map((a, index) => (

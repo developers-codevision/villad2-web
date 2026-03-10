@@ -563,7 +563,7 @@ export function ReservationCalendar({
                                                                         {role === 'middle' && (
                                                                             <span
                                                                                 className="truncate px-0.5 text-[9px] opacity-90">
-                                        {cellWidth > 30 ? r.mainGuest.firstName : ''}
+                                        {cellWidth > 30 ? guestName : ''}
                                       </span>
                                                                         )}
                                                                     </button>
