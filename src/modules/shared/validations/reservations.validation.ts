@@ -1,7 +1,6 @@
 // Shared Reservations Validations
 
 import { ReservationFormDataBase, ClientReservationFormData } from '@/modules/shared/types/reservations.types';
-import { ReservationFormData } from '@/modules/admin/types/reservations.types';
 
 /**
  * Check if two dates refer to the same calendar day
@@ -24,6 +23,14 @@ function timeToMinutes(time: string): number | null {
 }
 
 /**
+ * Simple email validation
+ */
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+/**
  * Validate reservation form data
  */
 export function validateReservationForm(
@@ -32,27 +39,29 @@ export function validateReservationForm(
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  // Required fields
+  // ── Required fields by context ──────────────────────────────────────────
   if (!formData.roomId) errors.push('Selecciona una habitación');
   if (!formData.guestFirstName.trim()) errors.push('El nombre es requerido');
-  if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
-  if (!formData.guestEmail.trim()) errors.push('El email es requerido');
-  if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
-  if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
-  if (!formData.checkOut) errors.push('Selecciona fecha de salida');
-  if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
 
-  // Email validation
+  if (context === 'client') {
+    if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
+    if (!formData.guestEmail.trim()) errors.push('El email es requerido');
+    if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
+    if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
+    if (!formData.checkOut) errors.push('Selecciona fecha de salida');
+    if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
+  }
+
+  // ── Email validation (only if provided) ─────────────────────────────────
   if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
     errors.push('Email inválido');
   }
 
-  // Date / time validation
+  // ── Date / time validation ───────────────────────────────────────────────
   if (formData.checkIn && formData.checkOut) {
     const sameDay = isSameDay(formData.checkIn, formData.checkOut);
 
     if (sameDay) {
-      // Same-day reservation: require explicit times and validate order
       if (!formData.checkInTime) errors.push('La hora de entrada es requerida para reservas de un día');
       if (!formData.checkOutTime) errors.push('La hora de salida es requerida para reservas de un día');
 
@@ -72,28 +81,22 @@ export function validateReservationForm(
     }
   }
 
-  // Total guests validation
-  if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
-    errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
-  }
+  // ── Guests validation (only client) ─────────────────────────────────────
+  if (context === 'client') {
+    if (formData.totalGuests !== formData.baseGuestsCount + formData.extraGuestsCount) {
+      errors.push('El total de huéspedes no coincide con la suma de huéspedes base y adicionales');
+    }
 
-  // Additional guests validation (all companions = total - 1)
-  const expectedAdditional = formData.totalGuests - 1;
-  if (formData.additionalGuests.length !== expectedAdditional) {
-    const mismatchMessage = context === 'admin'
-      ? 'El número de huéspedes adicionales no coincide con el total especificado'
-      : 'El número de huéspedes registrados no coincide con el total seleccionado';
-    errors.push(mismatchMessage);
+    const expectedAdditional = formData.totalGuests - 1;
+    if (formData.additionalGuests.length !== expectedAdditional) {
+      errors.push('El número de huéspedes registrados no coincide con el total seleccionado');
+    }
+
+    formData.additionalGuests.forEach((guest, index) => {
+      if (!guest.firstName.trim()) errors.push(`El nombre del huésped #${index + 2} es requerido`);
+      if (!guest.lastName.trim()) errors.push(`El apellido del huésped #${index + 2} es requerido`);
+    });
   }
-  formData.additionalGuests.forEach((guest, index) => {
-    const guestLabel = context === 'admin' ? `acompañante #${index + 1}` : `huésped #${index + 2}`;
-    if (!guest.firstName.trim()) {
-      errors.push(`El nombre del ${guestLabel} es requerido`);
-    }
-    if (!guest.lastName.trim()) {
-      errors.push(`El apellido del ${guestLabel} es requerido`);
-    }
-  });
 
   return {
     valid: errors.length === 0,
@@ -102,18 +105,20 @@ export function validateReservationForm(
 }
 
 /**
- * Simple email validation
- */
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-/**
- * Validate client reservation form data (wrapper for unified function)
+ * Validate client reservation form data
  */
 export function validateClientReservationForm(
   formData: ClientReservationFormData
 ): { valid: boolean; errors: string[] } {
   return validateReservationForm(formData, 'client');
+}
+
+/**
+ * Validate admin reservation form data
+ * Required: roomId + guestFirstName only
+ */
+export function validateAdminReservationForm(
+  formData: ReservationFormDataBase
+): { valid: boolean; errors: string[] } {
+  return validateReservationForm(formData, 'admin');
 }
