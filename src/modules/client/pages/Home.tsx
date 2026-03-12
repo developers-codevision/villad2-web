@@ -51,7 +51,7 @@ const Index = () => {
         {/* Imagen con título superpuesto */}
         <div className="relative w-full aspect-video">
           <img
-            src="/Foto-portada-no1-editada-scaled.jpg"
+            src="/Foto-portada-no1-editada-scaled.webp"
             alt="Hostal Villa D2"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
@@ -79,7 +79,7 @@ const Index = () => {
         <div
           className="absolute inset-0 bg-center mt-10"
           style={{
-            backgroundImage: "url('/Foto-portada-no1-editada-scaled.jpg')",
+            backgroundImage: "url('/Foto-portada-no1-editada-scaled.webp')",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
