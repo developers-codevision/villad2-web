@@ -35,8 +35,21 @@ const GestionHome = lazy(() => import("@/modules/admin/pages").then(m => ({ defa
 const queryClient = new QueryClient();
 
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center" aria-busy="true">
-    Cargando...
+  <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-6" aria-busy="true">
+    <img
+      src="/favicon.png"
+      alt="Villa D2"
+      className="h-20 w-20 animate-[pulse_1.5s_ease-in-out_infinite]"
+    />
+    <div className="flex items-center gap-1.5">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="block h-2 w-2 rounded-full bg-primary animate-bounce"
+          style={{ animationDelay: `${i * 0.15}s` }}
+        />
+      ))}
+    </div>
   </div>
 );
 
