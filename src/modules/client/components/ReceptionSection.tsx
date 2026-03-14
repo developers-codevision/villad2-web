@@ -6,23 +6,11 @@ const ReceptionSection = () => {
           La <span className="text-primary">Recepción</span>
         </h2>
         <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-          En la recepción se informa además a los huéspedes sobre los programas de
-          visitas a todos los sitios de interés turístico, cultural y recreativo,
-          y se establecen coordinaciones para el traslado hacia museos y centros
-          recreativos.
+          En la recepción se informa además a los huéspedes sobre los programas de visitas a todos los sitios de interés turístico, cultural y recreativo, y se establecen coordinaciones para el traslado hacia museos y centros recreativos.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <img
-              key={i}
-              src={`/recepcion${i}.jpg`}
-              alt={`Recepción ${i}`}
-              width={1280}
-              height={853}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-64 object-cover rounded-lg shadow-sm hover:shadow-lg transition-shadow"
-            />
+          {[1, 2,3].map((i) => (
+            <img key={i} src={`/recepcion${i}.jpg`} alt={`Recepción ${i}`} className="w-full  object-cover rounded-lg shadow-sm hover:shadow-lg transition-shadow" />
           ))}
         </div>
       </div>

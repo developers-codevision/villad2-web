@@ -10,16 +10,7 @@ const TerraceBarSection = () => {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map((i) => (
-            <img
-              key={i}
-              src={`/terraza${i}.jpg`}
-              alt={`Terraza ${i}`}
-              width={1280}
-              height={853}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-64 object-cover rounded-lg shadow-sm hover:shadow-lg transition-shadow"
-            />
+            <img key={i} src={`/terraza${i}.jpg`} alt={`Terraza ${i}`} className="w-full h-64 object-cover rounded-lg shadow-sm hover:shadow-lg transition-shadow" />
           ))}
         </div>
       </div>

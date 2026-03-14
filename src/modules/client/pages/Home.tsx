@@ -53,11 +53,6 @@ const Index = () => {
           <img
             src="/Foto-portada-no1-editada-scaled.webp"
             alt="Hostal Villa D2"
-            width={1920}
-            height={1080}
-            fetchpriority="high"
-            loading="eager"
-            decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Título sobre la imagen */}
@@ -80,15 +75,15 @@ const Index = () => {
 
       {/* DESK hero */}
       <section className="relative min-h-[100vh] hidden desk:flex items-center">
-        <img
-          src="/Foto-portada-no1-editada-scaled.webp"
-          alt="Hostal Villa D2"
-          width={1920}
-          height={1080}
-          fetchpriority="high"
-          loading="eager"
-          decoding="async"
-          className="absolute inset-0 mt-10 h-[calc(100%-2.5rem)] w-full object-cover object-center"
+        {/* Imagen de fondo completa sin overlay */}
+        <div
+          className="absolute inset-0 bg-center mt-10"
+          style={{
+            backgroundImage: "url('/Foto-portada-no1-editada-scaled.webp')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
         />
 
         {/* Título - Esquina superior izquierda */}
@@ -101,15 +96,7 @@ const Index = () => {
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
         <div className="absolute top-24 right-8 z-10">
-          <img
-            src={logo}
-            alt="Villa D2"
-            width={224}
-            height={112}
-            loading="eager"
-            decoding="async"
-            className="h-24 lg:h-28 w-auto drop-shadow-2xl"
-          />
+          <img src={logo} alt="Villa D2" className="h-24 lg:h-28 w-auto drop-shadow-2xl" />
         </div>
 
         {/* Descripción */}

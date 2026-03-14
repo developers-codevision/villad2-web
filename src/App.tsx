@@ -8,29 +8,29 @@ import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
 
 // Code-splitting: cargar páginas bajo demanda
-const Home = lazy(() => import("@/modules/client/pages/Home"));
-const Rooms = lazy(() => import("@/modules/client/pages/Rooms"));
-const RoomDetail = lazy(() => import("@/modules/client/pages/RoomDetail"));
-const Services = lazy(() => import("@/modules/client/pages/Services"));
-const Reservations = lazy(() => import("@/modules/client/pages/Reservations"));
-const Reviews = lazy(() => import("@/modules/client/pages/Reviews"));
-const Promociones = lazy(() => import("@/modules/client/pages/Promociones"));
-const Login = lazy(() => import("@/modules/client/pages/Login"));
-const InterestPlaces = lazy(() => import("@/modules/client/pages/InterestPlaces"));
-const StripeReturn = lazy(() => import("@/modules/client/pages/StripeReturn"));
-const RefundPolicies = lazy(() => import("@/modules/client/pages/RefundPolicies"));
-const TermsAndConditions = lazy(() => import("@/modules/client/pages/TermsAndConditions"));
-const FAQ = lazy(() => import("@/modules/client/pages/FAQ"));
+const Home = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Home })));
+const Rooms = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Rooms })));
+const RoomDetail = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.RoomDetail })));
+const Services = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Services })));
+const Reservations = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Reservations })));
+const Reviews = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Reviews })));
+const Promociones = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Promociones })));
+const Login = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.Login })));
+const InterestPlaces = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.InterestPlaces })));
+const StripeReturn = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.StripeReturn })));
+const RefundPolicies = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.RefundPolicies })));
+const TermsAndConditions = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.TermsAndConditions })));
+const FAQ = lazy(() => import("@/modules/client/pages").then(m => ({ default: m.FAQ })));
 
 // Admin pages
-const AdminLayout = lazy(() => import("@/modules/admin/pages/AdminLayout"));
-const AdminReservas = lazy(() => import("@/modules/admin/pages/AdminReservas"));
-const AdminHabitaciones = lazy(() => import("@/modules/admin/pages/AdminHabitaciones"));
-const AdminPromociones = lazy(() => import("@/modules/admin/pages/AdminPromociones"));
-const AdminResenas = lazy(() => import("@/modules/admin/pages/AdminResenas"));
-const AdminSettings = lazy(() => import("@/modules/admin/pages/AdminSettings"));
-const AdminSelector = lazy(() => import("@/modules/admin/pages/AdminSelector"));
-const GestionHome = lazy(() => import("@/modules/admin/pages/GestionHome"));
+const AdminLayout = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminLayout })));
+const AdminReservas = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminReservas })));
+const AdminHabitaciones = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminHabitaciones })));
+const AdminPromociones = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminPromociones })));
+const AdminResenas = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminResenas })));
+const AdminSettings = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminSettings })));
+const AdminSelector = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.AdminSelector })));
+const GestionHome = lazy(() => import("@/modules/admin/pages").then(m => ({ default: m.GestionHome })));
 
 const queryClient = new QueryClient();
 
@@ -39,8 +39,6 @@ const LoadingFallback = () => (
     <img
       src="/favicon.png"
       alt="Villa D2"
-      width={80}
-      height={80}
       className="h-20 w-20 animate-[pulse_1.5s_ease-in-out_infinite]"
     />
     <div className="flex items-center gap-1.5">

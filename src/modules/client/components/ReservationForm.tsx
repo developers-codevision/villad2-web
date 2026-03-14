@@ -11,13 +11,12 @@ import { ImageWithPlaceholder } from '@/modules/shared/components';
 import { parsePhotos } from '@/modules/client/utils/roomHelpers';
 import { roomsService } from '@/modules/shared/services/rooms.service';
 import type { Room } from '@/modules/shared/types/api.types';
-import { lazy, Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import { usePrices } from '@/modules/shared/hooks';
 import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
-// PayPalCheckout will be lazy-loaded below
-const LazyPayPalCheckout = lazy(() => import('./PayPalCheckout'));
+import PayPalCheckout from './PayPalCheckout';
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -127,7 +126,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             onClick={() => hook.goToStep('payment-zelle')}
             className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
           >
-            <img src="/zelle.svg" alt="Zelle" width={32} height={32} className="w-8 h-8 object-contain" />
+            <img src="/zelle.svg" alt="Zelle" className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Zelle</h3>
               <p className="text-sm text-muted-foreground">Transferencia bancaria en EE.UU.</p>
@@ -140,7 +139,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             onClick={() => hook.goToStep('payment-bizum')}
             className="w-full border-2 border-border rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all duration-300 group text-left"
           >
-            <img src="/bizum.svg" alt="Bizum" width={32} height={32} className="w-8 h-8 object-contain" />
+            <img src="/bizum.svg" alt="Bizum" className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Bizum</h3>
               <p className="text-sm text-muted-foreground">Transferencia instantánea en España</p>
@@ -154,7 +153,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             disabled={submitting}
             className="w-full border-2 border-primary/50 rounded-lg p-4 flex items-center gap-4 hover:border-primary hover:bg-primary/10 transition-all duration-300 group text-left bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <img src="/stripe.svg" alt="Stripe" width={32} height={32} className="w-8 h-8 object-contain" />
+            <img src="/stripe.svg" alt="Stripe" className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Stripe</h3>
               <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express </p>
@@ -165,15 +164,13 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
           {/* PayPal */}
           <div className="w-full border-2 border-border rounded-lg p-4">
             <div className="flex items-center gap-4 mb-3">
-              <img src="/paypal.svg" alt="PayPal" width={32} height={32} className="w-8 h-8 object-contain" />
+              <img src="/paypal.svg" alt="PayPal" className="w-8 h-8 object-contain" />
                <div className="flex-1">
                  <h3 className="font-semibold text-lg">PayPal</h3>
                  <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
                </div>
              </div>
-             <Suspense fallback={<p className="text-sm text-muted-foreground">Cargando PayPal...</p>}>
-               <LazyPayPalCheckout hook={hook} room={selectedRoom} />
-             </Suspense>
+             <PayPalCheckout hook={hook} room={selectedRoom} />
            </div>
         </div>
 

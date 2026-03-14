@@ -9,15 +9,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <img
-              src={logo}
-              alt="Villa D2"
-              width={192}
-              height={48}
-              loading="lazy"
-              decoding="async"
-              className="h-12 w-auto mb-2"
-            />
+            <img src={logo} alt="Villa D2" className="h-12 w-auto mb-2" />
             <p className="text-secondary-foreground/70 text-sm leading-relaxed">
               {HOSTAL.description}
             </p>
