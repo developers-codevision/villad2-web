@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {useEffect, useState} from 'react'
+import {useEffect, useRef ,useState} from 'react'
 import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import {
@@ -22,6 +22,9 @@ import ExchangeRateSection from "@/modules/client/components/ExchangeRateSection
 const Index = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+  const [isMapVisible, setIsMapVisible] = useState(false);
+  const [userHasInteractedWithMap, setUserHasInteractedWithMap] = useState(false);
+  const mapSectionRef = useRef<HTMLDivElement>(null);
 
   // Cargar reseñas aprobadas desde la API
   useEffect(() => {
@@ -274,59 +277,71 @@ const Index = () => {
           )}
         </div>
       </section>
+            {/* Contact + Map */}
+            <section className="py-20 px-4">
+              <div className="container mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+                  <span className="text-primary">Contacto</span> y Ubicación
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary/10 rounded-full p-3"><Phone className="text-primary" /></div>
+                      <div>
+                        <p className="font-semibold">Teléfonos</p>
+                        <p className="text-muted-foreground">{HOSTAL.phone}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary/10 rounded-full p-3"><Mail className="text-primary" /></div>
+                      <div>
+                        <p className="font-semibold">Email</p>
+                        <p className="text-muted-foreground">{HOSTAL.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary/10 rounded-full p-3"><MessageCircle className="text-primary" /></div>
+                      <div>
+                        <p className="font-semibold">WhatsApp</p>
+                        <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="bg-primary/10 rounded-full p-3"><MapPin className="text-primary" /></div>
+                      <div>
+                        <p className="font-semibold">Dirección</p>
+                        <p className="text-muted-foreground">{HOSTAL.address}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    ref={mapSectionRef}
+                    className="relative rounded-lg overflow-hidden shadow-lg h-[350px] cursor-pointer group bg-gray-200"
+                    onClick={() => setUserHasInteractedWithMap(true)}
+                  >
+                    {(isMapVisible || userHasInteractedWithMap) ? (
+                      <iframe
+                        src={HOSTAL.mapEmbedUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Ubicación del hostal"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center">
+                         <MapPin className="w-12 h-12 text-primary/50 mb-4" />
+                         <p className="font-semibold text-muted-foreground">Cargar mapa interactivo</p>
+                         <p className="text-sm text-muted-foreground/80">(Haz clic aquí)</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
 
-      {/* Contact + Map */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            <span className="text-primary">Contacto</span> y Ubicación
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 rounded-full p-3"><Phone className="text-primary" /></div>
-                <div>
-                  <p className="font-semibold">Teléfonos</p>
-                  <p className="text-muted-foreground">{HOSTAL.phone}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 rounded-full p-3"><Mail className="text-primary" /></div>
-                <div>
-                  <p className="font-semibold">Email</p>
-                  <p className="text-muted-foreground">{HOSTAL.email}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 rounded-full p-3"><MessageCircle className="text-primary" /></div>
-                <div>
-                  <p className="font-semibold">WhatsApp</p>
-                  <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 rounded-full p-3"><MapPin className="text-primary" /></div>
-                <div>
-                  <p className="font-semibold">Dirección</p>
-                  <p className="text-muted-foreground">{HOSTAL.address}</p>
-                </div>
-              </div>
-            </div>
-            <div className="rounded-lg overflow-hidden shadow-lg h-[350px]">
-              <iframe
-                src={HOSTAL.mapEmbedUrl}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación del hostal"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>
