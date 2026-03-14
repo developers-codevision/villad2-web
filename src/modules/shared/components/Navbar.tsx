@@ -26,7 +26,14 @@ export default function Navbar() {
 
 			{/* Logo — solo mobile */}
 			<Link to="/" className="desk:hidden">
-				<img src={logo} alt={HOSTAL.name} className="h-10 w-auto" />
+				<img
+					src={logo}
+					alt={HOSTAL.name}
+					width={160}
+					height={40}
+					decoding="async"
+					className="h-10 w-auto"
+				/>
 			</Link>
 
 			{/* Desktop: grid 3 columnas iguales */}

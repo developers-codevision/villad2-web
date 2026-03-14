@@ -17,6 +17,10 @@ export default function PromotionGlassCard({ promotion }: Props) {
         <img
           src={getMediaUrl(promotion.photo!)}
           alt={promotion.title}
+          width={1280}
+          height={853}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
       ) : (
@@ -53,7 +57,7 @@ export default function PromotionGlassCard({ promotion }: Props) {
         {services.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
             {services.slice(0, 4).map((service, idx) => {
-              const clean = typeof service === 'string' ? service.replace(/[\[\]"]/g, '').trim() : service;
+              const clean = typeof service === 'string' ? service.replace(/[[\]"]/g, '').trim() : service;
               return (
                 <span key={idx} className="px-2 py-0.5 rounded-full bg-primary/80 text-primary-foreground text-[10px] font-semibold">
                   {clean}
