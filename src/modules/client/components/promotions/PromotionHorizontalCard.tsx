@@ -20,6 +20,10 @@ export default function PromotionHorizontalCard({ promotion, reverse = false }: 
           <img
             src={getMediaUrl(promotion.photo!)}
             alt={promotion.title}
+            width={1280}
+            height={853}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (

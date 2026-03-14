@@ -22,6 +22,10 @@ export default function PromotionHeroCard({ promotion }: Props) {
             <img
               src={getMediaUrl(promotion.photo!)}
               alt={promotion.title}
+              width={1280}
+              height={1280}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
@@ -90,6 +94,10 @@ export default function PromotionHeroCard({ promotion }: Props) {
           <img
             src={getMediaUrl(promotion.photo!)}
             alt={promotion.title}
+            width={1600}
+            height={900}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (

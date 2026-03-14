@@ -9,19 +9,51 @@ export default function SocialLinks({ facebookUrl, twitterUrl, youtubeUrl, whats
   return (
     <div className="flex items-center gap-3">
       <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-        <img src="/facebook.png" alt="Facebook" className="w-8 h-8 hover:opacity-80 transition-opacity" />
+        <img
+          src="/facebook.png"
+          alt="Facebook"
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="w-8 h-8 hover:opacity-80 transition-opacity"
+        />
         {/* Facebook iconos creados por Freepik - Flaticon */}
       </a>
       <a href={twitterUrl} target="_blank" rel="noopener noreferrer" aria-label="X">
-        <img src="/x.png" alt="X" className="w-8 h-8 hover:opacity-80 transition-opacity" />
+        <img
+          src="/x.png"
+          alt="X"
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="w-8 h-8 hover:opacity-80 transition-opacity"
+        />
         {/* Pío iconos creados por Freepik - Flaticon */}
       </a>
       <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="Youtube">
-        <img src="/youtube.png" alt="Youtube" className="w-8 h-8 hover:opacity-80 transition-opacity" />
+        <img
+          src="/youtube.png"
+          alt="Youtube"
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="w-8 h-8 hover:opacity-80 transition-opacity"
+        />
         {/* Red social iconos creados por riajulislam - Flaticon */}
       </a>
       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Whatsapp">
-        <img src="/whatsapp.png" alt="Whatsapp" className="w-8 h-8 hover:opacity-80 transition-opacity" />
+        <img
+          src="/whatsapp.png"
+          alt="Whatsapp"
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="w-8 h-8 hover:opacity-80 transition-opacity"
+        />
         {/* Whatsapp iconos creados por Fathema Khanom - Flaticon */}
       </a>
     </div>
