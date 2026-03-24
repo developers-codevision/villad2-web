@@ -67,12 +67,6 @@ export default function StripeReturn() {
             <CheckCircle className="h-20 w-20 mx-auto text-green-500" />
             <h1 className="text-3xl font-bold text-green-700">¡Pago Exitoso!</h1>
             <p className="text-muted-foreground">{message}</p>
-            {sessionId && (
-              <div className="bg-muted/30 rounded-lg p-4 text-sm">
-                <p className="text-muted-foreground">ID de sesión:</p>
-                <p className="font-mono text-xs break-all">{sessionId}</p>
-              </div>
-            )}
             <div className="space-y-3 pt-4">
               <Button asChild className="w-full">
                 <Link to="/">Volver al Inicio</Link>
