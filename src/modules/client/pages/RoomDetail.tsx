@@ -17,6 +17,8 @@ import { usePrices } from '@/modules/shared/hooks';
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { RoomStatus } from "@/modules/shared/types/api.types";
 import { useEffect } from "react";
+import { toast } from "sonner";
+import type { DateRange } from "react-day-picker";
 
 export default function RoomDetail() {
   const { id } = useParams();
@@ -84,6 +86,19 @@ export default function RoomDetail() {
   // Parse additional photos and convert to full URLs
   const additionalPhotos = parsePhotos(room.additionalPhotos).map(photo => roomsService.getMediaUrl(photo));
   const capacity = room.baseCapacity + room.extraCapacity
+
+ // Function to check if a date range contains any occupied dates
+  const isDateRangeAvailable = (checkIn: Date, checkOut: Date): boolean => {
+    const current = new Date(checkIn);
+    while (current < checkOut) {
+      const dateStr = format(current, "yyyy-MM-dd");
+      if (reservationHook.occupiedDates.includes(dateStr)) {
+        return false;
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return true;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -176,7 +191,14 @@ export default function RoomDetail() {
                     from: reservationHook.formData.checkIn,
                     to: reservationHook.formData.checkOut,
                   }}
-                  onSelect={(r) => reservationHook.setDateRange(r?.from, r?.to)}
+                  onSelect={(range: DateRange | undefined) => {
+                    if (range?.from && range?.to) {
+                      if (!isDateRangeAvailable(range.from, range.to)) {
+                        return;
+                      }
+                    }
+                    reservationHook.setDateRange(range?.from, range?.to);
+                  }}
                   numberOfMonths={2}
                   disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || reservationHook.occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
                   locale={es}

@@ -13,6 +13,7 @@ import { useClientReservation } from "@/modules/client/hooks/useClientReservatio
 import { usePrices } from "@/modules/shared/hooks";
 import ReservationForm from "@/modules/client/components/ReservationForm";
 import type { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
@@ -47,6 +48,19 @@ export default function Reservations() {
   const hideCalendarAndHeader = ['payment', 'payment-zelle', 'payment-bizum'].includes(
     reservationHook.step as string
   );
+
+  // Function to check if a date range contains any occupied dates
+  const isDateRangeAvailable = (checkIn: Date, checkOut: Date): boolean => {
+    const current = new Date(checkIn);
+    while (current < checkOut) {
+      const dateStr = format(current, "yyyy-MM-dd");
+      if (occupiedDates.includes(dateStr)) {
+        return false;
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return true;
+  };
 
   if (confirmed) {
     return (
@@ -122,6 +136,11 @@ export default function Reservations() {
                       to: formData.checkOut,
                     }}
                     onSelect={(range: DateRange | undefined) => {
+                      if (range?.from && range?.to) {
+                        if (!isDateRangeAvailable(range.from, range.to)) {
+                          return;
+                        }
+                      }
                       setDateRange(range?.from, range?.to);
                     }}
                     numberOfMonths={2}
