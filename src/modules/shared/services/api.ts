@@ -49,16 +49,13 @@ export const apiClient = {
       await parseError(response);
     }
 
-    // Handle empty/no-content responses
     if (response.status === 204) return undefined as T;
 
-    // Read body as text first so we can parse JSON even if Content-Type header is missing
     const text = await response.text();
     if (!text) return undefined as T;
     try {
       return JSON.parse(text) as T;
-    } catch (e) {
-      // If it's not JSON, throw a parse error
+    } catch {
       throw new Error('Invalid JSON response from server');
     }
   },
@@ -107,30 +104,92 @@ export const apiClient = {
       await parseError(response);
     }
 
-    // Check if response has content before parsing JSON
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       return response.json();
     }
 
-    // Return empty object for void responses
     return undefined as T;
   },
 };
 
-/**
- * Get authentication headers
- */
-function getAuthHeaders(): HeadersInit {
-  const token = authService.getToken();
-  if (!token) {
-    throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+const SESSION_REQUIRED_MESSAGE = 'No hay sesión activa. Por favor, inicia sesión.';
+const SESSION_EXPIRED_MESSAGE = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+
+function buildAuthHeaders(token: string, headers?: HeadersInit, includeJsonContentType = true): Headers {
+  const mergedHeaders = new Headers(headers || {});
+  mergedHeaders.set('Authorization', `Bearer ${token}`);
+
+  if (includeJsonContentType && !mergedHeaders.has('Content-Type')) {
+    mergedHeaders.set('Content-Type', 'application/json');
   }
 
-  return {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  };
+  return mergedHeaders;
+}
+
+async function parseJsonOrEmpty<T>(response: Response): Promise<T> {
+  if (response.status === 204) return undefined as T;
+  const text = await response.text();
+  if (!text) return undefined as T;
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error('Invalid JSON response from server');
+  }
+}
+
+async function parseDeleteResponse<T>(response: Response): Promise<T> {
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return parseJsonOrEmpty<T>(response);
+  }
+
+  return undefined as T;
+}
+
+async function authenticatedFetch(
+  endpoint: string,
+  init: RequestInit = {},
+  includeJsonContentType = true,
+): Promise<Response> {
+  const token = authService.getToken();
+  if (!token) {
+    throw new Error(SESSION_REQUIRED_MESSAGE);
+  }
+
+  const requestWithToken = (accessToken: string): RequestInit => ({
+    ...init,
+    headers: buildAuthHeaders(accessToken, init.headers, includeJsonContentType),
+  });
+
+  let response = await fetch(`${API_BASE_URL}${endpoint}`, requestWithToken(token));
+
+  if (response.status !== 401) {
+    return response;
+  }
+
+  try {
+    await authService.refreshToken();
+  } catch {
+    await authService.logout();
+    throw new Error(SESSION_EXPIRED_MESSAGE);
+  }
+
+  const refreshedToken = authService.getToken();
+  if (!refreshedToken) {
+    await authService.logout();
+    throw new Error(SESSION_EXPIRED_MESSAGE);
+  }
+
+  response = await fetch(`${API_BASE_URL}${endpoint}`, requestWithToken(refreshedToken));
+
+  if (response.status === 401) {
+    await authService.logout();
+    throw new Error(SESSION_EXPIRED_MESSAGE);
+  }
+
+  return response;
 }
 
 /**
@@ -138,198 +197,118 @@ function getAuthHeaders(): HeadersInit {
  */
 export const authenticatedApiClient = {
   get: async <T>(endpoint: string): Promise<T> => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: getAuthHeaders(),
-    });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
+    const response = await authenticatedFetch(endpoint);
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    if (response.status === 204) return undefined as T;
-    const text = await response.text();
-    if (!text) return undefined as T;
-    try {
-      return JSON.parse(text) as T;
-    } catch (e) {
-      throw new Error('Invalid JSON response from server');
-    }
+    return parseJsonOrEmpty<T>(response);
   },
 
   post: async <T>(endpoint: string, data: unknown): Promise<T> => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await authenticatedFetch(endpoint, {
       method: 'POST',
-      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    return response.json();
+    return parseJsonOrEmpty<T>(response);
   },
 
   put: async <T>(endpoint: string, data: unknown): Promise<T> => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await authenticatedFetch(endpoint, {
       method: 'PUT',
-      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    return response.json();
+    return parseJsonOrEmpty<T>(response);
   },
 
   patch: async <T>(endpoint: string, data: unknown): Promise<T> => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await authenticatedFetch(endpoint, {
       method: 'PATCH',
-      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
 
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
-
     if (!response.ok) {
       await parseError(response);
     }
 
-    if (response.status === 204) return undefined as T;
-    const text = await response.text();
-    if (!text) return undefined as T;
-    try {
-      return JSON.parse(text) as T;
-    } catch (e) {
-      throw new Error('Invalid JSON response from server');
-    }
+    return parseJsonOrEmpty<T>(response);
   },
 
   delete: async <T>(endpoint: string): Promise<T> => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await authenticatedFetch(endpoint, {
       method: 'DELETE',
-      headers: getAuthHeaders(),
     });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    // Check if response has content before parsing JSON
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      return response.json();
-    }
-
-    // Return empty object for void responses
-    return undefined as T;
+    return parseDeleteResponse<T>(response);
   },
 
   /**
    * Upload files with FormData (for multipart/form-data)
    */
   postFormData: async <T>(endpoint: string, formData: FormData): Promise<T> => {
-    const token = authService.getToken();
-    if (!token) {
-      throw new Error('No hay sesión activa. Por favor, inicia sesión.');
-    }
-
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        // Don't set Content-Type for FormData - browser will set it with boundary
+    const response = await authenticatedFetch(
+      endpoint,
+      {
+        method: 'POST',
+        body: formData,
       },
-      body: formData,
-    });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
+      false,
+    );
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    return response.json();
+    return parseJsonOrEmpty<T>(response);
   },
 
   putFormData: async <T>(endpoint: string, formData: FormData): Promise<T> => {
-    const token = authService.getToken();
-    if (!token) {
-      throw new Error('No hay sesión activa. Por favor, inicia sesión.');
-    }
-
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await authenticatedFetch(
+      endpoint,
+      {
+        method: 'PUT',
+        body: formData,
       },
-      body: formData,
-    });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
+      false,
+    );
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    return response.json();
+    return parseJsonOrEmpty<T>(response);
   },
 
   patchFormData: async <T>(endpoint: string, formData: FormData): Promise<T> => {
-    const token = authService.getToken();
-    if (!token) {
-      throw new Error('No hay sesión activa. Por favor, inicia sesión.');
-    }
-
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
+    const response = await authenticatedFetch(
+      endpoint,
+      {
+        method: 'PATCH',
+        body: formData,
       },
-      body: formData,
-    });
-
-    if (response.status === 401) {
-      authService.logout();
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
-    }
+      false,
+    );
 
     if (!response.ok) {
       await parseError(response);
     }
 
-    return response.json();
+    return parseJsonOrEmpty<T>(response);
   },
 };
 

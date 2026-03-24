@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Input } from "@/modules/shared/components/ui/input";
@@ -13,7 +13,18 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, isAdmin, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+
+    if (isAdmin) {
+      navigate("/admin-selector", { replace: true });
+      return;
+    }
+
+    navigate("/", { replace: true });
+  }, [isAuthenticated, isAdmin, isLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,13 +40,6 @@ export default function Login() {
       const response = await login({ username, password });
 
       toast.success(`Bienvenido, ${response.user.fullName || response.user.username}!`);
-
-      // Redirect based on user role
-      if (response.user.roles && response.user.roles.includes('admin')) {
-        navigate("/admin-selector", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Error al iniciar sesión";
       toast.error(message);

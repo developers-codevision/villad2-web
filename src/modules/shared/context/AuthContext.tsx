@@ -19,19 +19,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user from localStorage on mount
+  // Rebuild in-memory auth on app boot using refresh token if needed
   useEffect(() => {
-    const loadUser = () => {
+    const bootstrapAuth = async () => {
       const storedUser = authService.getUser();
-      const hasToken = authService.isAuthenticated();
-
-      if (hasToken && storedUser) {
+      if (storedUser) {
         setUser(storedUser);
       }
-      setIsLoading(false);
+
+      if (authService.isAuthenticated()) {
+        setIsLoading(false);
+        return;
+      }
+
+      if (!authService.getRefreshToken()) {
+        if (storedUser) {
+          await authService.logout();
+          setUser(null);
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        await authService.refreshToken();
+
+        if (!storedUser) {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        }
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    loadUser();
+    bootstrapAuth();
   }, []);
 
   const login = useCallback(async (credentials: LoginDto): Promise<AuthResponse> => {
@@ -49,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const updatedUser = await authService.getCurrentUser();
       setUser(updatedUser);
-    } catch (error) {
+    } catch {
       setUser(null);
     }
   }, []);
@@ -81,4 +105,3 @@ export function useAuth() {
   }
   return context;
 }
-

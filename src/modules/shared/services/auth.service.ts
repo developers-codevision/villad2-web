@@ -3,16 +3,18 @@
 import { AuthResponse, LoginDto, RegisterDto, User, RefreshTokenResponse } from '../types/api.types';
 import { apiClient } from './api';
 
-const TOKEN_KEY = 'villad2_auth_token';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const REFRESH_TOKEN_KEY = 'villad2_refresh_token';
 const USER_KEY = 'villad2_user';
 
 class AuthService {
+  private accessToken: string | null = null;
+
   /**
-   * Get the stored authentication token
+   * Get the in-memory authentication token
    */
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    return this.accessToken;
   }
 
   /**
@@ -39,7 +41,7 @@ class AuthService {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return !!this.accessToken;
   }
 
   /**
@@ -51,10 +53,10 @@ class AuthService {
   }
 
   /**
-   * Store authentication data securely
+   * Store authentication data
    */
   private storeAuth(token: string, user: User, refreshToken?: string): void {
-    localStorage.setItem(TOKEN_KEY, token);
+    this.accessToken = token;
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     if (refreshToken) {
       localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
@@ -65,7 +67,7 @@ class AuthService {
    * Clear authentication data
    */
   private clearAuth(): void {
-    localStorage.removeItem(TOKEN_KEY);
+    this.accessToken = null;
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   }
@@ -74,26 +76,18 @@ class AuthService {
    * Login user
    */
   async login(credentials: LoginDto): Promise<AuthResponse> {
-    try {
-      const data = await apiClient.post<AuthResponse>('/auth/login', credentials);
-      this.storeAuth(data.access_token, data.user, data.refresh_token);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await apiClient.post<AuthResponse>('/auth/login', credentials);
+    this.storeAuth(data.accessToken, data.user, data.refreshToken);
+    return data;
   }
 
   /**
    * Register new user
    */
   async register(userData: RegisterDto): Promise<AuthResponse> {
-    try {
-      const data = await apiClient.post<AuthResponse>('/auth/register', userData);
-      this.storeAuth(data.access_token, data.user, data.refresh_token);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await apiClient.post<AuthResponse>('/auth/register', userData);
+    this.storeAuth(data.accessToken, data.user, data.refreshToken);
+    return data;
   }
 
   /**
@@ -108,9 +102,15 @@ class AuthService {
     // Try to notify server, but don't fail if it doesn't work
     if (token) {
       try {
-        await apiClient.post<void>('/auth/logout', {});
+        await fetch(`${API_BASE_URL}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
       } catch (error) {
-        // Silently fail - local logout already done
         console.warn('Error notifying server of logout:', error);
       }
     }
@@ -127,18 +127,16 @@ class AuthService {
     }
 
     try {
-      const data = await apiClient.post<RefreshTokenResponse>(
-        '/auth/refresh',
-        { refresh_token: refreshToken }
-      );
+      const data = await apiClient.post<RefreshTokenResponse>('/auth/refresh', {
+        refreshToken,
+      });
 
-      // Update tokens
-      localStorage.setItem(TOKEN_KEY, data.access_token);
-      if (data.refresh_token) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+      this.accessToken = data.accessToken;
+      if (data.refreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
       }
 
-      return data.access_token;
+      return data.accessToken;
     } catch (error) {
       this.clearAuth();
       throw error;
@@ -155,9 +153,18 @@ class AuthService {
     }
 
     try {
-      // Note: This should use authenticatedApiClient, but we avoid circular dependency
-      // by using apiClient and manually adding the auth header check in the api client
-      const user = await apiClient.get<User>('/auth/profile');
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo obtener el perfil de usuario');
+      }
+
+      const user = (await response.json()) as User;
       localStorage.setItem(USER_KEY, JSON.stringify(user));
       return user;
     } catch (error) {
