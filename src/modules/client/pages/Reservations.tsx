@@ -13,7 +13,6 @@ import { useClientReservation } from "@/modules/client/hooks/useClientReservatio
 import { usePrices } from "@/modules/shared/hooks";
 import ReservationForm from "@/modules/client/components/ReservationForm";
 import type { DateRange } from "react-day-picker";
-import { toast } from "sonner";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
@@ -26,6 +25,7 @@ export default function Reservations() {
     formData,
     confirmed,
     confirmationId,
+    paymentMethod,
     reservationSummary,
     setDateRange,
     resetForm,
@@ -73,11 +73,6 @@ export default function Reservations() {
             <p className="text-muted-foreground mb-2">
               Gracias, <strong>{formData.guestFirstName} {formData.guestLastName}</strong>. Tu solicitud de reserva ha sido registrada.
             </p>
-            {confirmationId && (
-              <p className="text-sm text-muted-foreground mb-4">
-                Número de confirmación: <strong>#{confirmationId}</strong>
-              </p>
-            )}
             <div className="bg-muted/30 rounded-lg p-4 mb-4">
               <p className="font-semibold mb-2">{selectedRoom?.name}</p>
               <p className="text-sm text-muted-foreground mb-2">
@@ -96,12 +91,11 @@ export default function Reservations() {
               )}
               <p className="text-2xl font-bold text-primary mt-2">${totalPrice}</p>
             </div>
-            <p className="text-sm text-muted-foreground mb-2">
-              Tu reserva está <strong>pendiente de confirmación</strong>.
-            </p>
-            <p className="text-sm text-muted-foreground mb-6">
-              Recibirás un email en <strong>{formData.guestEmail}</strong> cuando sea confirmada por el administrador.
-            </p>
+            {paymentMethod === 'zelle' || paymentMethod === 'bizum' ? (
+              <p className="text-sm text-muted-foreground mb-6">
+                Recibirás un email en <strong>{formData.guestEmail}</strong> cuando sea confirmada por el administrador.
+              </p>
+            ) : null}
             <Button className="font-semibold" onClick={resetForm}>
               Nueva Reserva
             </Button>
