@@ -197,6 +197,10 @@ export interface CreateReservationDto {
   transferOneWay?: boolean;
   transferRoundTrip?: boolean;
   breakfasts?: number;
+  paymentMethod?: 'paypal' | 'stripe' | 'zelle' | 'bizum';
+  stripeCustomerId?: string;
+  paymentType?: 'reservation';
+  currency?: string;
 }
 
 export interface UpdateReservationDto {

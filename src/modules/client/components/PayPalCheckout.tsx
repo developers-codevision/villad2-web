@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import type { Room } from '@/modules/shared/types/api.types';
 import type { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import { clientFormDataToCreateDto } from '@/modules/admin/utils/reservations.utils';
-import type { CreateReservationDto } from '@/modules/shared/dtos/reservation.dto';
+import type { CreateReservationDto } from '@/modules/shared/types/api.types';
 
 interface Props {
   hook: ReturnType<typeof useClientReservation>;
@@ -86,7 +86,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   const createDto = useMemo(
-    () => clientFormDataToCreateDto(formData as CreateReservationDto),
+    () => clientFormDataToCreateDto(formData, 'paypal'),
     [formData]
   );
 
@@ -120,11 +120,12 @@ export default function PayPalCheckout({ hook, room }: Props) {
       createOrder: async () => {
         try {
           setLoading(true);
-          const res = await fetch(`${apiUrl}/paypal/create-order-with-reservation`, {
+          const res = await fetch(`${apiUrl}/reservations/with-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(createDto),
           });
+          console.log(createDto)
 
           if (!res.ok) {
             const err = await res.text();
@@ -132,7 +133,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
           }
 
           const data = await res.json();
-          const orderId = data?.data?.orderId || data?.orderId;
+          const orderId = data?.paypalOrder?.orderId || data?.data?.orderId || data?.orderId;
           if (!orderId) throw new Error('No order id returned from server');
           return orderId;
         } catch (error) {

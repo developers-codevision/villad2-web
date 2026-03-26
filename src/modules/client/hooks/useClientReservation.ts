@@ -240,25 +240,18 @@ export function useClientReservation(prices?: PricesResponse) {
       setSubmitting(true);
 
       try {
-        const createDto = clientFormDataToCreateDto(formData);
+        const createDto = clientFormDataToCreateDto(formData, method);
         console.log('Creating reservation with payment method:', method, createDto);
 
-        if (method === 'stripe') {
-          // Create checkout session and redirect to Stripe-hosted page
-          const response = await reservationsService.createWithPayment(createDto);
-          console.log('Stripe response:', response);
+        const response = await reservationsService.createWithPayment(createDto);
+        console.log('Payment response:', response);
 
-          // The backend returns paymentSession with url
-          if (response.paymentSession?.url) {
-            // Redirect to Stripe-hosted checkout page
-            window.location.href = response.paymentSession.url;
-          } else {
-            throw new Error('No se recibió la URL de checkout de Stripe');
-          }
+        if (method === 'stripe' && response.paymentSession?.url) {
+          // Redirect to Stripe-hosted checkout page
+          window.location.href = response.paymentSession.url;
         } else {
-          // For Zelle/Bizum, create reservation normally
-          const response = await reservationsService.create(createDto);
-          setConfirmationId(response.id);
+          // For Zelle/Bizum, or if no redirect needed, set confirmed
+          setConfirmationId(response.reservation.id);
           setPaymentMethod(method);
           toast.success('¡Reserva solicitada correctamente!');
           setConfirmed(true);

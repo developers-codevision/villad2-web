@@ -202,7 +202,9 @@ export function formDataToCreateDto(
  * Convert ClientFormData to CreateReservationDto
  */
 export function clientFormDataToCreateDto(
-  formData: ClientReservationFormData
+  formData: ClientReservationFormData,
+  paymentMethod?: 'paypal' | 'stripe' | 'zelle' | 'bizum',
+  stripeCustomerId?: string
 ): CreateReservationDto {
   if (!formData.roomId || !formData.checkIn || !formData.checkOut) {
     throw new Error('Missing required fields');
@@ -247,6 +249,10 @@ export function clientFormDataToCreateDto(
     transferOneWay: formData.transferOneWay,
     transferRoundTrip: formData.transferRoundTrip,
     breakfasts: formData.breakfasts || undefined,
+    paymentMethod,
+    stripeCustomerId,
+    paymentType: 'reservation',
+    currency: 'usd',
   };
 }
 
