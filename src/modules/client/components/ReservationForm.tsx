@@ -201,11 +201,11 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
           <div className="space-y-3">
             <div>
               <p className="text-sm text-muted-foreground">Email Zelle:</p>
-              <p className="font-bold text-lg">pagos@villad2.com</p>
+              <p className="font-bold text-lg">luislo2456@gmail.com</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Nombre del titular:</p>
-              <p className="font-bold text-lg">Villa D2</p>
+              <p className="font-bold text-lg">Luis Manuel López González</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Monto a transferir:</p>
@@ -218,9 +218,8 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
           <h3 className="font-semibold">Instrucciones:</h3>
           <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
             <li>Abre tu aplicación bancaria o Zelle</li>
-            <li>Envía una transferencia a <strong>pagos@villad2.com</strong></li>
-            <li>Monto <strong>${totalPrice}</strong> como monto</li>
-            <li>Incluye tu número de reserva en el concepto (si es posible)</li>
+            <li>Envía una transferencia a <strong>luislo2456@gmail.com</strong></li>
+            <li>Importe <strong>${totalPrice}</strong> </li>
             <li>Haz clic en el botón "Confirmar Pago" abajo</li>
           </ol>
         </div>
