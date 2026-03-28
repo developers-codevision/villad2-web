@@ -117,9 +117,9 @@ const Index = () => {
 
         {/* Descripción */}
         <div className="absolute bottom-12 right-8 z-10 max-w-xl">
-          <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
+          <div className="bg-[#00ffdd] border-l-4 border-primary px-6 py-4 rounded-r-lg">
             <p className="text-lg lg:text-xl">
-              {HOSTAL.tagline} — {HOSTAL.description}
+              {HOSTAL.tagline}
             </p>
           </div>
         </div>

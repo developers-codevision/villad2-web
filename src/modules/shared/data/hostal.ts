@@ -2,8 +2,8 @@ import { Wifi, Coffee, Car, Shield, Flame, Camera, Lightbulb, MapPin, Luggage, H
 
 export const HOSTAL = {
   name: "Villa D2",
-  tagline: "Un viaje por la historia de Cuba",
-  description: "Nuestras 7 habitaciones llevan los nombres de las antiguas provincias (hasta 1976) e Isla de Pinos, contando la evolución territorial del país hasta la actualidad.",
+  tagline: "Un viaje por la historia de la división administrativa de Cuba",
+  description: "",
   phone: "+53 78820045 / +53 63511623 /  +53 50970588",
   email: "hostal.villad2@gmail.com",
   whatsapp: "+53 63511623",
