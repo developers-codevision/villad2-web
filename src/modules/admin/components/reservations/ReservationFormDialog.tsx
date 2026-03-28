@@ -458,7 +458,7 @@ export function ReservationFormDialog({
                 onCheckedChange={checked => onFormChange('earlyCheckIn', !!checked)}
               />
               <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
-                Check-in anticipado{' '}
+                Early check-in {' '}
                 <span className="text-muted-foreground text-sm">
                   (solicitar llegada antes del horario estándar)
                 </span>
@@ -471,7 +471,7 @@ export function ReservationFormDialog({
                 onCheckedChange={checked => onFormChange('lateCheckOut', !!checked)}
               />
               <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
-                Check-out tardío{' '}
+                Late check-out {' '}
                 <span className="text-muted-foreground text-sm">
                   (solicitar salida después del horario estándar)
                 </span>

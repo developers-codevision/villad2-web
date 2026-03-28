@@ -535,7 +535,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('earlyCheckIn', !!checked)}
             />
             <Label htmlFor="earlyCheckIn" className="cursor-pointer font-normal">
-              Check-in anticipado{' '}
+              Early check-in {' '}
               <span className="text-muted-foreground text-sm">
               </span>
             </Label>
@@ -547,7 +547,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               onCheckedChange={(checked) => updateFormField('lateCheckOut', !!checked)}
             />
             <Label htmlFor="lateCheckOut" className="cursor-pointer font-normal">
-              Check-out tardío{' '}
+              Late check-out {' '}
               <span className="text-muted-foreground text-sm">
               </span>
             </Label>
@@ -679,13 +679,13 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             )}
             {earlyCheckInCost > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Check-in anticipado</span>
+                <span className="text-muted-foreground">Early check-in </span>
                 <span>${earlyCheckInCost}</span>
               </div>
             )}
             {lateCheckOutCost > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Check-out tardío</span>
+                <span className="text-muted-foreground">Late check-out </span>
                 <span>${lateCheckOutCost}</span>
               </div>
             )}

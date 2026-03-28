@@ -12,7 +12,7 @@ const FAQSection = () => {
   const faqs: FAQItem[] = [
     {
       question: "¿Cuál es el horario de check-in y check-out?",
-      answer: "El check-in está disponible a partir de las 3:00 PM y el check-out debe realizarse antes de las 11:00 AM. Podemos ofrecer check-in anticipado o check-out tardío sujeto a disponibilidad y con un costo adicional. Por favor solicítalo al momento de la reserva."
+      answer: "El check-in está disponible a partir de las 3:00 PM y el check-out debe realizarse antes de las 11:00 AM. Podemos ofrecer Early check-in  o Late check-out  sujeto a disponibilidad y con un costo adicional. Por favor solicítalo al momento de la reserva."
     },
     {
       question: "¿Puedo cancelar o modificar mi reserva?",

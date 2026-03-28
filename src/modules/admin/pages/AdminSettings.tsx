@@ -75,14 +75,14 @@ export default function AdminSettings() {
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <PriceField
-                label="Check-in anticipado"
+                label="Early check-in "
                 description="Cargo por llegada antes de la hora estándar"
                 value={formData.earlyCheckInPrice}
                 onChange={(v) => handleFieldChange("earlyCheckInPrice", v)}
                 disabled={saving}
               />
               <PriceField
-                label="Check-out tardío"
+                label="Late check-out "
                 description="Cargo por salida después de la hora estándar"
                 value={formData.lateCheckOutPrice}
                 onChange={(v) => handleFieldChange("lateCheckOutPrice", v)}

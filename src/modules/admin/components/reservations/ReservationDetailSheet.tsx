@@ -215,14 +215,14 @@ export function ReservationDetailSheet({
           {reservation.earlyCheckIn && (
             <DetailRow
               icon={<Clock size={15} />}
-              label="Check-in anticipado"
+              label="Early check-in "
               value="Solicitado"
             />
           )}
           {reservation.lateCheckOut && (
             <DetailRow
               icon={<Clock size={15} />}
-              label="Check-out tardío"
+              label="Late check-out "
               value="Solicitado"
             />
           )}
