@@ -89,15 +89,15 @@ export default function AdminSettings() {
                 disabled={saving}
               />
               <PriceField
-                label="Traslado de ida"
-                description="Precio del servicio de traslado solo de ida"
+                label="Recogida del aeropuerto"
+                description="Precio del servicio de traslado solo de ida al aeropuerto"
                 value={formData.transferOneWayPrice}
                 onChange={(v) => handleFieldChange("transferOneWayPrice", v)}
                 disabled={saving}
               />
               <PriceField
-                label="Traslado de ida y vuelta"
-                description="Precio del servicio de traslado redondo"
+                label="Retorno al aeropuerto"
+                description="Precio del servicio de traslado solo de vuelta al aeropuerto"
                 value={formData.transferRoundTripPrice}
                 onChange={(v) => handleFieldChange("transferRoundTripPrice", v)}
                 disabled={saving}
