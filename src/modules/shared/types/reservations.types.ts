@@ -17,6 +17,7 @@ export interface ReservationFormDataBase {
   guestEmail: string;
   guestPhone: string;
   guestSex: 'M' | 'F' | 'otro';
+  guestIdNumber: string;
   baseGuestsCount: number;
   extraGuestsCount: number;
   totalGuests: number;

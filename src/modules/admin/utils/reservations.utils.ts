@@ -56,6 +56,7 @@ export function createEmptyClientReservationForm(): ClientReservationFormData {
     guestSex: 'M',
     guestEmail: '',
     guestPhone: '',
+    guestIdNumber: '',
     checkIn: undefined,
     checkOut: undefined,
     checkInTime: '',

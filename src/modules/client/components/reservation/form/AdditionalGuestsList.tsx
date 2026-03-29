@@ -6,6 +6,7 @@ interface AdditionalGuest {
   firstName: string;
   lastName: string;
   sex: 'M' | 'F' | 'otro';
+  idNumber?: string;
 }
 
 interface AdditionalGuestsListProps {
@@ -68,9 +69,18 @@ export default function AdditionalGuestsList({
               </SelectContent>
             </Select>
           </div>
+          <div className="space-y-2">
+            <Label>Número de Identificación</Label>
+            <Input
+              value={guest.idNumber || ''}
+              onChange={(e) =>
+                onGuestChange(index, { ...guest, idNumber: e.target.value })
+              }
+              placeholder="12345678"
+            />
+          </div>
         </div>
       ))}
     </div>
   );
 }
-

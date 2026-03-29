@@ -205,11 +205,13 @@ export default function ReservationForm({
             sex={formData.guestSex}
             email={formData.guestEmail}
             phone={formData.guestPhone}
+            idNumber={formData.guestIdNumber}
             onFirstNameChange={(value) => updateFormField('guestFirstName', value)}
             onLastNameChange={(value) => updateFormField('guestLastName', value)}
             onSexChange={(value) => updateFormField('guestSex', value)}
             onEmailChange={(value) => updateFormField('guestEmail', value)}
             onPhoneChange={(value) => updateFormField('guestPhone', value)}
+            onIdNumberChange={(value) => updateFormField('guestIdNumber', value)}
           />
 
         <AdditionalGuestsList
@@ -267,4 +269,3 @@ export default function ReservationForm({
     </form>
   );
 }
-

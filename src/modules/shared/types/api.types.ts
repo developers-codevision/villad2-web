@@ -153,6 +153,7 @@ export interface GuestInfo {
   firstName: string;
   lastName: string;
   sex: 'M' | 'F' | 'otro';
+  idNumber?: string;
 }
 
 export interface MainGuestInfo extends GuestInfo {

@@ -47,6 +47,7 @@ export function validateReservationForm(
     if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
     if (!formData.guestEmail.trim()) errors.push('El email es requerido');
     if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
+    if (!formData.guestIdNumber.trim()) errors.push('El número de identificación es requerido');
     if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
     if (!formData.checkOut) errors.push('Selecciona fecha de salida');
     if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');

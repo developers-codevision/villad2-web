@@ -8,11 +8,13 @@ interface PrimaryGuestDetailsProps {
   sex: 'M' | 'F' | 'otro';
   email: string;
   phone: string;
+  idNumber: string;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onSexChange: (value: 'M' | 'F' | 'otro') => void;
   onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
+  onIdNumberChange: (value: string) => void;
 }
 
 export default function PrimaryGuestDetails({
@@ -21,11 +23,13 @@ export default function PrimaryGuestDetails({
   sex,
   email,
   phone,
+  idNumber,
   onFirstNameChange,
   onLastNameChange,
   onSexChange,
   onEmailChange,
   onPhoneChange,
+  onIdNumberChange,
 }: PrimaryGuestDetailsProps) {
   return (
     <div className="space-y-4">
@@ -51,6 +55,16 @@ export default function PrimaryGuestDetails({
             required
           />
         </div>
+      </div>
+       <div className="space-y-2">
+        <Label htmlFor="idNumber">CI o Pasaporte</Label>
+        <Input
+          id="idNumber"
+          value={idNumber}
+          onChange={(e) => onIdNumberChange(e.target.value)}
+          placeholder="12345678"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="sex">Sexo</Label>
@@ -92,4 +106,3 @@ export default function PrimaryGuestDetails({
     </div>
   );
 }
-
