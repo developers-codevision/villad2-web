@@ -38,7 +38,7 @@ export default function RoomAndGuestSelection({
           <SelectContent>
             {rooms.map((r) => (
               <SelectItem key={r.id} value={r.id.toString()}>
-                {r.name} — ${r.pricePerNight}/noche
+                {r.name} : ${r.pricePerNight}/noche
               </SelectItem>
             ))}
           </SelectContent>

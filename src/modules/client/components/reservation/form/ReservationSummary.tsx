@@ -57,7 +57,7 @@ export default function ReservationSummary({
               />
             );
           })()}
-          <p className="font-semibold">{selectedRoom.name}</p>
+          <p className="font-semibold">{`# ${selectedRoom.number} : ${selectedRoom.name}`}  </p>
           <p className="text-sm text-muted-foreground mb-4">
             {ROOM_TYPE_LABELS[selectedRoom.roomType]} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
           </p>

@@ -157,7 +157,7 @@ export default function ReservationForm({
           <SelectContent>
             {rooms.map((r) => (
               <SelectItem key={r.id} value={r.id.toString()}>
-                {r.name} — ${r.pricePerNight}/noche
+                 {`# ${r.number}`} : {r.name}
               </SelectItem>
             ))}
           </SelectContent>
