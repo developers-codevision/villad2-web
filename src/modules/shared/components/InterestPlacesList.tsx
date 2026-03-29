@@ -10,7 +10,7 @@ export default function InterestPlacesList() {
           Lugares de Interés <span className="text-primary">Turístico</span>
         </h2>
         <p className="text-muted-foreground text-center max-w-xl mx-auto">
-          Descubre los mejores sitios turísticos, culturales y recreativos cercanos a Villa D2.
+          Descubre los mejores sitios turísticos, culturales y recreativos cercanos a Villa D2 y contacta en recepción para organizar la excursión de tu interés.
         </p>
       </div>
 

@@ -154,6 +154,18 @@ export function useClientReservation(prices?: PricesResponse) {
    * Set date range
    */
   const setDateRange = useCallback((checkIn: Date | undefined, checkOut: Date | undefined) => {
+    // Validate that check-in and check-out are at least one night apart
+    if (checkIn && checkOut) {
+      const nights = calculateNights(checkIn, checkOut);
+      if (nights < 1) {
+        setValidationErrors(['La reserva debe ser de al menos una noche']);
+        return;
+      }
+    }
+
+    // Clear any previous validation errors
+    setValidationErrors([]);
+
     setFormData(prev => ({ ...prev, checkIn, checkOut }));
   }, []);
 
