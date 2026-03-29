@@ -78,7 +78,7 @@ export const SERVICES_INCLUDED = [
 ];
 
 export const SERVICES_ADDITIONAL = [
-  { icon: Plane, name: "Recogida en Aeropuerto", description: "Servicio de recogida en el aeropuerto y retorno al finalizar la estancia." },
+  { icon: Plane, name: "Recogida y retorno al Aeropuerto", description: "Servicio de recogida en el aeropuerto y retorno al finalizar la estancia." },
   { icon: Car, name: "Traslados por la Ciudad", description: "Traslados a cualquier punto de la ciudad según sus necesidades." },
   { icon: Clock, name: "Servicio de Habitaciones 24h", description: "Servicio de habitaciones disponible las 24 horas del día." },
   { icon: Wine, name: "Servicio de Minibar", description: "Minibar en habitaciones con selección de bebidas y snacks." },

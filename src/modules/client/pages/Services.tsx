@@ -48,7 +48,7 @@ export default function Services() {
           </div>
 
           {/* Additional */}
-          <h2 className="text-2xl font-bold mb-6">Servicios Adicionales</h2>
+          <h2 className="text-2xl font-bold mb-6">$ Servicios Adicionales</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES_ADDITIONAL.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
