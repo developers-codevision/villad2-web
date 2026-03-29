@@ -152,7 +152,7 @@ export interface RefreshTokenResponse {
 export interface GuestInfo {
   firstName: string;
   lastName: string;
-  sex: 'M' | 'F' | 'otro';
+  sex: 'M' | 'F' | 'otro' | undefined;
   idNumber?: string;
 }
 

@@ -34,6 +34,7 @@ export function useClientReservation(prices?: PricesResponse) {
   const [confirmationId, setConfirmationId] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'zelle' | 'bizum' | 'stripe' | 'paypal' | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   // Availability
   const { occupiedDates } = useAvailability(formData.roomId);
@@ -141,8 +142,12 @@ export function useClientReservation(prices?: PricesResponse) {
       value: ClientReservationFormData[K]
     ) => {
       setFormData(prev => ({ ...prev, [field]: value }));
+      // Clear validation errors when user starts typing
+      if (validationErrors.length > 0) {
+        setValidationErrors([]);
+      }
     },
-    []
+    [validationErrors.length]
   );
 
   /**
@@ -222,9 +227,14 @@ export function useClientReservation(prices?: PricesResponse) {
       // Validate form
       const validation = validateReservationForm(formData, 'client');
       if (!validation.valid) {
-        validation.errors.forEach(error => toast.error(error));
+        setValidationErrors(validation.errors);
+        // Scroll to top to show errors
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
+
+      // Clear any previous errors
+      setValidationErrors([]);
 
       // Go to payment step
       setStep('payment');
@@ -284,8 +294,6 @@ export function useClientReservation(prices?: PricesResponse) {
   // ============================================
 
   // --- canSubmit: validación centralizada ---
-  const canSubmit = validateReservationForm(formData, 'client').valid;
-
   return {
     // State
     formData,
@@ -296,11 +304,11 @@ export function useClientReservation(prices?: PricesResponse) {
     paymentMethod,
     clientSecret,
     occupiedDates,
+    validationErrors,
 
     // Computed
     isStepComplete: isStepComplete(),
     reservationSummary,
-    canSubmit,
 
     // Form management
     updateFormField,

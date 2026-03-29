@@ -45,11 +45,13 @@ export function validateReservationForm(
 
   if (context === 'client') {
     if (!formData.guestLastName.trim()) errors.push('El apellido es requerido');
+    if (!formData.guestSex) errors.push('El sexo es requerido');
     if (!formData.guestEmail.trim()) errors.push('El email es requerido');
     if (!formData.guestPhone.trim()) errors.push('El teléfono es requerido');
     if (!formData.guestIdNumber.trim()) errors.push('El número de identificación es requerido');
     if (!formData.checkIn) errors.push('Selecciona fecha de entrada');
     if (!formData.checkOut) errors.push('Selecciona fecha de salida');
+    if (formData.totalGuests < 1) errors.push('Selecciona el número de huéspedes');
     if (formData.baseGuestsCount < 1) errors.push('Mínimo 1 huésped base');
   }
 
@@ -96,6 +98,7 @@ export function validateReservationForm(
     formData.additionalGuests.forEach((guest, index) => {
       if (!guest.firstName.trim()) errors.push(`El nombre del huésped #${index + 2} es requerido`);
       if (!guest.lastName.trim()) errors.push(`El apellido del huésped #${index + 2} es requerido`);
+      if (!guest.sex) errors.push(`El sexo del huésped #${index + 2} es requerido`);
     });
   }
 

@@ -42,7 +42,7 @@ export default function ReservationForm({
     resetForm,
     submitReservation,
     submitPayment,
-    canSubmit,
+    validationErrors,
     occupiedDates,
     setDateRange,
   } = hook;
@@ -89,9 +89,21 @@ export default function ReservationForm({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (canSubmit && selectedRoom) {
-      submitReservation();
-    }
+    submitReservation();
+  };
+
+  const hasRoomError = () => {
+    return validationErrors.some((error) =>
+      error.toLowerCase().includes('habitación') ||
+      error.toLowerCase().includes('selecciona una habitación')
+    );
+  };
+
+  const hasGuestsError = () => {
+    return validationErrors.some((error) =>
+      error.toLowerCase().includes('huéspedes') ||
+      error.toLowerCase().includes('selecciona el número de huéspedes')
+    );
   };
 
   // Payment method selection step
@@ -151,7 +163,7 @@ export default function ReservationForm({
           onValueChange={(value) => handleRoomSelect(parseInt(value))}
           disabled={loadingRooms || !!singleRoomId}
         >
-          <SelectTrigger>
+          <SelectTrigger className={hasRoomError() ? "border-red-500 focus:border-red-500" : ""}>
             <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
           </SelectTrigger>
           <SelectContent>
@@ -171,6 +183,7 @@ export default function ReservationForm({
         occupiedDates={occupiedDates}
         selectedRoomId={formData.roomId}
         onDateChange={(from, to) => setDateRange(from, to)}
+        validationErrors={validationErrors}
       />
 
       {/* Guest Count - After Calendar */}
@@ -178,12 +191,12 @@ export default function ReservationForm({
         <div className="space-y-2">
           <Label>Huéspedes Totales</Label>
           <Select
-            value={formData.totalGuests.toString()}
+            value={formData.totalGuests > 0 ? formData.totalGuests.toString() : ""}
             onValueChange={(value) => handleTotalGuestsChangeHelper(parseInt(value))}
             disabled={!selectedRoom}
           >
-            <SelectTrigger>
-              <SelectValue />
+            <SelectTrigger className={hasGuestsError() ? "border-red-500 focus:border-red-500" : ""}>
+              <SelectValue placeholder="Seleccionar número de huéspedes" />
             </SelectTrigger>
             <SelectContent>
               {Array.from({ length: Math.max(maxCapacity, 1) }, (_, i) => i + 1).map((n) => (
@@ -212,6 +225,7 @@ export default function ReservationForm({
             onEmailChange={(value) => updateFormField('guestEmail', value)}
             onPhoneChange={(value) => updateFormField('guestPhone', value)}
             onIdNumberChange={(value) => updateFormField('guestIdNumber', value)}
+            validationErrors={validationErrors}
           />
 
         <AdditionalGuestsList
@@ -221,6 +235,7 @@ export default function ReservationForm({
             newGuests[index] = guest;
             updateFormField('additionalGuests', newGuests);
           }}
+          validationErrors={validationErrors}
         />
 
         <CheckInCheckOutOptions
@@ -248,7 +263,14 @@ export default function ReservationForm({
           onNotesChange={(value) => updateFormField('notes', value)}
         />
 
-        <FormSubmitButton submitting={submitting} canSubmit={canSubmit} />
+        <FormSubmitButton submitting={submitting} />
+
+        {/* Validation message below button */}
+        {validationErrors.length > 0 && (
+          <p className="text-red-600 text-sm text-center mt-2">
+            Completa los campos señalados en rojo
+          </p>
+        )}
       </div>
 
       <div className="lg:col-span-2">

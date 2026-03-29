@@ -5,19 +5,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 interface AdditionalGuest {
   firstName: string;
   lastName: string;
-  sex: 'M' | 'F' | 'otro';
+  sex: 'M' | 'F' | 'otro' | undefined;
   idNumber?: string;
 }
 
 interface AdditionalGuestsListProps {
   guests: AdditionalGuest[];
   onGuestChange: (index: number, guest: AdditionalGuest) => void;
+  validationErrors?: string[];
 }
 
 export default function AdditionalGuestsList({
   guests,
   onGuestChange,
+  validationErrors = [],
 }: AdditionalGuestsListProps) {
+  const hasError = (guestIndex: number, fieldName: string) => {
+    const guestNumber = guestIndex + 2; // Primary guest is #1, additional start from #2
+    return validationErrors.some(error =>
+      error.toLowerCase().includes(`huésped #${guestNumber}`) &&
+      error.toLowerCase().includes(fieldName.toLowerCase())
+    );
+  };
+
   if (guests.length === 0) {
     return null;
   }
@@ -36,7 +46,7 @@ export default function AdditionalGuestsList({
                   onGuestChange(index, { ...guest, firstName: e.target.value })
                 }
                 placeholder="Juan"
-                required
+                className={hasError(index, 'nombre') ? "border-red-500 focus:border-red-500" : ""}
               />
             </div>
             <div className="space-y-2">
@@ -47,20 +57,20 @@ export default function AdditionalGuestsList({
                   onGuestChange(index, { ...guest, lastName: e.target.value })
                 }
                 placeholder="Pérez"
-                required
+                className={hasError(index, 'apellido') ? "border-red-500 focus:border-red-500" : ""}
               />
             </div>
           </div>
           <div className="space-y-2">
             <Label>Sexo</Label>
             <Select
-              value={guest.sex}
+              value={guest.sex || ""}
               onValueChange={(value) =>
                 onGuestChange(index, { ...guest, sex: value as 'M' | 'F' | 'otro' })
               }
             >
-              <SelectTrigger>
-                <SelectValue />
+              <SelectTrigger className={hasError(index, 'sexo') ? "border-red-500 focus:border-red-500" : ""}>
+                <SelectValue placeholder="Seleccionar sexo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="M">Masculino</SelectItem>
@@ -77,6 +87,7 @@ export default function AdditionalGuestsList({
                 onGuestChange(index, { ...guest, idNumber: e.target.value })
               }
               placeholder="12345678"
+              className=""
             />
           </div>
         </div>

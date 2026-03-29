@@ -11,6 +11,7 @@ interface DateSelectionProps {
   occupiedDates: string[];
   selectedRoomId: number | undefined;
   onDateChange: (from: Date | undefined, to: Date | undefined) => void;
+  validationErrors?: string[];
 }
 
 export default function DateSelection({
@@ -19,6 +20,7 @@ export default function DateSelection({
   occupiedDates,
   selectedRoomId,
   onDateChange,
+  validationErrors = [],
 }: DateSelectionProps) {
   const [numberOfMonths, setNumberOfMonths] = useState(1);
 
@@ -45,10 +47,18 @@ export default function DateSelection({
     }
   };
 
+  const hasDateError = () => {
+    return validationErrors.some((error) =>
+      error.toLowerCase().includes('fecha') ||
+      error.toLowerCase().includes('entrada') ||
+      error.toLowerCase().includes('salida')
+    );
+  };
+
   return (
     <div className="space-y-2">
       <Label className="text-base">Fechas de estancia</Label>
-      <div className="border border-border rounded-lg p-4 md:p-6 w-full overflow-hidden">
+      <div className={`border rounded-lg p-4 md:p-6 w-full overflow-hidden ${hasDateError() ? 'border-red-500' : 'border-border'}`}>
         <div className="w-full flex justify-center -mx-4 md:-mx-6 px-4 md:px-6">
           <div className="w-full max-w-full overflow-x-auto">
             <Calendar
@@ -78,6 +88,3 @@ export default function DateSelection({
     </div>
   );
 }
-
-
-
