@@ -1,9 +1,5 @@
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import { Users, BedDouble, Bath, CheckCircle, ArrowRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
-import { Calendar } from "@/modules/shared/components/ui/calendar";
-import { Label } from "@/modules/shared/components/ui/label";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { ImageWithPlaceholder } from "@/modules/shared/components";
@@ -11,14 +7,12 @@ import { RoomDetailSkeleton } from "@/modules/client/components";
 import { useRoom } from "@/modules/client/hooks/useRooms";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
-import ReservationForm from '@/modules/client/components/ReservationForm';
+import { ReservationForm } from '@/modules/client/components/reservation';
 import { useClientReservation } from '@/modules/client/hooks/useClientReservation';
 import { usePrices } from '@/modules/shared/hooks';
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { RoomStatus } from "@/modules/shared/types/api.types";
 import { useEffect } from "react";
-import { toast } from "sonner";
-import type { DateRange } from "react-day-picker";
 
 export default function RoomDetail() {
   const { id } = useParams();
@@ -85,20 +79,7 @@ export default function RoomDetail() {
 
   // Parse additional photos and convert to full URLs
   const additionalPhotos = parsePhotos(room.additionalPhotos).map(photo => roomsService.getMediaUrl(photo));
-  const capacity = room.baseCapacity + room.extraCapacity
-
- // Function to check if a date range contains any occupied dates
-  const isDateRangeAvailable = (checkIn: Date, checkOut: Date): boolean => {
-    const current = new Date(checkIn);
-    while (current < checkOut) {
-      const dateStr = format(current, "yyyy-MM-dd");
-      if (reservationHook.occupiedDates.includes(dateStr)) {
-        return false;
-      }
-      current.setDate(current.getDate() + 1);
-    }
-    return true;
-  };
+  const capacity = room.baseCapacity + room.extraCapacity;
 
   return (
     <div className="min-h-screen bg-background">
@@ -176,42 +157,12 @@ export default function RoomDetail() {
             })()}
           </div>
 
-          {/* Booking form - Reutilizar ReservationForm para eliminar duplicación */}
+          {/* Booking form - Usar ReservationForm con calendario integrado */}
           <section className="mb-16">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
               Reserva esta <span className="text-primary">Habitación</span>
             </h2>
-            {/* Calendar con lógica de días ocupados unificada */}
-            <div className="space-y-2 mb-8">
-              <Label className="text-base">Fechas de estancia</Label>
-              <div className="border border-border rounded-lg p-6 flex justify-center overflow-x-auto">
-                <Calendar
-                  mode="range"
-                  selected={{
-                    from: reservationHook.formData.checkIn,
-                    to: reservationHook.formData.checkOut,
-                  }}
-                  onSelect={(range: DateRange | undefined) => {
-                    if (range?.from && range?.to) {
-                      if (!isDateRangeAvailable(range.from, range.to)) {
-                        return;
-                      }
-                    }
-                    reservationHook.setDateRange(range?.from, range?.to);
-                  }}
-                  numberOfMonths={2}
-                  disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0)) || reservationHook.occupiedDates.includes(format(d, 'yyyy-MM-dd'))}
-                  locale={es}
-                  className="pointer-events-auto"
-                />
-              </div>
-              {reservationHook.formData.checkIn && reservationHook.formData.checkOut && (
-                <p className="text-sm text-muted-foreground text-center">
-                  {format(reservationHook.formData.checkIn, "dd MMM yyyy", { locale: es })} — {format(reservationHook.formData.checkOut, "dd MMM yyyy", { locale: es })}
-                </p>
-              )}
-            </div>
-            {/* Usar ReservationForm para reutilizar lógica y UI */}
+            {/* ReservationForm incluye el calendario y toda la lógica de reserva */}
             <ReservationForm hook={reservationHook} rooms={room ? [room] : []} singleRoomId={room?.id} />
           </section>
 

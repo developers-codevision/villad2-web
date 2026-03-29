@@ -1,0 +1,76 @@
+import { Label } from '@/modules/shared/components/ui/label';
+import { Input } from '@/modules/shared/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
+
+interface AdditionalGuest {
+  firstName: string;
+  lastName: string;
+  sex: 'M' | 'F' | 'otro';
+}
+
+interface AdditionalGuestsListProps {
+  guests: AdditionalGuest[];
+  onGuestChange: (index: number, guest: AdditionalGuest) => void;
+}
+
+export default function AdditionalGuestsList({
+  guests,
+  onGuestChange,
+}: AdditionalGuestsListProps) {
+  if (guests.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-4">
+      {guests.map((guest, index) => (
+        <div key={index} className="border border-border rounded-lg p-4 space-y-4">
+          <h4 className="font-medium">Acompañante #{index + 1}</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Nombre</Label>
+              <Input
+                value={guest.firstName}
+                onChange={(e) =>
+                  onGuestChange(index, { ...guest, firstName: e.target.value })
+                }
+                placeholder="Juan"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Apellido</Label>
+              <Input
+                value={guest.lastName}
+                onChange={(e) =>
+                  onGuestChange(index, { ...guest, lastName: e.target.value })
+                }
+                placeholder="Pérez"
+                required
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Sexo</Label>
+            <Select
+              value={guest.sex}
+              onValueChange={(value) =>
+                onGuestChange(index, { ...guest, sex: value as 'M' | 'F' | 'otro' })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="M">Masculino</SelectItem>
+                <SelectItem value="F">Femenino</SelectItem>
+                <SelectItem value="otro">Otro</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+

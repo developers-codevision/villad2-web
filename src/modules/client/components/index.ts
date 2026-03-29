@@ -7,3 +7,4 @@ export { default as RefundPoliciesSection } from './RefundPoliciesSection';
 export { default as TermsAndConditionsSection } from './TermsAndConditionsSection';
 export { default as FAQSection } from './FAQSection';
 export { default as ExchangeRateSection } from './ExchangeRateSection';
+export { ReservationForm } from './reservation';
