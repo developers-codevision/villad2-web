@@ -41,6 +41,12 @@ export default function DateSelection({
 
   const handleSelect = (range: DateRange | undefined) => {
     if (range?.from && range?.to) {
+      // Prevent selecting same day or invalid ranges
+      const nights = Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24));
+      if (nights < 1) {
+        // Don't call onDateChange for invalid ranges
+        return;
+      }
       onDateChange(range.from, range.to);
     } else {
       onDateChange(range?.from, range?.to);

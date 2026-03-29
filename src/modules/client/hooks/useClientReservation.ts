@@ -111,7 +111,11 @@ export function useClientReservation(prices?: PricesResponse) {
   const isStepComplete = useCallback((): boolean => {
     switch (step) {
       case 'dates':
-        return !!formData.checkIn && !!formData.checkOut;
+        return !!(
+          formData.checkIn &&
+          formData.checkOut &&
+          calculateNights(formData.checkIn, formData.checkOut) >= 1
+        );
       case 'room':
         return !!formData.roomId;
       case 'details':
