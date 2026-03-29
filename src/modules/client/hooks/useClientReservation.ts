@@ -111,11 +111,18 @@ export function useClientReservation(prices?: PricesResponse) {
   const isStepComplete = useCallback((): boolean => {
     switch (step) {
       case 'dates':
-        return !!(
-          formData.checkIn &&
-          formData.checkOut &&
-          calculateNights(formData.checkIn, formData.checkOut) >= 1
-        );
+        if (!formData.checkIn || !formData.checkOut) return false;
+
+        const nights = calculateNights(formData.checkIn, formData.checkOut);
+        if (nights < 1) return false;
+
+        // Check that no dates in between are occupied
+        const occupiedInRange = occupiedDates.filter(dateStr => {
+          const date = new Date(dateStr + 'T00:00:00');
+          return date > formData.checkIn! && date < formData.checkOut!;
+        });
+
+        return occupiedInRange.length === 0;
       case 'room':
         return !!formData.roomId;
       case 'details':
@@ -131,7 +138,7 @@ export function useClientReservation(prices?: PricesResponse) {
       default:
         return false;
     }
-  }, [step, formData]);
+  }, [step, formData, occupiedDates]);
 
   // ============================================
   // FORM MANAGEMENT
@@ -165,13 +172,24 @@ export function useClientReservation(prices?: PricesResponse) {
         setValidationErrors(['La reserva debe ser de al menos una noche']);
         return;
       }
+
+      // Validate that no dates in between are occupied
+      const occupiedInRange = occupiedDates.filter(dateStr => {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date > checkIn && date < checkOut;
+      });
+
+      if (occupiedInRange.length > 0) {
+        setValidationErrors(['No se pueden realizar reservas con fechas ocupadas en el medio. Por favor selecciona un rango continuo disponible.']);
+        return;
+      }
     }
 
     // Clear any previous validation errors
     setValidationErrors([]);
 
     setFormData(prev => ({ ...prev, checkIn, checkOut }));
-  }, []);
+  }, [occupiedDates]);
 
   /**
    * Select room
