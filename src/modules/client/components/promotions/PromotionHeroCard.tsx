@@ -85,6 +85,18 @@ export default function PromotionHeroCard({ promotion }: Props) {
               })}
             </div>
           )}
+
+          <div className="pt-2 mt-4">
+            <a
+              href={`https://wa.me/5350970588?text=Hola,%20quisiera%20reservar%20la%20promoción%20${encodeURIComponent(promotion.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full border border-border bg-transparent hover:bg-[#25D366] hover:border-[#25D366] text-foreground hover:text-white transition-all duration-300 font-medium text-sm"
+            >
+              <img src="/whatsapp.png" alt="WhatsApp" className="w-4 h-4 dark:invert group-hover:brightness-0 group-hover:invert transition-all" />
+              Reservar
+            </a>
+          </div>
         </div>
       </div>
 
@@ -108,57 +120,71 @@ export default function PromotionHeroCard({ promotion }: Props) {
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/40 to-transparent" />
 
         {/* Content */}
-        <div className="relative z-10 p-12 w-full max-w-3xl">
-          <h2 className="text-4xl font-bold text-white mb-3 leading-tight">
-            {promotion.title}
-          </h2>
-          {promotion.description && (
-            <p className="text-white/80 text-lg mb-6 line-clamp-3">
-              {promotion.description}
-            </p>
-          )}
+        <div className="relative z-10 p-12 w-full flex flex-row items-end justify-between gap-6">
+          <div className="max-w-3xl">
+            <h2 className="text-4xl font-bold text-white mb-3 leading-tight">
+              {promotion.title}
+            </h2>
+            {promotion.description && (
+              <p className="text-white/80 text-lg mb-6 line-clamp-3">
+                {promotion.description}
+              </p>
+            )}
 
-          <div className="flex flex-wrap gap-4 text-white/90 text-sm">
-            {(promotion.minPeople || promotion.maxPeople) && (
-              <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <Users size={14} />
-                {promotion.maxPeople
-                  ? `Hasta ${promotion.maxPeople} personas`
-                  : `Desde ${promotion.minPeople} personas`}
-              </span>
-            )}
-            {promotion.checkInTime && (
-              <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <ArrowRight size={14} />
-                Entrada: {formatTimeToAmPm(promotion.checkInTime)}
-              </span>
-            )}
-            {promotion.checkOutTime && (
-              <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <LogOut size={14} />
-                Salida: {formatTimeToAmPm(promotion.checkOutTime)}
-              </span>
-            )}
-            {promotion.time && (
-              <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                <Clock size={14} />
-                {formatTimeToAmPm(promotion.time) || promotion.time}
-              </span>
+            <div className="flex flex-wrap gap-4 text-white/90 text-sm">
+              {(promotion.minPeople || promotion.maxPeople) && (
+                <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <Users size={14} />
+                  {promotion.maxPeople
+                    ? `Hasta ${promotion.maxPeople} personas`
+                    : `Desde ${promotion.minPeople} personas`}
+                </span>
+              )}
+              {promotion.checkInTime && (
+                <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <ArrowRight size={14} />
+                  Entrada: {formatTimeToAmPm(promotion.checkInTime)}
+                </span>
+              )}
+              {promotion.checkOutTime && (
+                <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <LogOut size={14} />
+                  Salida: {formatTimeToAmPm(promotion.checkOutTime)}
+                </span>
+              )}
+              {promotion.time && (
+                <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <Clock size={14} />
+                  {formatTimeToAmPm(promotion.time) || promotion.time}
+                </span>
+              )}
+            </div>
+
+            {services.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-5">
+                {services.map((service, idx) => {
+                  const clean = typeof service === 'string' ? service.replace(/[[\]"]/g, '').trim() : service;
+                  return (
+                    <span key={idx} className="px-3 py-1 rounded-full border border-white/20 text-white/90 text-xs backdrop-blur-sm">
+                      {clean}
+                    </span>
+                  );
+                })}
+              </div>
             )}
           </div>
 
-          {services.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-5">
-              {services.map((service, idx) => {
-                const clean = typeof service === 'string' ? service.replace(/[[\]"]/g, '').trim() : service;
-                return (
-                  <span key={idx} className="px-3 py-1 rounded-full border border-white/20 text-white/90 text-xs backdrop-blur-sm">
-                    {clean}
-                  </span>
-                );
-              })}
-            </div>
-          )}
+          <div className="shrink-0">
+            <a
+              href={`https://wa.me/5350970588?text=Hola,%20quisiera%20reservar%20la%20promoción%20${encodeURIComponent(promotion.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-full bg-green-700/40 hover:bg-[#25D366] border border-white/20 hover:border-[#25D366] text-white transition-all duration-300 backdrop-blur-sm text-sm font-medium"
+            >
+              <img src="/whatsapp.png" alt="WhatsApp" className="w-8 h-8 " />
+              Reservar
+            </a>
+          </div>
         </div>
       </div>
 
