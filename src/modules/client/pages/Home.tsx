@@ -83,8 +83,8 @@ const Index = () => {
             className="w-full h-full object-cover object-center scale-105"
           />
           {/* Overlay gradiente diagonal */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
         </div>
 
         {/* Contenido principal — layout vertical centrado a la izquierda */}
