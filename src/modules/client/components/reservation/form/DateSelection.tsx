@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { useToast } from '@/modules/shared/hooks/use-toast';
 
 interface DateSelectionProps {
   checkIn: Date | undefined;
@@ -23,6 +24,7 @@ export default function DateSelection({
   validationErrors = [],
 }: DateSelectionProps) {
   const [numberOfMonths, setNumberOfMonths] = useState(1);
+  const { toast } = useToast();
 
   // Ajustar cantidad de meses según tamaño de pantalla
   useEffect(() => {
@@ -67,11 +69,48 @@ export default function DateSelection({
     );
   };
 
+  const handleCalendarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+
+    // If we clicked on a TD, look for button inside
+    let button: HTMLButtonElement | null;
+
+    if (target.tagName === 'TD') {
+      button = target.querySelector('button');
+    } else if (target.tagName === 'BUTTON') {
+      button = target as HTMLButtonElement;
+    } else {
+      button = target.closest('button') as HTMLButtonElement;
+    }
+
+    if (button) {
+      // Check if button is disabled (using HTML disabled attribute)
+      const isDisabled = button.disabled;
+
+      if (isDisabled) {
+        if (!selectedRoomId) {
+          toast({
+            title: "Habitación requerida",
+            description: "Por favor, seleccione una habitación primero.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        toast({
+          title: "Día ocupado",
+          description: "Ese día está ocupado, por favor probar con otra habitación.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   return (
     <div className="space-y-2">
       <Label className="text-base">Fechas de estancia</Label>
       <div className={`border rounded-lg p-4 md:p-6 w-full overflow-hidden ${hasDateError() ? 'border-red-500' : 'border-border'}`}>
-        <div className="w-full flex justify-center -mx-4 md:-mx-6 px-4 md:px-6">
+        <div className="w-full flex justify-center -mx-4 md:-mx-6 px-4 md:px-6" onClick={handleCalendarClick}>
           <div className="w-full max-w-full overflow-x-auto">
             <Calendar
               mode="range"
