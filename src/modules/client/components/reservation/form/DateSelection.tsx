@@ -40,16 +40,22 @@ export default function DateSelection({
   }, []);
 
   const handleSelect = (range: DateRange | undefined) => {
-    if (range?.from && range?.to) {
+    if (!range) {
+      onDateChange(undefined, undefined);
+      return;
+    }
+
+    if (range.from && range.to) {
       // Prevent selecting same day or invalid ranges
       const nights = Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24));
       if (nights < 1) {
-        // Don't call onDateChange for invalid ranges
+        // If clicking the same date or invalid range, just clear it to allow deselection
+        onDateChange(undefined, undefined);
         return;
       }
       onDateChange(range.from, range.to);
     } else {
-      onDateChange(range?.from, range?.to);
+      onDateChange(range.from, range.to);
     }
   };
 
