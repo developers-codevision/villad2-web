@@ -74,47 +74,84 @@ const Index = () => {
       </div>
 
       {/* DESK hero */}
-      <section className="relative min-h-[100vh] hidden desk:flex items-center">
-        {/* Imagen de fondo completa sin overlay */}
-        <div
-          className="absolute inset-0 bg-center mt-10"
-          style={{
-            backgroundImage: "url('/Foto-portada-no1-editada-scaled.webp')",
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        />
-
-        {/* Título - Esquina superior izquierda */}
-        <div className="absolute top-24 left-8 z-10">
-          <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
-            Hostal Boutique{" "}
-            <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
-          </h1>
+      <section className="relative min-h-[100vh] hidden desk:flex items-center overflow-hidden">
+        {/* Imagen de fondo con overlay cinematográfico */}
+        <div className="absolute inset-0">
+          <img
+            src="/Foto-portada-no1-editada-scaled.webp"
+            alt="Hostal Villa D2"
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          {/* Overlay gradiente diagonal */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
         </div>
 
-        {/* Logo - Esquina superior derecha (sin fondo) */}
-        <div className="absolute top-24 right-8 z-10">
-          <img src={logo} alt="Villa D2" className="h-24 lg:h-28 w-auto drop-shadow-2xl" />
-        </div>
+        {/* Contenido principal — layout vertical centrado a la izquierda */}
+        <div className="relative z-10 container mx-auto px-8 lg:px-16 flex items-center justify-between w-full">
+          {/* Columna izquierda: texto + CTA */}
+          <div className="max-w-2xl space-y-8">
+            {/* Etiqueta superior */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm">
+              <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-xs font-medium tracking-widest uppercase text-primary">
+                Hostal Boutique
+              </span>
+            </div>
 
-        {/* Descripción */}
-        <div className="absolute bottom-12 right-8 z-10 max-w-xl">
-          <div className="bg-accent/40 backdrop-blur-sm border-l-4 border-primary px-6 py-4 rounded-r-lg">
-            <p className="text-lg lg:text-xl">
-              {HOSTAL.tagline} — {HOSTAL.description}
+            {/* Título principal */}
+            <h1 className="text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[0.9] tracking-tight text-white">
+              {HOSTAL.name}
+            </h1>
+
+            {/* Línea decorativa */}
+            <div className="flex items-center gap-4">
+              <div className="h-[2px] w-16 bg-primary" />
+              <div className="h-[2px] w-8 bg-primary/40" />
+            </div>
+
+            {/* Descripción */}
+            <p className="text-lg lg:text-xl text-white/80 leading-relaxed max-w-lg">
+              {HOSTAL.tagline}
             </p>
+            <p className="text-base text-white/60 leading-relaxed max-w-md">
+              {HOSTAL.description}
+            </p>
+
+            {/* CTA */}
+            <div className="flex items-center gap-4 pt-2">
+              <Link to="/reservas">
+                <Button size="lg" className="text-lg px-10 py-7 font-bold shadow-2xl rounded-full">
+                  Reservar Ahora
+                </Button>
+              </Link>
+              <Link to="/habitaciones">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-7 font-semibold rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm">
+                  Ver Habitaciones
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Columna derecha: Logo flotante con efecto glow */}
+          <div className="hidden lg:flex flex-col items-center gap-6">
+            <div className="relative">
+              <div className="absolute inset-0 blur-3xl bg-primary/20 rounded-full scale-150" />
+              <img
+                src={logo}
+                alt="Villa D2"
+                className="relative h-36 xl:h-44 w-auto drop-shadow-2xl"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Botón - Centro inferior */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
-          <Link to="/reservas">
-            <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
-              Reservar Ahora
-            </Button>
-          </Link>
+        {/* Indicador de scroll */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+          <span className="text-xs text-white/40 tracking-widest uppercase">Descubre más</span>
+          <div className="w-5 h-8 rounded-full border-2 border-white/30 flex justify-center pt-1.5">
+            <div className="w-1 h-2 rounded-full bg-white/60 animate-bounce" />
+          </div>
         </div>
       </section>
 
