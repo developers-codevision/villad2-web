@@ -111,10 +111,10 @@ const Index = () => {
             </div>
 
             {/* Descripción */}
-            <p className="text-lg lg:text-xl text-white/80 leading-relaxed max-w-lg">
+            <p className="text-xl lg:text-2xl text-white font-semibold leading-relaxed max-w-lg drop-shadow-lg">
               {HOSTAL.tagline}
             </p>
-            <p className="text-base text-white/60 leading-relaxed max-w-md">
+            <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-md drop-shadow-md font-medium">
               {HOSTAL.description}
             </p>
 
@@ -126,7 +126,7 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/habitaciones">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-7 font-semibold rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-7 font-semibold rounded-full border-2 border-white text-white hover:bg-white/20 hover:text-white backdrop-blur-sm">
                   Ver Habitaciones
                 </Button>
               </Link>
