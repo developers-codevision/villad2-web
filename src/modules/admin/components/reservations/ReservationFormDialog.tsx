@@ -64,7 +64,7 @@ export function ReservationFormDialog({
     if (!open) {
       setBookingMode('range');
     }
-  }, [open, isEditing]);
+  }, [open, isEditing, formData.checkIn, formData.checkOut]);
 
   // Switch mode and clear date fields
   const handleModeChange = (mode: BookingMode) => {
@@ -308,6 +308,16 @@ export function ReservationFormDialog({
               </div>
             </div>
 
+            {/* CI / Passport field (admin only) */}
+            <div className="space-y-2">
+              <Label>CI o Pasaporte</Label>
+              <Input
+                placeholder="12345678"
+                value={formData.guestIdNumber || ''}
+                onChange={e => onFormChange('guestIdNumber', e.target.value)}
+              />
+            </div>
+
             <div className="space-y-2">
               <Label>Sexo</Label>
               <Select
@@ -488,6 +498,58 @@ export function ReservationFormDialog({
               value={formData.notes}
               onChange={e => onFormChange('notes', e.target.value)}
             />
+          </div>
+
+          {/* Extra Services */}
+          <div className="space-y-4 border-t pt-4 mt-4">
+            <h3 className="font-semibold">Servicios Adicionales</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Transport Services */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium text-muted-foreground">Transporte</h4>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="transferOneWay-admin"
+                    checked={formData.transferOneWay}
+                    onCheckedChange={(checked) => onFormChange('transferOneWay', !!checked)}
+                  />
+                  <Label htmlFor="transferOneWay-admin" className="font-normal cursor-pointer">Recogida del aeropuerto</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="transferRoundTrip-admin"
+                    checked={formData.transferRoundTrip}
+                    onCheckedChange={(checked) => onFormChange('transferRoundTrip', !!checked)}
+                  />
+                  <Label htmlFor="transferRoundTrip-admin" className="font-normal cursor-pointer">Retorno al aeropuerto</Label>
+                </div>
+              </div>
+
+              {/* Breakfasts and other Arrival/Departure settings */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium text-muted-foreground">Estancia</h4>
+                <div className="space-y-2">
+                  <Label htmlFor="breakfasts-admin">Desayunos Incluidos</Label>
+                  <Select
+                    value={(formData.breakfasts || 0).toString()}
+                    onValueChange={(val) => onFormChange('breakfasts', parseInt(val))}
+                  >
+                    <SelectTrigger id="breakfasts-admin">
+                      <SelectValue placeholder="Seleccionar cantidad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">Sin desayunos</SelectItem>
+                      {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                        <SelectItem key={num} value={num.toString()}>
+                          {num} {num === 1 ? 'desayuno' : 'desayunos'}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -195,9 +195,21 @@ export function useReservationManagement() {
    */
   const saveReservation = useCallback(async () => {
     // Validate form
-    const validation = validateReservationForm(formData);
+    const validation = validateReservationForm(formData, 'admin'); // Pass admin explicitly to match types
     if (!validation.valid) {
-      validation.errors.forEach(error => toast.error(error));
+      const hasPhoneFormatError = validation.errors.some(error =>
+        error.includes('formato internacional válido') || error.includes('+51 987 654 321')
+      );
+
+      if (hasPhoneFormatError) {
+        toast.error('Por favor, ingrese un número de teléfono válido en formato internacional (incluyendo el "+").');
+      }
+
+      validation.errors.forEach(error => {
+         if (!error.includes('formato internacional válido') && !error.includes('+51 987 654 321')) {
+             toast.error(error);
+         }
+      });
       return;
     }
 
@@ -333,7 +345,8 @@ export function useReservationManagement() {
   // ============================================
 
   // --- canSubmit: validación centralizada ---
-  const canSubmit = validateReservationForm(formData, 'admin').valid;
+  // Allow submitting so we can show validation errors (like phone format) on click
+  const canSubmit = !formState.saving;
 
   return {
     // State

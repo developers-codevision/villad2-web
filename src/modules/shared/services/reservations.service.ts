@@ -35,7 +35,7 @@ export const reservationsService = {
    * Create a new reservation
    */
   async create(dto: CreateReservationDto): Promise<Reservation> {
-    return apiClient.post<Reservation>('/reservations', dto);
+    return authenticatedApiClient.post<Reservation>('/reservations', dto);
   },
 
   /**
