@@ -262,6 +262,15 @@ export function useClientReservation(prices?: PricesResponse) {
       const validation = validateReservationForm(formData, 'client');
       if (!validation.valid) {
         setValidationErrors(validation.errors);
+
+        // Custom toast for incorrect phone format (having +)
+        const hasPhoneFormatError = validation.errors.some(error =>
+          error.includes('formato internacional válido') || error.includes('+51 987 654 321')
+        );
+         if (hasPhoneFormatError) {
+  toast.error('Por favor, ingrese un número de teléfono válido en formato internacional (incluyendo el "+").');
+}
+
         // Scroll to top to show errors
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;

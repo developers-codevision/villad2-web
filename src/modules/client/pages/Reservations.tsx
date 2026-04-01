@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CheckCircle } from "lucide-react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { Button } from "@/modules/shared/components/ui/button";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";

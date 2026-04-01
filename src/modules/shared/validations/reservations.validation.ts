@@ -1,6 +1,7 @@
 // Shared Reservations Validations
 
 import { ReservationFormDataBase, ClientReservationFormData } from '@/modules/shared/types/reservations.types';
+import { isPhoneNumber } from 'class-validator';
 
 /**
  * Check if two dates refer to the same calendar day
@@ -58,6 +59,11 @@ export function validateReservationForm(
   // ── Email validation (only if provided) ─────────────────────────────────
   if (formData.guestEmail && !isValidEmail(formData.guestEmail)) {
     errors.push('Email inválido');
+  }
+
+  // ── Phone validation ─────────────────────────────────────────────────────
+  if (formData.guestPhone && !isPhoneNumber(formData.guestPhone)) {
+    errors.push('El teléfono debe tener un formato internacional válido (ej. +51 987 654 321)');
   }
 
   // ── Date / time validation ───────────────────────────────────────────────
