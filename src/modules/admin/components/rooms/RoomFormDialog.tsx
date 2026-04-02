@@ -175,7 +175,7 @@ export function RoomFormDialog({
           {/* Room Amenities */}
           <div className="space-y-2">
             <Label>
-              Amenities habitación{' '}
+              La habitación incluye :{' '}
               <span className="text-muted-foreground text-xs">(separados por coma)</span>
             </Label>
             <Input
@@ -188,7 +188,7 @@ export function RoomFormDialog({
           {/* Bathroom Amenities */}
           <div className="space-y-2">
             <Label>
-              Amenities baño{' '}
+              El baño incluye :{' '}
               <span className="text-muted-foreground text-xs">(separados por coma)</span>
             </Label>
             <Input

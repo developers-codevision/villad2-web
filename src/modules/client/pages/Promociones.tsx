@@ -5,10 +5,12 @@ import Footer from "@/modules/shared/components/Footer";
 import { promotionsService } from "@/modules/shared/services";
 import { Promotion, PromotionStatus } from "@/modules/shared/types/api.types";
 import { PromotionHeroCard } from "@/modules/client/components/promotions";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function Promociones() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadPromotions = async () => {
@@ -38,14 +40,13 @@ export default function Promociones() {
           {/* Header */}
           <div className="text-center mb-14">
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
-              Ofertas exclusivas
+              {t("promo.exclusive")}
             </span>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-              Promociones Especiales
+              {t("promo.title")}
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-              Descubre nuestras ofertas diseñadas para brindarte la mejor experiencia.
-              Aprovecha estas promociones limitadas y vive momentos inolvidables.
+              {t("promo.subtitle")}
             </p>
           </div>
 
@@ -58,8 +59,8 @@ export default function Promociones() {
           ) : promotions.length === 0 ? (
             <div className="border border-dashed border-border rounded-2xl p-16 flex flex-col items-center justify-center text-muted-foreground">
               <Tag size={56} className="mb-5 opacity-20" />
-              <p className="font-semibold text-lg">Sin promociones disponibles</p>
-              <p className="text-sm mt-2">Vuelve más tarde para ver nuestras nuevas ofertas.</p>
+              <p className="font-semibold text-lg">{t("promo.none")}</p>
+              <p className="text-sm mt-2">{t("promo.noneDesc")}</p>
             </div>
           ) : (
             <div className="space-y-10">

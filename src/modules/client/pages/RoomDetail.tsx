@@ -13,11 +13,14 @@ import { usePrices } from '@/modules/shared/hooks';
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { RoomStatus } from "@/modules/shared/types/api.types";
 import { useEffect } from "react";
+import { useLanguage } from "@/modules/client/contexts";
+import { parseBilingualText, parseBilingualList } from "@/modules/client/utils/bilingualHelpers";
 
 export default function RoomDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { room, loading, error } = useRoom(id ? parseInt(id) : 0);
+  const { language, t } = useLanguage();
 
   // Usar el mismo hook de reservas para una única fuente de verdad
   const { prices } = usePrices();
@@ -46,8 +49,8 @@ export default function RoomDetail() {
         <Navbar />
         <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
           <div>
-            <h1 className="text-2xl font-bold mb-4">{error || "Habitación no encontrada"}</h1>
-            <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones</Button>
+            <h1 className="text-2xl font-bold mb-4">{error || t("room.notFound")}</h1>
+            <Button onClick={() => navigate("/habitaciones")}>{t("room.viewRooms")}</Button>
           </div>
         </main>
         <Footer />
@@ -61,9 +64,9 @@ export default function RoomDetail() {
         <Navbar />
         <main className="pb-20 px-4 text-center flex items-center justify-center min-h-screen pt-16">
           <div>
-            <h1 className="text-2xl font-bold mb-4">Esta habitación no está disponible</h1>
-            <p className="text-muted-foreground mb-4">La habitación que buscas no se encuentra disponible en este momento.</p>
-            <Button onClick={() => navigate("/habitaciones")}>Ver habitaciones disponibles</Button>
+            <h1 className="text-2xl font-bold mb-4">{t("room.notAvailable")}</h1>
+            <p className="text-muted-foreground mb-4">{t("room.notAvailableDesc")}</p>
+            <Button onClick={() => navigate("/habitaciones")}>{t("room.viewAvailable")}</Button>
           </div>
         </main>
         <Footer />
@@ -80,6 +83,15 @@ export default function RoomDetail() {
   // Parse additional photos and convert to full URLs
   const additionalPhotos = parsePhotos(room.additionalPhotos).map(photo => roomsService.getMediaUrl(photo));
   const capacity = room.baseCapacity + room.extraCapacity;
+  
+  // Parse bilingual description
+  const description = parseBilingualText(room.description, language);
+  
+  // Parse bilingual amenities
+  const roomAmenitiesRaw = parseAmenities(room.roomAmenities);
+  const bathroomAmenitiesRaw = parseAmenities(room.bathroomAmenities);
+  const roomAmenities = parseBilingualList(roomAmenitiesRaw.join(','), language);
+  const bathroomAmenities = parseBilingualList(bathroomAmenitiesRaw.join(','), language);
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,14 +114,14 @@ export default function RoomDetail() {
                 className="text-white/80 hover:text-white hover:bg-white/10 mb-4"
                 onClick={() => navigate("/habitaciones")}
               >
-                <ChevronLeft size={16} /> Todas las habitaciones
+                <ChevronLeft size={16} /> {t("room.allRooms")}
               </Button>
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{room.name}</h1>
-              <p className="text-white/90 text-lg max-w-2xl">{room.description}</p>
+              <p className="text-white/90 text-lg max-w-2xl">{description}</p>
               <div className="flex items-center gap-4 mt-4">
 
                 <span className="flex items-center gap-1 text-white/80">
-                  <Users size={16} /> Hasta {capacity} {capacity === 1 ? "persona" : "personas"}
+                  <Users size={16} /> {t("room.upTo")} {capacity} {capacity === 1 ? t("room.person") : t("room.persons")}
                 </span>
               </div>
             </div>
@@ -119,48 +131,42 @@ export default function RoomDetail() {
         <div className="container mx-auto px-4 mt-12">
           {/* Amenities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {(() => {
-              const roomAmenities = parseAmenities(room.roomAmenities);
-              return roomAmenities.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <BedDouble size={22} className="text-primary" /> La habitación cuenta con
-                  </h2>
-                  <div className="grid grid-cols-2 gap-3">
-                    {roomAmenities.map((a, index) => (
-                      <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
-                        <CheckCircle size={16} className="text-primary shrink-0" />
-                        <span className="text-sm font-medium">{a}</span>
-                      </div>
-                    ))}
-                  </div>
+            {roomAmenities.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                  <BedDouble size={22} className="text-primary" /> {t("room.includes")}
+                </h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {roomAmenities.map((a, index) => (
+                    <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
+                      <CheckCircle size={16} className="text-primary shrink-0" />
+                      <span className="text-sm font-medium">{a}</span>
+                    </div>
+                  ))}
                 </div>
-              );
-            })()}
-            {(() => {
-              const bathroomAmenities = parseAmenities(room.bathroomAmenities);
-              return bathroomAmenities.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <Bath size={22} className="text-primary" /> El baño cuenta con
-                  </h2>
-                  <div className="grid grid-cols-2 gap-3">
-                    {bathroomAmenities.map((a, index) => (
-                      <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
-                        <CheckCircle size={16} className="text-primary shrink-0" />
-                        <span className="text-sm font-medium">{a}</span>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+            )}
+            {bathroomAmenities.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                  <Bath size={22} className="text-primary" /> {t("room.bathroom")}
+                </h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {bathroomAmenities.map((a, index) => (
+                    <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
+                      <CheckCircle size={16} className="text-primary shrink-0" />
+                      <span className="text-sm font-medium">{a}</span>
+                    </div>
+                  ))}
                 </div>
-              );
-            })()}
+              </div>
+            )}
           </div>
 
           {/* Booking form - Usar ReservationForm con calendario integrado */}
           <section className="mb-16">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-              Reserva esta <span className="text-primary">Habitación</span>
+              {t("room.bookRoom")} <span className="text-primary">{t("room.room")}</span>
             </h2>
             {/* ReservationForm incluye el calendario y toda la lógica de reserva */}
             <ReservationForm hook={reservationHook} rooms={room ? [room] : []} singleRoomId={room?.id} />
@@ -170,7 +176,7 @@ export default function RoomDetail() {
           {additionalPhotos.length > 0 && (
             <section className="mb-16">
               <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-                Más <span className="text-primary">Fotos</span>
+                {t("room.morePhotos")} <span className="text-primary">{t("room.photos")}</span>
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {additionalPhotos.map((img, i) => (
@@ -190,14 +196,14 @@ export default function RoomDetail() {
           {/* Services CTA */}
           <section className="text-center py-12 mb-8 bg-accent/30 rounded-2xl">
             <h2 className="text-2xl md:text-3xl font-bold mb-3">
-              Descubre nuestros <span className="text-primary">Servicios</span>
+              {t("room.services")} <span className="text-primary">{t("nav.services")}</span>
             </h2>
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-              Tours guiados, alquiler de bicicletas, traslados al aeropuerto y mucho más para que tu estancia sea perfecta.
+              {t("room.servicesDesc")}
             </p>
             <Link to="/servicios">
               <Button size="lg" className="font-semibold text-lg px-8">
-                Explorar Servicios <ArrowRight size={18} />
+                {t("room.exploreServices")} <ArrowRight size={18} />
               </Button>
             </Link>
           </section>

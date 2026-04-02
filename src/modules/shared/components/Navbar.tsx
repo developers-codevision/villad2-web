@@ -1,24 +1,31 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { HOSTAL } from "@/modules/shared/data/hostal";
 import logo from "@/assets/logo.png";
 import SocialLinks from "./SocialLinks";
+import { useLanguage } from "@/modules/client/contexts";
 
-const links = [
-	{ to: "/", label: "Inicio" },
-	{ to: "/habitaciones", label: "Habitaciones" },
-	{ to: "/servicios", label: "Servicios" },
-	{ to: "/promociones", label: "Promociones" },
-	{ to: "/reservas", label: "Reservas" },
-	{ to: "/resenas", label: "Reseñas" },
-	{ to: "/lugares-interes", label: "Lugares de Interés" },
+const getLinks = (t: (key: string) => string) => [
+	{ to: "/", label: t("nav.home") },
+	{ to: "/habitaciones", label: t("nav.rooms") },
+	{ to: "/servicios", label: t("nav.services") },
+	{ to: "/promociones", label: t("nav.promotions") },
+	{ to: "/reservas", label: t("nav.reservations") },
+	{ to: "/resenas", label: t("nav.reviews") },
+	{ to: "/lugares-interes", label: t("nav.places") },
 ];
 
 export default function Navbar() {
 	const [open, setOpen] = useState(false);
 	const location = useLocation();
+	const { language, setLanguage, t } = useLanguage();
+	const links = getLinks(t);
+
+	const toggleLanguage = () => {
+		setLanguage(language === 'es' ? 'en' : 'es');
+	};
 
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -57,7 +64,7 @@ export default function Navbar() {
 					))}
 				</ul>
 
-				{/* Columna derecha — redes + botón */}
+				{/* Columna derecha — redes + idioma + botón */}
 				<div className="flex items-center justify-end gap-3">
 					<SocialLinks
 						facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
@@ -65,8 +72,16 @@ export default function Navbar() {
 						youtubeUrl="https://youtube.com/villad2"
 						whatsappUrl="https://wa.me/5350970588"
 					/>
+					<button
+						onClick={toggleLanguage}
+						className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-accent transition-colors"
+						aria-label="Cambiar idioma"
+					>
+						<Languages size={18} />
+						<span className="text-sm font-medium uppercase">{language}</span>
+					</button>
 					<Link to="/reservas">
-						<Button className="font-semibold">Reservar Ahora</Button>
+						<Button className="font-semibold">{t("nav.bookNow")}</Button>
 					</Link>
 				</div>
 			</div>
@@ -96,8 +111,18 @@ export default function Navbar() {
 						))}
 						<li>
 							<Link to="/reservas" onClick={() => setOpen(false)}>
-								<Button className="w-full font-semibold">Reservar Ahora</Button>
+								<Button className="w-full font-semibold">{t("nav.bookNow")}</Button>
 							</Link>
+						</li>
+						<li>
+							<button
+								onClick={toggleLanguage}
+								className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md bg-accent hover:bg-accent/80 transition-colors"
+								aria-label="Cambiar idioma"
+							>
+								<Languages size={18} />
+								<span className="text-sm font-medium">{language === 'es' ? 'Español' : 'English'}</span>
+							</button>
 						</li>
 						<li className="flex justify-center pt-2">
 							<SocialLinks
