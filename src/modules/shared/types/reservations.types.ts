@@ -13,11 +13,11 @@ export interface ReservationFormDataBase {
   checkInTime?: string;
   checkOutTime?: string;
   guestFirstName: string;
-  guestLastName: string;
-  guestEmail: string;
-  guestPhone: string;
+  guestLastName: string | undefined;
+  guestEmail: string | undefined;
+  guestPhone: string | undefined;
   guestSex: 'M' | 'F' | 'otro' | undefined;
-  guestIdNumber: string;
+  guestIdNumber: string | undefined;
   baseGuestsCount: number;
   extraGuestsCount: number;
   totalGuests: number;

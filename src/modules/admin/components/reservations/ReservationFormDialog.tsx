@@ -302,8 +302,8 @@ export function ReservationFormDialog({
                 <Label>Apellido *</Label>
                 <Input
                   placeholder="Pérez"
-                  value={formData.guestLastName}
-                  onChange={e => onFormChange('guestLastName', e.target.value)}
+                  value={formData.guestLastName || ''}
+                  onChange={e => onFormChange('guestLastName', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
               </div>
             </div>
@@ -314,15 +314,15 @@ export function ReservationFormDialog({
               <Input
                 placeholder="12345678"
                 value={formData.guestIdNumber || ''}
-                onChange={e => onFormChange('guestIdNumber', e.target.value)}
+                onChange={e => onFormChange('guestIdNumber', e.target.value.trim() === '' ? undefined : e.target.value)}
               />
             </div>
 
             <div className="space-y-2">
               <Label>Sexo</Label>
               <Select
-                value={formData.guestSex}
-                onValueChange={value => onFormChange('guestSex', value as 'M' | 'F' | 'otro')}
+                value={formData.guestSex || ''}
+                onValueChange={value => onFormChange('guestSex', value === '' ? undefined : value as 'M' | 'F' | 'otro')}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -341,8 +341,8 @@ export function ReservationFormDialog({
                 <Input
                   type="email"
                   placeholder="juan@email.com"
-                  value={formData.guestEmail}
-                  onChange={e => onFormChange('guestEmail', e.target.value)}
+                  value={formData.guestEmail || ''}
+                  onChange={e => onFormChange('guestEmail', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -350,8 +350,8 @@ export function ReservationFormDialog({
                 <Input
                   type="tel"
                   placeholder="+51 987 654 321"
-                  value={formData.guestPhone}
-                  onChange={e => onFormChange('guestPhone', e.target.value)}
+                  value={formData.guestPhone || ''}
+                  onChange={e => onFormChange('guestPhone', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
               </div>
             </div>
