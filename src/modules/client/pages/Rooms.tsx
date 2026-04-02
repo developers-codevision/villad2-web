@@ -1,9 +1,11 @@
 import { Navbar, Footer } from "@/modules/shared/components";
 import { RoomCard, RoomCardSkeleton } from "@/modules/client/components";
 import { useRooms } from "@/modules/client/hooks/useRooms";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function Rooms() {
   const { availableRooms, loading, error } = useRooms();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -11,10 +13,10 @@ export default function Rooms() {
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Nuestras <span className="text-primary">Habitaciones</span>
+            {t("rooms.title")}
           </h1>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Encuentra la habitación ideal para tu estancia. Todas incluyen WiFi gratuito y desayuno.
+            {t("rooms.subtitle")}
           </p>
 
           {loading && (
@@ -28,13 +30,17 @@ export default function Rooms() {
           {error && (
             <div className="text-center py-12">
               <p className="text-destructive mb-4">{error}</p>
-              <p className="text-muted-foreground">Por favor, intenta nuevamente más tarde.</p>
+              <p className="text-muted-foreground">
+                {t("rooms.error")}
+              </p>
             </div>
           )}
 
           {!loading && !error && availableRooms.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No hay habitaciones disponibles en este momento.</p>
+              <p className="text-muted-foreground">
+                {t("rooms.noRooms")}
+              </p>
             </div>
           )}
 

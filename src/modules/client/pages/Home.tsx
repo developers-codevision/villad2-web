@@ -18,6 +18,8 @@ import logo from "@/assets/logo.png";
 import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
 import ReceptionSection from "@/modules/client/components/ReceptionSection";
 import ExchangeRateSection from "@/modules/client/components/ExchangeRateSection";
+import { useLanguage } from "@/modules/client/contexts";
+import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 
 const Index = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -25,6 +27,7 @@ const Index = () => {
   const [isMapVisible, setIsMapVisible] = useState(false);
   const [userHasInteractedWithMap, setUserHasInteractedWithMap] = useState(false);
   const mapSectionRef = useRef<HTMLDivElement>(null);
+  const { t, language } = useLanguage();
 
   // Cargar reseñas aprobadas desde la API
   useEffect(() => {
@@ -66,7 +69,7 @@ const Index = () => {
           {/* Título sobre la imagen */}
           <div className="absolute inset-0 flex items-start p-4 pt-3">
             <h1 className="text-2xl font-extrabold leading-tight text-white drop-shadow-2xl">
-              Hostal Boutique{" "}
+              {t("home.heroTitle")}{" "}
               <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
             </h1>
           </div>
@@ -75,7 +78,7 @@ const Index = () => {
         <div className="flex justify-center py-5 bg-background">
           <Link to="/reservas">
             <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
-              Reservar Ahora
+              {t("home.bookNow")}
             </Button>
           </Link>
         </div>
@@ -97,7 +100,7 @@ const Index = () => {
         {/* Título - Esquina superior izquierda */}
         <div className="absolute top-24 left-8 z-10">
           <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
-            Hostal Boutique{" "}
+            {t("home.heroTitle")}{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
         </div>
@@ -119,7 +122,7 @@ const Index = () => {
         <div className="absolute bottom-12 right-8 z-10 max-w-xl">
           <div className="bg-[#00ffdd] border-l-4 border-primary px-6 py-4 rounded-r-lg">
             <p className="text-lg lg:text-xl">
-              {HOSTAL.tagline}
+              {parseBilingualText(HOSTAL.tagline, language)}
             </p>
           </div>
         </div>
@@ -128,7 +131,7 @@ const Index = () => {
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
           <Link to="/reservas">
             <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
-              Reservar Ahora
+              {t("home.bookNow")}
             </Button>
           </Link>
         </div>
@@ -175,16 +178,16 @@ const Index = () => {
       <section className="py-20 px-4 bg-accent/30">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Nuestros <span className="text-primary">Servicios</span>
+            {t("home.servicesTitle")}
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Desde seguridad 24/7 hasta servicios premium, tenemos todo lo que necesitas para una estancia perfecta.
+            {t("home.servicesSubtitle")}
           </p>
 
           <div className="text-center">
             <Link to="/servicios">
               <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                Ver Todos los Servicios
+                {t("home.viewAllServices")}
               </Button>
             </Link>
           </div>
@@ -200,19 +203,19 @@ const Index = () => {
             <div className="h-px w-12 bg-primary/40" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Lo que dicen nuestros <span className="text-primary">Huéspedes</span>
+            {t("home.reviewsTitle")}
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Experiencias reales de quienes ya nos visitaron.
+            {t("home.reviewsSubtitle")}
           </p>
           {loadingReviews ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-              <p className="mt-4 text-muted-foreground">Cargando reseñas...</p>
+              <p className="mt-4 text-muted-foreground">{t("home.loadingReviews")}</p>
             </div>
           ) : reviews.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No hay reseñas aprobadas aún. ¡Sé el primero en dejar una!</p>
+              <p className="text-muted-foreground">{t("home.noReviews")}</p>
             </div>
           ) : (
             <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
@@ -261,7 +264,7 @@ const Index = () => {
                           {/* BOTTOM: hostal response */}
                           {review.response && (
                             <div className="bg-primary/5 rounded-lg p-3 border border-primary/10 mt-auto">
-                              <p className="text-xs font-semibold text-primary mb-1">💬 Respuesta del hostal</p>
+                              <p className="text-xs font-semibold text-primary mb-1">{t("home.hostalResponse")}</p>
                               <p className="text-xs text-foreground/80 line-clamp-3">{review.response}</p>
                             </div>
                           )}
@@ -281,35 +284,35 @@ const Index = () => {
             <section className="py-20 px-4">
               <div className="container mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                  <span className="text-primary">Contacto</span> y Ubicación
+                  {t("home.contactTitle")}
                 </h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
                       <div className="bg-primary/10 rounded-full p-3"><Phone className="text-primary" /></div>
                       <div>
-                        <p className="font-semibold">Teléfonos</p>
+                        <p className="font-semibold">{t("home.phones")}</p>
                         <p className="text-muted-foreground">{HOSTAL.phone}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="bg-primary/10 rounded-full p-3"><Mail className="text-primary" /></div>
                       <div>
-                        <p className="font-semibold">Email</p>
+                        <p className="font-semibold">{t("home.email")}</p>
                         <p className="text-muted-foreground">{HOSTAL.email}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="bg-primary/10 rounded-full p-3"><MessageCircle className="text-primary" /></div>
                       <div>
-                        <p className="font-semibold">WhatsApp</p>
+                        <p className="font-semibold">{t("home.whatsapp")}</p>
                         <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="bg-primary/10 rounded-full p-3"><MapPin className="text-primary" /></div>
                       <div>
-                        <p className="font-semibold">Dirección</p>
+                        <p className="font-semibold">{t("home.address")}</p>
                         <p className="text-muted-foreground">{HOSTAL.address}</p>
                       </div>
                     </div>
@@ -328,13 +331,13 @@ const Index = () => {
                         allowFullScreen
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
-                        title="Ubicación del hostal"
+                        title={t("home.mapTitle")}
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center">
                          <MapPin className="w-12 h-12 text-primary/50 mb-4" />
-                         <p className="font-semibold text-muted-foreground">Cargar mapa interactivo</p>
-                         <p className="text-sm text-muted-foreground/80">(Haz clic aquí)</p>
+                         <p className="font-semibold text-muted-foreground">{t("home.loadMap")}</p>
+                         <p className="text-sm text-muted-foreground/80">{t("home.clickHere")}</p>
                       </div>
                     )}
                   </div>

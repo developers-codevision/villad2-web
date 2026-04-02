@@ -8,9 +8,11 @@ import { useToast } from "@/modules/shared/hooks/use-toast";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { reviewsService } from "@/modules/shared/services";
+import { useLanguage } from "@/modules/client/contexts";
 
 const Reviews = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [title, setTitle] = useState("");
@@ -24,8 +26,8 @@ const Reviews = () => {
 
     if (!name.trim() || !content.trim() || stars === 0) {
       toast({
-        title: "Campos requeridos",
-        description: "Por favor completa tu nombre, puntuación y comentario.",
+        title: t("reviews.requiredFields"),
+        description: t("reviews.requiredFieldsDesc"),
         variant: "destructive",
       });
       return;
@@ -49,14 +51,14 @@ const Reviews = () => {
       setStars(0);
 
       toast({
-        title: "¡Gracias por tu reseña!",
-        description: "Tu opinión ha sido recibida, gracias por participar .",
+        title: t("reviews.successTitle"),
+        description: t("reviews.successDesc"),
       });
     } catch (error) {
       console.error("Error submitting review:", error);
       toast({
-        title: "Error",
-        description: "No pudimos procesar tu reseña. Intenta de nuevo.",
+        title: t("reviews.errorTitle"),
+        description: t("reviews.errorDesc"),
         variant: "destructive",
       });
     } finally {
@@ -73,32 +75,32 @@ const Reviews = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-3">
-              Reseñas de <span className="text-primary">Huéspedes</span>
+              {t("reviews.title")}
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto mb-4">
-              Comparte tu experiencia y ayuda a otros viajeros a conocer Villa D2.
+              {t("reviews.subtitle")}
             </p>
           </div>
 
           {/* Form */}
           <Card className="mb-12">
             <CardContent className="p-6 md:p-8">
-              <h2 className="text-xl font-semibold mb-6">Deja tu reseña</h2>
+              <h2 className="text-xl font-semibold mb-6">{t("reviews.formTitle")}</h2>
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Nombre *</label>
+                    <label className="text-sm font-medium">{t("reviews.name")}</label>
                     <Input
-                      placeholder="Tu nombre"
+                      placeholder={t("reviews.namePlaceholder")}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       disabled={isSubmitting}
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">País</label>
+                    <label className="text-sm font-medium">{t("reviews.country")}</label>
                     <Input
-                      placeholder="Tu país (opcional)"
+                      placeholder={t("reviews.countryPlaceholder")}
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
                       disabled={isSubmitting}
@@ -107,9 +109,9 @@ const Reviews = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Título</label>
+                  <label className="text-sm font-medium">{t("reviews.titleLabel")}</label>
                   <Input
-                    placeholder="Un breve título para tu reseña"
+                    placeholder={t("reviews.titlePlaceholder")}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     disabled={isSubmitting}
@@ -117,9 +119,9 @@ const Reviews = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Comentario *</label>
+                  <label className="text-sm font-medium">{t("reviews.comment")}</label>
                   <Textarea
-                    placeholder="Cuéntanos sobre tu experiencia en Villa D2..."
+                    placeholder={t("reviews.commentPlaceholder")}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     rows={4}
@@ -128,7 +130,7 @@ const Reviews = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Puntuación *</label>
+                  <label className="text-sm font-medium">{t("reviews.rating")}</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -158,7 +160,7 @@ const Reviews = () => {
                   className="font-semibold"
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  {isSubmitting ? "Enviando..." : "Publicar Reseña"}
+                  {isSubmitting ? t("reviews.submitting") : t("reviews.submit")}
                 </Button>
               </form>
             </CardContent>

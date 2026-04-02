@@ -1,16 +1,19 @@
 import * as React from "react";
 import { MapPin, ExternalLink } from "lucide-react";
 import { interestPlaces } from "@/modules/shared/data/interestPlaces";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function InterestPlacesList() {
+  const { t, language } = useLanguage();
+
   return (
     <div className="max-w-4xl mx-auto px-4">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          Lugares de Interés <span className="text-primary">Turístico</span>
+          {t("places.title")}
         </h2>
         <p className="text-muted-foreground text-center max-w-xl mx-auto">
-          Descubre los mejores sitios turísticos, culturales y recreativos cercanos a Villa D2 y contacta en recepción para organizar la excursión de tu interés.
+          {t("places.subtitle")}
         </p>
       </div>
 
@@ -37,10 +40,12 @@ export default function InterestPlacesList() {
                   rel="noopener noreferrer"
                   className="text-primary hover:underline text-sm mt-2 inline-flex items-center gap-1"
                 >
-                  Visitar sitio
+                  {t("places.visitSite")}
                 </a>
               ) : (
-                <p className="text-muted-foreground text-sm mt-2">Consultar disponibilidad</p>
+                <p className="text-muted-foreground text-sm mt-2">
+                  {t("places.checkAvailability")}
+                </p>
               )}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/modules/shared/compo
 import { Lock } from "lucide-react";
 import { useAuth } from "@/modules/shared/context";
 import { toast } from "sonner";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login, isAuthenticated, isAdmin, isLoading } = useAuth();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isLoading || !isAuthenticated) return;
@@ -30,7 +32,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!username.trim() || !password.trim()) {
-      toast.error("Introduce usuario y contraseña");
+      toast.error(t("login.errorCredentials"));
       return;
     }
 
@@ -39,9 +41,9 @@ export default function Login() {
     try {
       const response = await login({ username, password });
 
-      toast.success(`Bienvenido, ${response.user.fullName || response.user.username}!`);
+      toast.success(t("login.welcome").replace("${name}", response.user.fullName || response.user.username));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Error al iniciar sesión";
+      const message = error instanceof Error ? error.message : t("login.errorLogin");
       toast.error(message);
     } finally {
       setLoading(false);
@@ -55,37 +57,37 @@ export default function Login() {
           <div className="mx-auto mb-2 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
             <Lock className="text-primary" size={24} />
           </div>
-          <CardTitle className="text-xl">Acceso Administración</CardTitle>
+          <CardTitle className="text-xl">{t("login.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Usuario</Label>
+              <Label htmlFor="username">{t("login.username")}</Label>
               <Input
                 id="username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin"
+                placeholder={t("login.usernamePlaceholder")}
                 disabled={loading}
                 autoComplete="username"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
+              <Label htmlFor="password">{t("login.password")}</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t("login.passwordPlaceholder")}
                 disabled={loading}
                 autoComplete="current-password"
               />
             </div>
             <div className="flex flex-col gap-2">
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+                {loading ? t("login.submitting") : t("login.submit")}
               </Button>
               <Button
                 type="button"
@@ -94,7 +96,7 @@ export default function Login() {
                 disabled={loading}
                 onClick={() => navigate(-1)}
               >
-                Volver
+                {t("login.back")}
               </Button>
             </div>
           </form>

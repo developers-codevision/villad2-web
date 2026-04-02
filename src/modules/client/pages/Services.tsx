@@ -1,22 +1,26 @@
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
+import { useLanguage } from "@/modules/client/contexts";
+import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 
 export default function Services() {
+  const { language, t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Nuestros <span className="text-primary">Servicios</span>
+            {t("services.title")}
           </h1>
           <p className="text-muted-foreground text-center mb-16 max-w-xl mx-auto">
-            Todo lo que necesitas para disfrutar al máximo tu estancia.
+            {t("services.subtitle")}
           </p>
 
           {/* Basic */}
-          <h2 className="text-2xl font-bold mb-6">Seguridad del Hostal</h2>
+          <h2 className="text-2xl font-bold mb-6">{t("services.security")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {SERVICES_SECURITY.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
@@ -24,15 +28,15 @@ export default function Services() {
                   <s.icon size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{s.name}</h3>
-                  <p className="text-muted-foreground text-sm">{s.description}</p>
+                  <h3 className="font-semibold mb-1">{parseBilingualText(s.name, language)}</h3>
+                  <p className="text-muted-foreground text-sm">{parseBilingualText(s.description, language)}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Included */}
-          <h2 className="text-2xl font-bold mb-6">Servicios Incluidos</h2>
+          <h2 className="text-2xl font-bold mb-6">{t("services.included")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {SERVICES_INCLUDED.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
@@ -40,15 +44,15 @@ export default function Services() {
                   <s.icon size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{s.name}</h3>
-                  <p className="text-muted-foreground text-sm">{s.description}</p>
+                  <h3 className="font-semibold mb-1">{parseBilingualText(s.name, language)}</h3>
+                  <p className="text-muted-foreground text-sm">{parseBilingualText(s.description, language)}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Additional */}
-          <h2 className="text-2xl font-bold mb-6">$ Servicios Adicionales</h2>
+          <h2 className="text-2xl font-bold mb-6">{t("services.additional")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES_ADDITIONAL.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
@@ -56,8 +60,8 @@ export default function Services() {
                   <s.icon size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{s.name}</h3>
-                  <p className="text-muted-foreground text-sm">{s.description}</p>
+                  <h3 className="font-semibold mb-1">{parseBilingualText(s.name, language)}</h3>
+                  <p className="text-muted-foreground text-sm">{parseBilingualText(s.description, language)}</p>
                 </div>
               </div>
             ))}
