@@ -19,6 +19,7 @@ import {
   StickyNote,
   Sunrise,
   Sunset,
+  Car,
 } from 'lucide-react';
 import { Badge } from '@/modules/shared/components/ui/badge';
 import { Button } from '@/modules/shared/components/ui/button';
@@ -299,6 +300,13 @@ export function ReservationDetailSheet({
               }
             />
           )}
+          {reservation.mainGuest.idNumber && (
+            <DetailRow
+              icon={<User size={15} />}
+              label="CI / Pasaporte"
+              value={reservation.mainGuest.idNumber}
+            />
+          )}
         </div>
 
         {/* Additional Guests Section */}
@@ -330,6 +338,36 @@ export function ReservationDetailSheet({
               </div>
             </div>
           </>
+        )}
+
+        <Separator />
+
+        {/* Servicios Adicionales Section */}
+        {(reservation.breakfasts > 0 || reservation.transferOneWay || reservation.transferRoundTrip) && (
+          <div className="space-y-3">
+            <SectionTitle>Servicios Adicionales</SectionTitle>
+            {reservation.breakfasts > 0 && (
+              <DetailRow
+                icon={<Users size={15} />}
+                label="Desayunos"
+                value={`${reservation.breakfasts} ${reservation.breakfasts === 1 ? 'desayuno' : 'desayunos'}`}
+              />
+            )}
+            {reservation.transferOneWay && (
+              <DetailRow
+                icon={<Car size={15} />}
+                label="Traslado"
+                value="Recogida del aeropuerto"
+              />
+            )}
+            {reservation.transferRoundTrip && (
+              <DetailRow
+                icon={<Car size={15} />}
+                label="Traslado"
+                value="Retorno al aeropuerto"
+              />
+            )}
+          </div>
         )}
 
         <Separator />

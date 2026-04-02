@@ -52,6 +52,7 @@ export function ReservationTable({
           <TableHeader>
             <TableRow>
               <TableHead>Habitación</TableHead>
+              <TableHead>Cliente</TableHead>
               <TableHead>Entrada</TableHead>
               <TableHead>Salida</TableHead>
               <TableHead>Huéspedes</TableHead>
@@ -81,6 +82,22 @@ export function ReservationTable({
                       {reservation.room?.name && (
                         <p className="text-sm text-muted-foreground">
                           {reservation.room.name}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </TableCell>
+
+                {/* Cliente Info - New Column */}
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <p className="font-medium">
+                        {reservation.mainGuest.firstName}
+                      </p>
+                      {reservation.mainGuest.email && (
+                        <p className="text-sm text-muted-foreground">
+                          {reservation.mainGuest.email}
                         </p>
                       )}
                     </div>
@@ -206,6 +223,19 @@ export function ReservationTable({
               <Badge variant={RESERVATION_STATUS_VARIANTS[reservation.status]}>
                 {RESERVATION_STATUS_LABELS[reservation.status]}
               </Badge>
+            </div>
+
+            {/* Cliente */}
+            <div className="mb-3">
+              <p className="text-xs text-muted-foreground">Cliente</p>
+              <p className="font-medium">
+                {reservation.mainGuest.firstName} {reservation.mainGuest.lastName}
+              </p>
+              {reservation.mainGuest.email && (
+                <p className="text-sm text-muted-foreground">
+                  {reservation.mainGuest.email}
+                </p>
+              )}
             </div>
 
             {/* Dates */}
