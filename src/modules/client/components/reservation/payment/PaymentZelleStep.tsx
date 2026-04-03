@@ -48,7 +48,7 @@ export default function PaymentZelleStep({
         <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
           <li>{t("reservation.zelleStep1")}</li>
           <li>{t("reservation.zelleStep2")}</li>
-          <li>{t("reservation.zelleStep3")}</li>
+          <li>{t("reservation.zelleStep3").replace("${amount}", `$${totalPrice}`)}</li>
           <li>{t("reservation.zelleStep4")}</li>
         </ol>
       </div>
