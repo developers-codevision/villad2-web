@@ -1,4 +1,6 @@
 export { default as RoomAndGuestSelection } from './RoomAndGuestSelection';
+export { default as RoomSelectionSection } from './RoomSelectionSection';
+export { default as GuestCountSection } from './GuestCountSection';
 export { default as DateSelection } from './DateSelection';
 export { default as PrimaryGuestDetails } from './PrimaryGuestDetails';
 export { default as AdditionalGuestsList } from './AdditionalGuestsList';

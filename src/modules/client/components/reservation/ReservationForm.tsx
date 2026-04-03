@@ -1,8 +1,6 @@
 import { FormEvent, useEffect } from 'react';
 import type { ReservationFormProps } from './types';
 import { usePricesData, handleTotalGuestsChange } from './utils';
-import { Label } from '@/modules/shared/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
 
 // Payment components
 import { PaymentMethodsStep, PaymentZelleStep, PaymentBizumStep } from './payment';
@@ -12,6 +10,8 @@ import { ConfirmationStep } from './confirmation';
 
 // Form components
 import {
+  RoomSelectionSection,
+  GuestCountSection,
   DateSelection,
   PrimaryGuestDetails,
   AdditionalGuestsList,
@@ -39,7 +39,6 @@ export default function ReservationForm({
     reservationSummary,
     updateFormField,
     selectRoom,
-    resetForm,
     submitReservation,
     submitPayment,
     validationErrors,
@@ -92,21 +91,7 @@ export default function ReservationForm({
     submitReservation();
   };
 
-  const hasRoomError = () => {
-    return validationErrors.some((error) =>
-      error.toLowerCase().includes('habitación') ||
-      error.toLowerCase().includes('selecciona una habitación')
-    );
-  };
-
-  const hasGuestsError = () => {
-    return validationErrors.some((error) =>
-      error.toLowerCase().includes('huéspedes') ||
-      error.toLowerCase().includes('selecciona el número de huéspedes')
-    );
-  };
-
-  // Payment method selection step
+  // Renderizar componentes según el step
   if (step === 'payment') {
     return (
       <PaymentMethodsStep
@@ -155,28 +140,27 @@ export default function ReservationForm({
   // Main reservation form
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Room Selection - Full Width */}
-      <div className="space-y-2">
-        <Label>Habitación</Label>
-        <Select
-          value={formData.roomId?.toString() || ''}
-          onValueChange={(value) => handleRoomSelect(parseInt(value))}
-          disabled={loadingRooms || !!singleRoomId}
-        >
-          <SelectTrigger className={hasRoomError() ? "border-red-500 focus:border-red-500" : ""}>
-            <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
-          </SelectTrigger>
-          <SelectContent>
-            {rooms.map((r) => (
-              <SelectItem key={r.id} value={r.id.toString()}>
-                 {`# ${r.number}`} : {r.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Selección de habitación y huéspedes */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <RoomSelectionSection
+          roomId={formData.roomId}
+          rooms={rooms}
+          loadingRooms={loadingRooms}
+          disabled={!!singleRoomId}
+          onRoomSelect={handleRoomSelect}
+          validationErrors={validationErrors}
+        />
+
+        <GuestCountSection
+          totalGuests={formData.totalGuests}
+          maxCapacity={maxCapacity}
+          disabled={!selectedRoom}
+          onGuestCountChange={handleTotalGuestsChangeHelper}
+          validationErrors={validationErrors}
+        />
       </div>
 
-      {/* Calendar - Full Width */}
+      {/* Calendario */}
       <DateSelection
         checkIn={formData.checkIn}
         checkOut={formData.checkOut}
@@ -186,30 +170,7 @@ export default function ReservationForm({
         validationErrors={validationErrors}
       />
 
-      {/* Guest Count - After Calendar */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Huéspedes Totales</Label>
-          <Select
-            value={formData.totalGuests > 0 ? formData.totalGuests.toString() : ""}
-            onValueChange={(value) => handleTotalGuestsChangeHelper(parseInt(value))}
-            disabled={!selectedRoom}
-          >
-            <SelectTrigger className={hasGuestsError() ? "border-red-500 focus:border-red-500" : ""}>
-              <SelectValue placeholder="Seleccionar número de huéspedes" />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from({ length: Math.max(maxCapacity, 1) }, (_, i) => i + 1).map((n) => (
-                <SelectItem key={n} value={String(n)}>
-                  {n} {n === 1 ? "huésped" : "huéspedes"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Rest of form with summary sidebar - Grid layout */}
+      {/* Grid principal: Formulario + Resumen */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3 space-y-6">
           <PrimaryGuestDetails
@@ -265,7 +226,6 @@ export default function ReservationForm({
 
         <FormSubmitButton submitting={submitting} />
 
-        {/* Validation message below button */}
         {validationErrors.length > 0 && (
           <p className="text-red-600 text-sm text-center mt-2">
             Completa los campos señalados en rojo
