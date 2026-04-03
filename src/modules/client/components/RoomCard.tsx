@@ -6,8 +6,11 @@ import { ImageWithPlaceholder } from "@/modules/shared/components";
 import type { Room } from "@/modules/shared/types/api.types";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function RoomCard({ room, compact }: { room: Room; compact?: boolean }) {
+  const { t } = useLanguage();
+
   // Get the main image from mainPhoto array or use a placeholder
   const mainPhotoArray = parsePhotos(room.mainPhoto);
   const mainImage = mainPhotoArray.length > 0
@@ -22,7 +25,7 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
       <div className="relative overflow-hidden aspect-[4/3]">
         <ImageWithPlaceholder
           src={mainImage}
-          alt={`Habitación #${room.number}`}
+          alt={`${t("room.room")} #${room.number}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
@@ -37,12 +40,12 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
         <div className="flex gap-2">
           <Link to={`/habitaciones/${room.id}`} className="flex-1">
             <Button variant="outline" className="w-full font-semibold" size="sm">
-              Ver más
+              {t("room.morePhotos")}
             </Button>
           </Link>
           <Link to={`/reservas?room=${room.id}`} className="flex-1">
             <Button className="w-full font-semibold" size="sm">
-              Reservar
+              {t("home.bookNow")}
             </Button>
           </Link>
         </div>

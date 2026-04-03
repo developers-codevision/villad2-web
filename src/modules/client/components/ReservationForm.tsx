@@ -18,6 +18,7 @@ import { usePrices } from '@/modules/shared/hooks';
 import {ROOM_TYPE_LABELS} from "@/modules/admin/types/rooms.types.ts";
 // PayPalCheckout will be lazy-loaded below
 const LazyPayPalCheckout = lazy(() => import('./PayPalCheckout'));
+import { useLanguage } from '@/modules/client/contexts';
 
 type ReservationHook = ReturnType<typeof useClientReservation>;
 
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export default function ReservationForm({ hook, rooms, loadingRooms = false, singleRoomId }: Props) {
+  const { t } = useLanguage();
   const { prices: rawPrices } = usePrices();
   // Force numeric conversion — API returns prices as strings ("20.00")
   const prices = {
@@ -110,14 +112,14 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
     }
   };
 
-  // Payment method selection step
-  if (step === 'payment') {
+    // Payment method selection step
+    if (step === 'payment') {
     return (
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="space-y-3">
-          <h1 className="text-3xl font-bold">Selecciona Método de Pago</h1>
+          <h1 className="text-3xl font-bold">{t("reservation.selectPaymentMethod")}</h1>
           <p className="text-muted-foreground text-lg">
-            Total a pagar: <span className="font-bold text-primary text-2xl">${totalPrice}</span>
+            {t("reservation.totalToPay")} <span className="font-bold text-primary text-2xl">${totalPrice}</span>
           </p>
         </div>
 
@@ -130,7 +132,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             <img src="/zelle.svg" alt="Zelle" width={32} height={32} className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Zelle</h3>
-              <p className="text-sm text-muted-foreground">Transferencia bancaria en EE.UU.</p>
+              <p className="text-sm text-muted-foreground">{t("reservation.zelleDescription")}</p>
             </div>
             <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
           </button>
@@ -143,7 +145,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             <img src="/bizum.svg" alt="Bizum" width={32} height={32} className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Bizum</h3>
-              <p className="text-sm text-muted-foreground">Transferencia instantánea en España</p>
+              <p className="text-sm text-muted-foreground">{t("reservation.bizumDescription")}</p>
             </div>
             <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
           </button>
@@ -157,7 +159,7 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
             <img src="/stripe.svg" alt="Stripe" width={32} height={32} className="w-8 h-8 object-contain" />
             <div className="flex-1">
               <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">Stripe</h3>
-              <p className="text-sm text-muted-foreground">Visa, Mastercard, American Express </p>
+              <p className="text-sm text-muted-foreground">{t("reservation.stripeDescription")}</p>
             </div>
             <span className="text-xl text-muted-foreground group-hover:text-primary transition-colors">→</span>
           </button>
@@ -168,10 +170,10 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
               <img src="/paypal.svg" alt="PayPal" width={32} height={32} className="w-8 h-8 object-contain" />
                <div className="flex-1">
                  <h3 className="font-semibold text-lg">PayPal</h3>
-                 <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
+                 <p className="text-sm text-muted-foreground">{t("reservation.paypalDescription")}</p>
                </div>
              </div>
-             <Suspense fallback={<p className="text-sm text-muted-foreground">Cargando PayPal...</p>}>
+             <Suspense fallback={<p className="text-sm text-muted-foreground">{t("reservation.loadingPaypal")}</p>}>
                <LazyPayPalCheckout hook={hook} room={selectedRoom} />
              </Suspense>
            </div>
@@ -180,12 +182,12 @@ export default function ReservationForm({ hook, rooms, loadingRooms = false, sin
         {/* Back button */}
         <div className="pt-4">
           <Button variant="outline" onClick={() => hook.previousStep()} className="w-full">
-            ← Volver a detalles
+            {t("reservation.backToDetails")}
           </Button>
         </div>
       </div>
     );
-  }
+    }
 
   // Payment Zelle page
   if (step === 'payment-zelle') {

@@ -1,6 +1,7 @@
 import { Label } from '@/modules/shared/components/ui/label';
 import { Input } from '@/modules/shared/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface AdditionalGuest {
   firstName: string;
@@ -20,6 +21,8 @@ export default function AdditionalGuestsList({
   onGuestChange,
   validationErrors = [],
 }: AdditionalGuestsListProps) {
+  const { t } = useLanguage();
+
   const hasError = (guestIndex: number, fieldName: string) => {
     const guestNumber = guestIndex + 2; // Primary guest is #1, additional start from #2
     return validationErrors.some(error =>
@@ -36,10 +39,10 @@ export default function AdditionalGuestsList({
     <div className="space-y-4">
       {guests.map((guest, index) => (
         <div key={index} className="border border-border rounded-lg p-4 space-y-4">
-          <h4 className="font-medium">Acompañante #{index + 1}</h4>
+          <h4 className="font-medium">{t("reservation.guestDetails")}{index + 1}</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Nombre</Label>
+              <Label>{t("reservation.firstName")}</Label>
               <Input
                 value={guest.firstName}
                 onChange={(e) =>
@@ -50,7 +53,7 @@ export default function AdditionalGuestsList({
               />
             </div>
             <div className="space-y-2">
-              <Label>Apellido</Label>
+              <Label>{t("reservation.lastName")}</Label>
               <Input
                 value={guest.lastName}
                 onChange={(e) =>
@@ -62,7 +65,7 @@ export default function AdditionalGuestsList({
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Sexo</Label>
+            <Label>{t("reservation.sex")}</Label>
             <Select
               value={guest.sex || ""}
               onValueChange={(value) =>
@@ -70,23 +73,23 @@ export default function AdditionalGuestsList({
               }
             >
               <SelectTrigger className={hasError(index, 'sexo') ? "border-red-500 focus:border-red-500" : ""}>
-                <SelectValue placeholder="Seleccionar sexo" />
+                <SelectValue placeholder={t("reservation.selectSex")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="M">Masculino</SelectItem>
-                <SelectItem value="F">Femenino</SelectItem>
-                <SelectItem value="otro">Otro</SelectItem>
+                <SelectItem value="M">{t("reservation.male")}</SelectItem>
+                <SelectItem value="F">{t("reservation.female")}</SelectItem>
+                <SelectItem value="otro">{t("reservation.other")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Número de Identificación</Label>
+            <Label>{t("reservation.idNumber")}</Label>
             <Input
               value={guest.idNumber || ''}
               onChange={(e) =>
                 onGuestChange(index, { ...guest, idNumber: e.target.value })
               }
-              placeholder="12345678"
+              placeholder={t("reservation.idNumberPlaceholder")}
               className=""
             />
           </div>

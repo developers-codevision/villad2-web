@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { HOSTAL } from "@/modules/shared/data/hostal";
 import logo from "@/assets/logo.png";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -24,24 +27,24 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-primary">Enlaces</h4>
+            <h4 className="font-semibold mb-4 text-primary">{t("footer.links")}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/" className="hover:text-primary transition-colors">Inicio</Link></li>
-              <li><Link to="/habitaciones" className="hover:text-primary transition-colors">Habitaciones</Link></li>
-              <li><Link to="/servicios" className="hover:text-primary transition-colors">Servicios</Link></li>
-              <li><Link to="/reservas" className="hover:text-primary transition-colors">Reservas</Link></li>
-              <li><Link to="/preguntas-frecuentes" className="hover:text-primary transition-colors">Preguntas Frecuentes</Link></li>
-              <li><Link to="/politicas-reembolso" className="hover:text-primary transition-colors">Política de Reembolsos</Link></li>
-              <li><Link to="/terminos-condiciones" className="hover:text-primary transition-colors">Términos y Condiciones</Link></li>
+              <li><Link to="/" className="hover:text-primary transition-colors">{t("footer.home")}</Link></li>
+              <li><Link to="/habitaciones" className="hover:text-primary transition-colors">{t("footer.rooms")}</Link></li>
+              <li><Link to="/servicios" className="hover:text-primary transition-colors">{t("footer.services")}</Link></li>
+              <li><Link to="/reservas" className="hover:text-primary transition-colors">{t("footer.reservations")}</Link></li>
+              <li><Link to="/preguntas-frecuentes" className="hover:text-primary transition-colors">{t("footer.faq")}</Link></li>
+              <li><Link to="/politicas-reembolso" className="hover:text-primary transition-colors">{t("footer.refundPolicy")}</Link></li>
+              <li><Link to="/terminos-condiciones" className="hover:text-primary transition-colors">{t("footer.terms")}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-primary">Contacto</h4>
+            <h4 className="font-semibold mb-4 text-primary">{t("footer.contact")}</h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-primary" />
-                <span className="font-medium">Teléfonos:</span> {HOSTAL.phone}
+                <span className="font-medium">{t("footer.phones")}</span> {HOSTAL.phone}
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-primary" />
@@ -56,9 +59,9 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-secondary-foreground/10 mt-8 pt-6 flex items-center justify-between text-sm text-secondary-foreground/50">
-          <span>© {new Date().getFullYear()} {HOSTAL.name}. Todos los derechos reservados.</span>
+          <span>© {new Date().getFullYear()} {HOSTAL.name}. {t("footer.copyright")}</span>
           <Link to="/login" className="hover:text-secondary-foreground/70 transition-colors">
-            Admin
+            {t("footer.admin")}
           </Link>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Label } from '@/modules/shared/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
 import type { Room } from '@/modules/shared/types/api.types';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface RoomAndGuestSelectionProps {
   selectedRoomId: number | undefined;
@@ -23,17 +24,19 @@ export default function RoomAndGuestSelection({
   onRoomSelect,
   onTotalGuestsChange,
 }: RoomAndGuestSelectionProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div className="space-y-2">
-        <Label>Habitación</Label>
+        <Label>{t("reservation.selectRoom")}</Label>
         <Select
           value={selectedRoomId?.toString() || ''}
           onValueChange={(value) => onRoomSelect(parseInt(value))}
           disabled={loadingRooms || !!singleRoomId}
         >
           <SelectTrigger>
-            <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
+            <SelectValue placeholder={loadingRooms ? t("reservation.loadingRooms") : t("reservation.selectRoomPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
             {rooms.map((r) => (
@@ -45,19 +48,17 @@ export default function RoomAndGuestSelection({
         </Select>
       </div>
       <div className="space-y-2">
-        <Label>Huéspedes Totales</Label>
+        <Label>{t("reservation.totalGuests")}</Label>
         <Select
           value={totalGuests.toString()}
           onValueChange={(value) => onTotalGuestsChange(parseInt(value))}
           disabled={!selectedRoomId}
         >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
+          <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
             {Array.from({ length: Math.max(maxCapacity, 1) }, (_, i) => i + 1).map((n) => (
               <SelectItem key={n} value={String(n)}>
-                {n} {n === 1 ? "huésped" : "huéspedes"}
+                {n} {n === 1 ? t("reservation.guest") : t("reservation.guests")}
               </SelectItem>
             ))}
           </SelectContent>
@@ -66,4 +67,3 @@ export default function RoomAndGuestSelection({
     </div>
   );
 }
-

@@ -1,6 +1,7 @@
 import { Label } from '@/modules/shared/components/ui/label';
 import { Input } from '@/modules/shared/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface PrimaryGuestDetailsProps {
   firstName: string;
@@ -33,6 +34,8 @@ export default function PrimaryGuestDetails({
   onIdNumberChange,
   validationErrors = [],
 }: PrimaryGuestDetailsProps) {
+  const { t } = useLanguage();
+
   const hasError = (fieldName: string) => {
     return validationErrors.some(error =>
       error.toLowerCase().includes(fieldName.toLowerCase())
@@ -41,10 +44,10 @@ export default function PrimaryGuestDetails({
 
   return (
     <div className="space-y-4">
-      <h3 className="font-semibold text-lg">Datos del Huésped Principal</h3>
+      <h3 className="font-semibold text-lg">{t("reservation.guestDetails")}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName">Nombre</Label>
+          <Label htmlFor="firstName">{t("reservation.firstName")}</Label>
           <Input
             id="firstName"
             value={firstName}
@@ -54,7 +57,7 @@ export default function PrimaryGuestDetails({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Apellido</Label>
+          <Label htmlFor="lastName">{t("reservation.lastName")}</Label>
           <Input
             id="lastName"
             value={lastName}
@@ -65,31 +68,31 @@ export default function PrimaryGuestDetails({
         </div>
       </div>
        <div className="space-y-2">
-        <Label htmlFor="idNumber">CI o Pasaporte</Label>
+        <Label htmlFor="idNumber">{t("reservation.idNumber")}</Label>
         <Input
           id="idNumber"
           value={idNumber}
           onChange={(e) => onIdNumberChange(e.target.value)}
-          placeholder="12345678"
+          placeholder={t("reservation.idNumberPlaceholder")}
           className={hasError('identificación') ? "border-red-500 focus:border-red-500" : ""}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="sex">Sexo</Label>
+        <Label htmlFor="sex">{t("reservation.sex")}</Label>
         <Select value={sex || ""} onValueChange={(value) => onSexChange(value as 'M' | 'F' | 'otro')}>
           <SelectTrigger className={hasError('sexo') ? "border-red-500 focus:border-red-500" : ""}>
-            <SelectValue placeholder="Seleccionar sexo" />
+            <SelectValue placeholder={t("reservation.selectSex")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="M">Masculino</SelectItem>
-            <SelectItem value="F">Femenino</SelectItem>
-            <SelectItem value="otro">Otro</SelectItem>
+            <SelectItem value="M">{t("reservation.male")}</SelectItem>
+            <SelectItem value="F">{t("reservation.female")}</SelectItem>
+            <SelectItem value="otro">{t("reservation.other")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("reservation.email")}</Label>
           <Input
             id="email"
             type="email"
@@ -98,9 +101,10 @@ export default function PrimaryGuestDetails({
             placeholder="tu@email.com"
             className={hasError('email') ? "border-red-500 focus:border-red-500" : ""}
           />
+
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Teléfono</Label>
+          <Label htmlFor="phone">{t("reservation.phone")}</Label>
           <Input
             id="phone"
             type="tel"

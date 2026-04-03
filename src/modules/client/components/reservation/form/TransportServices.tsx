@@ -1,5 +1,6 @@
 import { Label } from '@/modules/shared/components/ui/label';
 import { Checkbox } from '@/modules/shared/components/ui/checkbox';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface TransportServicesProps {
   transferOneWay: boolean;
@@ -14,9 +15,11 @@ export default function TransportServices({
   onTransferOneWayChange,
   onTransferRoundTripChange,
 }: TransportServicesProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold text-lg">Servicios de Transporte</h3>
+      <h3 className="font-semibold text-lg">{t("reservation.transportServices")}</h3>
       <div className="flex items-center gap-3">
         <Checkbox
           id="transferOneWay"
@@ -24,7 +27,7 @@ export default function TransportServices({
           onCheckedChange={(checked) => onTransferOneWayChange(!!checked)}
         />
         <Label htmlFor="transferOneWay" className="cursor-pointer font-normal">
-          Recogida del aeropuerto
+          {t("reservation.airportPickup")}
         </Label>
       </div>
       <div className="flex items-center gap-3">
@@ -34,10 +37,9 @@ export default function TransportServices({
           onCheckedChange={(checked) => onTransferRoundTripChange(!!checked)}
         />
         <Label htmlFor="transferRoundTrip" className="cursor-pointer font-normal">
-          Retorno al aeropuerto
+          {t("reservation.airportReturn")}
         </Label>
       </div>
     </div>
   );
 }
-

@@ -1,10 +1,11 @@
 import { Label } from '@/modules/shared/components/ui/label';
 import { Calendar } from '@/modules/shared/components/ui/calendar';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { es, enUS } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useToast } from '@/modules/shared/hooks/use-toast';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface DateSelectionProps {
   checkIn: Date | undefined;
@@ -25,6 +26,7 @@ export default function DateSelection({
 }: DateSelectionProps) {
   const [numberOfMonths, setNumberOfMonths] = useState(1);
   const { toast } = useToast();
+  const { t, language } = useLanguage();
 
   // Ajustar cantidad de meses según tamaño de pantalla
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function DateSelection({
     }
 
     if (range.from && range.to) {
+
       // Prevent selecting same day or invalid ranges
       const nights = Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24));
       if (nights < 1) {
@@ -90,25 +93,27 @@ export default function DateSelection({
       if (isDisabled) {
         if (!selectedRoomId) {
           toast({
-            title: "Habitación requerida",
-            description: "Por favor, seleccione una habitación primero.",
+            title: t("reservation.roomRequired"),
+            description: t("reservation.selectRoomFirst"),
             variant: "destructive",
           });
           return;
         }
 
         toast({
-          title: "Día ocupado",
-          description: "Ese día está ocupado, por favor probar con otra habitación.",
+          title: t("reservation.dayOccupied"),
+          description: t("reservation.tryAnotherRoom"),
           variant: "destructive",
         });
       }
     }
   };
 
+  const locale = language === 'es' ? es : enUS;
+
   return (
     <div className="space-y-2">
-      <Label className="text-base">Fechas de estancia</Label>
+      <Label className="text-base">{t("reservation.stayDates")}</Label>
       <div className={`border rounded-lg p-4 md:p-6 w-full overflow-hidden ${hasDateError() ? 'border-red-500' : 'border-border'}`}>
         <div className="w-full flex justify-center -mx-4 md:-mx-6 px-4 md:px-6" onClick={handleCalendarClick}>
           <div className="w-full max-w-full overflow-x-auto">
@@ -125,7 +130,7 @@ export default function DateSelection({
                 d < new Date(new Date().setHours(0, 0, 0, 0)) ||
                 occupiedDates.includes(format(d, 'yyyy-MM-dd'))
               }
-              locale={es}
+              locale={locale}
               className="pointer-events-auto mx-auto"
             />
           </div>
@@ -133,7 +138,7 @@ export default function DateSelection({
       </div>
       {checkIn && checkOut && (
         <p className="text-sm text-muted-foreground text-center">
-          {format(checkIn, "dd MMM yyyy", { locale: es })} — {format(checkOut, "dd MMM yyyy", { locale: es })}
+          {format(checkIn, "dd MMM yyyy", { locale })} — {format(checkOut, "dd MMM yyyy", { locale })}
         </p>
       )}
     </div>
