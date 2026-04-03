@@ -50,7 +50,6 @@ export default function PaymentBizumStep({
           <li>{t("reservation.bizumStep2")}</li>
           <li>{t("reservation.bizumStep3")}</li>
           <li>{t("reservation.bizumStep4")}</li>
-          <li>{t("reservation.bizumStep5")}</li>
           <li>{t("reservation.bizumStep6")}</li>
           <li>{t("reservation.bizumStep7")}</li>
         </ol>

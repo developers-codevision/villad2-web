@@ -256,7 +256,6 @@ export const en = {
   'reservation.bizumStep2': 'Select "Send money"',
   'reservation.bizumStep3': 'Enter the number +34 600 123 456',
   'reservation.bizumStep4': 'Amount: ${amount}',
-  'reservation.bizumStep5': 'In the concept, include your reservation number (if possible)',
   'reservation.bizumStep6': 'Confirm the transaction',
   'reservation.bizumStep7': 'Click "Confirm Payment" below',
   'reservation.bizumReminder': 'You will receive a confirmation email within 24 hours. If you don\'t receive it, contact our team at the hostel phones.',
