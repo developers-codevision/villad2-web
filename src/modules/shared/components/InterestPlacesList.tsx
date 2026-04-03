@@ -2,6 +2,7 @@ import * as React from "react";
 import { MapPin, ExternalLink } from "lucide-react";
 import { interestPlaces } from "@/modules/shared/data/interestPlaces";
 import { useLanguage } from "@/modules/client/contexts";
+import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 
 export default function InterestPlacesList() {
   const { t, language } = useLanguage();
@@ -28,7 +29,7 @@ export default function InterestPlacesList() {
             </div>
             <div className="flex-1">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="font-semibold text-base">{place.name}</h3>
+                <h3 className="font-semibold text-base">{parseBilingualText(place.name, language)}</h3>
                 {place.url && (
                   <ExternalLink size={16} className="text-primary flex-shrink-0 mt-0.5" />
                 )}

@@ -7,9 +7,10 @@ import type { Room } from "@/modules/shared/types/api.types";
 import { parseAmenities, parsePhotos } from "@/modules/client/utils/roomHelpers";
 import { roomsService } from "@/modules/shared/services/rooms.service";
 import { useLanguage } from "@/modules/client/contexts";
+import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 
 export default function RoomCard({ room, compact }: { room: Room; compact?: boolean }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Get the main image from mainPhoto array or use a placeholder
   const mainPhotoArray = parsePhotos(room.mainPhoto);
@@ -19,6 +20,9 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
 
   // Ensure roomAmenities is always an array
   const amenities = parseAmenities(room.roomAmenities);
+
+  // Parse bilingual description
+  const description = parseBilingualText(room.description, language);
 
   return (
     <Card className="overflow-hidden group hover:shadow-lg transition-shadow">
@@ -36,7 +40,7 @@ export default function RoomCard({ room, compact }: { room: Room; compact?: bool
             <Users size={14} /> {room.capacity}
           </span>
         </div>
-        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{room.description}</p>
+        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{description}</p>
         <div className="flex gap-2">
           <Link to={`/habitaciones/${room.id}`} className="flex-1">
             <Button variant="outline" className="w-full font-semibold" size="sm">
