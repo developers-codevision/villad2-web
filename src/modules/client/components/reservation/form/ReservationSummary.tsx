@@ -6,6 +6,7 @@ import { roomsService } from '@/modules/shared/services/rooms.service';
 import { ROOM_TYPE_LABELS } from "@/modules/admin/types/rooms.types.ts";
 import type { Room } from '@/modules/shared/types/api.types';
 import type { ReservationBreakdown } from '../types';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface ReservationSummaryProps {
   selectedRoom: Room | undefined;
@@ -32,6 +33,7 @@ export default function ReservationSummary({
   breakdown,
   breakfasts,
 }: ReservationSummaryProps) {
+  const { t } = useLanguage();
   const breakfastsCost = breakdown?.breakfastsCost ?? 0;
   const earlyCheckInCost = breakdown?.earlyCheckInCost ?? 0;
   const lateCheckOutCost = breakdown?.lateCheckOutCost ?? 0;
@@ -40,7 +42,7 @@ export default function ReservationSummary({
 
   return (
     <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
-      <h3 className="font-bold text-lg mb-4">Resumen de Reserva</h3>
+      <h3 className="font-bold text-lg mb-4">{t("reservation.reservationSummary")}</h3>
       {selectedRoom ? (
         <>
           {(() => {
@@ -59,77 +61,77 @@ export default function ReservationSummary({
           })()}
           <p className="font-semibold">{`# ${selectedRoom.number} : ${selectedRoom.name}`}  </p>
           <p className="text-sm text-muted-foreground mb-4">
-            {ROOM_TYPE_LABELS[selectedRoom.roomType]} · Hasta {maxCapacity} {maxCapacity === 1 ? "persona" : "personas"}
+            {ROOM_TYPE_LABELS[selectedRoom.roomType]} · {t("reservation.upTo")} {maxCapacity} {maxCapacity === 1 ? t("reservation.personSingular") : t("reservation.personPlural")}
           </p>
         </>
       ) : (
-        <p className="text-muted-foreground text-sm mb-4">Selecciona una habitación</p>
+        <p className="text-muted-foreground text-sm mb-4">{t("reservation.selectRoom")}</p>
       )}
       <div className="border-t border-border pt-4 space-y-2 text-sm">
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Check-in</span>
+          <span className="text-muted-foreground">{t("reservation.checkIn")}</span>
           <span>{checkIn ? format(checkIn, "dd MMM yyyy", { locale: es }) : "—"}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Check-out</span>
+          <span className="text-muted-foreground">{t("reservation.checkOut")}</span>
           <span>{checkOut ? format(checkOut, "dd MMM yyyy", { locale: es }) : "—"}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Noches</span>
+          <span className="text-muted-foreground">{t("reservation.nights")}</span>
           <span>{nights}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-muted-foreground">Huéspedes</span>
+          <span className="text-muted-foreground">{t("reservation.guests")}</span>
           <span>{totalGuests}</span>
         </div>
         {breakfasts > 0 && (
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Desayunos ({breakfasts})</span>
+              <span className="text-muted-foreground">{t("reservation.breakfasts")} ({breakfasts})</span>
               <span>${breakfastsCost}</span>
             </div>
           </div>
         )}
         {earlyCheckInCost > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Early check-in</span>
+            <span className="text-muted-foreground">{t("reservation.earlyCheckIn")}</span>
             <span>${earlyCheckInCost}</span>
           </div>
         )}
         {lateCheckOutCost > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Late check-out</span>
+            <span className="text-muted-foreground">{t("reservation.lateCheckOut")}</span>
             <span>${lateCheckOutCost}</span>
           </div>
         )}
         {transferOneWayCost > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Transporte ida</span>
+            <span className="text-muted-foreground">{t("reservation.airportPickup")}</span>
             <span>${transferOneWayCost}</span>
           </div>
         )}
         {transferReturnCost > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Transporte vuelta</span>
+            <span className="text-muted-foreground">{t("reservation.airportReturn")}</span>
             <span>${transferReturnCost}</span>
           </div>
         )}
         {selectedRoom && (
           <>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Precio/noche</span>
+              <span className="text-muted-foreground">{t("reservation.pricePerNight")}</span>
               <span>${selectedRoom.pricePerNight}</span>
             </div>
             {extraGuestsCount > 0 && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Huéspedes adicionales</span>
+                <span className="text-muted-foreground">{t("reservation.additionalGuests")}</span>
               </div>
             )}
           </>
         )}
       </div>
       <div className="border-t border-border mt-4 pt-4 flex justify-between items-center">
-        <span className="font-bold text-lg">Total</span>
+        <span className="font-bold text-lg">{t("reservation.total")}</span>
         <span className="font-bold text-2xl text-primary">${totalPrice}</span>
       </div>
     </div>

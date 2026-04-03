@@ -306,19 +306,50 @@ const translations: Record<Language, Record<string, string>> = {
     'reservation.dayOccupied': 'Día ocupado',
     'reservation.tryAnotherRoom': 'Ese día está ocupado, por favor probar con otra habitación.',
 
-    // Reservation Summary
-    'reservation.reservationSummary': 'Resumen de Reserva',
-    'reservation.selectRoom': 'Selecciona una habitación',
-    'reservation.checkIn': 'Check-in',
-    'reservation.checkOut': 'Check-out',
-    'reservation.nights': 'Noches',
-    'reservation.guests': 'Huéspedes',
-    'reservation.breakfasts': 'Desayunos',
-    'reservation.transportOneWay': 'Transporte ida',
-    'reservation.transportReturn': 'Transporte vuelta',
-    'reservation.pricePerNight': 'Precio/noche',
-    'reservation.extraGuests': 'Huéspedes adicionales',
-    'reservation.total': 'Total',
+    // Nuevas claves de traducción para componentes refactorizados
+    'reservation.room': 'Habitación',
+    'reservation.loading': 'Cargando...',
+    'reservation.upTo': 'Hasta',
+    'reservation.personSingular': 'persona',
+    'reservation.personPlural': 'personas',
+    'reservation.perBreakfast': 'por desayuno',
+    'reservation.accountInformation': 'Información de la Cuenta',
+    'reservation.zelleEmail': 'Email Zelle',
+    'reservation.accountholderName': 'Nombre del titular',
+    'reservation.amountToTransfer': 'Monto a transferir',
+    'reservation.instructions': 'Instrucciones',
+    'reservation.zelleStep1': 'Abre tu aplicación bancaria o Zelle',
+    'reservation.zelleStep2': 'Envía una transferencia a luislo2456@gmail.com',
+    'reservation.zelleStep3': 'Importe: ${amount}',
+    'reservation.zelleStep4': 'Haz clic en el botón "Confirmar Pago" abajo',
+    'reservation.remember': 'Recuerda',
+    'reservation.zelleReminder': 'Recibirás un email de confirmación en menos de 24 horas. Si no lo recibes, contacta a nuestro equipo en los teléfonos del hostal.',
+    'reservation.back': 'Atrás',
+    'reservation.confirmPayment': 'Confirmar Pago',
+    'reservation.bizumInformation': 'Información de Bizum',
+    'reservation.phoneNumber': 'Número de teléfono',
+    'reservation.receiverName': 'Nombre del receptor',
+    'reservation.bizumStep1': 'Abre tu aplicación bancaria y ve a Bizum',
+    'reservation.bizumStep2': 'Selecciona "Enviar dinero"',
+    'reservation.bizumStep3': 'Ingresa el número +34 600 123 456',
+    'reservation.bizumStep4': 'Monto: ${amount}',
+    'reservation.bizumStep5': 'En el concepto, incluye tu número de reserva (si es posible)',
+    'reservation.bizumStep6': 'Confirma la transacción',
+    'reservation.bizumStep7': 'Haz clic en "Confirmar Pago" abajo',
+    'reservation.bizumReminder': 'Recibirás un email de confirmación en menos de 24 horas. Si no lo recibes, contacta a nuestro equipo en los teléfonos del hostal.',
+    'reservation.reservationRequested': '¡Reserva Solicitada!',
+    'reservation.thankYou': 'Gracias',
+    'reservation.requestRegistered': 'Tu solicitud de reserva ha sido registrada.',
+    'reservation.nightSingular': 'noche',
+    'reservation.nightPlural': 'noches',
+    'reservation.includes': 'Incluye',
+    'reservation.additionalGuest': 'huésped adicional',
+    'reservation.reservationStatus': 'Tu reserva está',
+    'reservation.pendingConfirmation': 'pendiente de confirmación',
+    'reservation.confirmationEmailSent': 'Recibirás un email en',
+    'reservation.whenConfirmedByAdmin': 'cuando sea confirmada por el administrador.',
+    'reservation.newReservation': 'Nueva Reserva',
+    'reservation.completeRequiredFields': 'Completa los campos señalados en rojo',
   },
   en: {
     // Navbar
@@ -558,27 +589,82 @@ const translations: Record<Language, Record<string, string>> = {
     'reservation.guest': 'guest',
     'reservation.guests': 'guests',
 
-    // Breakfast Selection
-    'reservation.breakfastIncluded': 'Breakfast Included',
-    'reservation.breakfastPrice': '(${price}/breakfast)',
-    'reservation.selectBreakfastQuantity': 'Select number of breakfasts',
-    'reservation.noBreakfast': 'No breakfast',
-    'reservation.breakfast': 'breakfast',
-    'reservation.breakfasts': 'breakfasts',
-
-    // CheckInCheckOutOptions
-    'reservation.checkInCheckOutOptions': 'Check-in and Check-out Options',
-
-    // TransportServices
-    'reservation.transportServices': 'Transport Services',
+    // Reservation Summary
+    'reservation.reservationSummary': 'Reservation Summary',
+    'reservation.upTo': 'Up to',
+    'reservation.personSingular': 'person',
+    'reservation.personPlural': 'persons',
+    'reservation.nights': 'Nights',
     'reservation.airportPickup': 'Airport Pickup',
     'reservation.airportReturn': 'Airport Return',
 
-    // DateSelection Component
-    'reservation.stayDates': 'Stay Dates',
-    'reservation.roomRequired': 'Room Required',
-    'reservation.selectRoomFirst': 'Please select a room first.',
-    'reservation.dayOccupied': 'Day Occupied',
-    'reservation.tryAnotherRoom': 'That day is occupied, please try another room.',
+    // Room Selection
+    'reservation.room': 'Room',
+    'reservation.loading': 'Loading...',
+
+    // Breakfast Selection
+    'reservation.perBreakfast': 'per breakfast',
+
+    // Payment Methods
+    'reservation.zelleDescription': 'Bank transfer in USA',
+    'reservation.bizumDescription': 'Instant transfer in Spain',
+    'reservation.stripeDescription': 'Visa, Mastercard, American Express',
+    'reservation.paypalDescription': 'Pay securely with PayPal',
+    'reservation.loadingPaypal': 'Loading PayPal...',
+
+    // Payment Zelle
+    'reservation.paymentWithZelle': 'Payment with Zelle',
+    'reservation.accountInformation': 'Account Information',
+    'reservation.zelleEmail': 'Zelle Email',
+    'reservation.accountholderName': 'Account Holder Name',
+    'reservation.amountToTransfer': 'Amount to Transfer',
+    'reservation.instructions': 'Instructions',
+    'reservation.zelleStep1': 'Open your banking app or Zelle',
+    'reservation.zelleStep2': 'Send a transfer to luislo2456@gmail.com',
+    'reservation.zelleStep3': 'Amount: ${amount}',
+    'reservation.zelleStep4': 'Click the "Confirm Payment" button below',
+    'reservation.remember': 'Remember',
+    'reservation.zelleReminder': 'You will receive a confirmation email within 24 hours. If you don\'t receive it, contact our team at the hostel phones.',
+    'reservation.back': 'Back',
+    'reservation.confirmPayment': 'Confirm Payment',
+
+    // Payment Bizum
+    'reservation.paymentWithBizum': 'Payment with Bizum',
+    'reservation.bizumInformation': 'Bizum Information',
+    'reservation.phoneNumber': 'Phone Number',
+    'reservation.receiverName': 'Receiver Name',
+    'reservation.bizumStep1': 'Open your banking app and go to Bizum',
+    'reservation.bizumStep2': 'Select "Send money"',
+    'reservation.bizumStep3': 'Enter the number +34 600 123 456',
+    'reservation.bizumStep4': 'Amount: ${amount}',
+    'reservation.bizumStep5': 'In the concept, include your reservation number (if possible)',
+    'reservation.bizumStep6': 'Confirm the transaction',
+    'reservation.bizumStep7': 'Click "Confirm Payment" below',
+    'reservation.bizumReminder': 'You will receive a confirmation email within 24 hours. If you don\'t receive it, contact our team at the hostel phones.',
+
+    // Confirmation
+    'reservation.reservationRequested': 'Reservation Requested!',
+    'reservation.thankYou': 'Thank you',
+    'reservation.requestRegistered': 'Your reservation request has been registered.',
+    'reservation.nightSingular': 'night',
+    'reservation.nightPlural': 'nights',
+    'reservation.includes': 'Includes',
+    'reservation.additionalGuest': 'additional guest',
+    'reservation.reservationStatus': 'Your reservation is',
+    'reservation.pendingConfirmation': 'pending confirmation',
+    'reservation.confirmationEmailSent': 'You will receive an email at',
+    'reservation.whenConfirmedByAdmin': 'when it is confirmed by the administrator.',
+    'reservation.newReservation': 'New Reservation',
+
+    // Validation
+    'reservation.completeRequiredFields': 'Complete the fields marked in red',
   },
 };
+
+
+
+
+
+
+
+

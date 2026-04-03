@@ -1,8 +1,9 @@
 import { FormEvent, useEffect } from 'react';
 import type { ReservationFormProps } from './types';
 import { usePricesData, handleTotalGuestsChange } from './utils';
+import { useLanguage } from '@/modules/client/contexts';
 
-// Payment components
+// ...existing code...
 import { PaymentMethodsStep, PaymentZelleStep, PaymentBizumStep } from './payment';
 
 // Confirmation component
@@ -30,6 +31,7 @@ export default function ReservationForm({
   singleRoomId,
 }: ReservationFormProps) {
   const prices = usePricesData();
+  const { t } = useLanguage();
 
   const {
     formData,
@@ -91,7 +93,7 @@ export default function ReservationForm({
     submitReservation();
   };
 
-  // Renderizar componentes según el step
+  // Render components based on step
   if (step === 'payment') {
     return (
       <PaymentMethodsStep
@@ -101,7 +103,7 @@ export default function ReservationForm({
     );
   }
 
-  // Payment Zelle page
+  // Zelle payment page
   if (step === 'payment-zelle') {
     return (
       <PaymentZelleStep
@@ -113,7 +115,7 @@ export default function ReservationForm({
     );
   }
 
-  // Payment Bizum page
+  // Bizum payment page
   if (step === 'payment-bizum') {
     return (
       <PaymentBizumStep
@@ -140,7 +142,7 @@ export default function ReservationForm({
   // Main reservation form
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Selección de habitación y huéspedes */}
+      {/* Room and guest selection */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <RoomSelectionSection
           roomId={formData.roomId}
@@ -160,7 +162,7 @@ export default function ReservationForm({
         />
       </div>
 
-      {/* Calendario */}
+      {/* Calendar */}
       <DateSelection
         checkIn={formData.checkIn}
         checkOut={formData.checkOut}
@@ -170,7 +172,7 @@ export default function ReservationForm({
         validationErrors={validationErrors}
       />
 
-      {/* Grid principal: Formulario + Resumen */}
+      {/* Main grid: Form + Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3 space-y-6">
           <PrimaryGuestDetails
@@ -228,7 +230,7 @@ export default function ReservationForm({
 
         {validationErrors.length > 0 && (
           <p className="text-red-600 text-sm text-center mt-2">
-            Completa los campos señalados en rojo
+            {t("reservation.completeRequiredFields")}
           </p>
         )}
       </div>

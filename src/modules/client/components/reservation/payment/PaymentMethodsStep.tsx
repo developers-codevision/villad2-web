@@ -1,6 +1,7 @@
 import { Button } from '@/modules/shared/components/ui/button';
 import { lazy, Suspense } from 'react';
 import type { ReservationHook } from '../types';
+import { useLanguage } from '@/modules/client/contexts';
 
 const LazyPayPalCheckout = lazy(() => import('../../PayPalCheckout'));
 
@@ -11,13 +12,14 @@ interface PaymentMethodsStepProps {
 
 export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsStepProps) {
   const { submitting, submitPayment } = hook;
+  const { t } = useLanguage();
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div className="space-y-3">
-        <h1 className="text-3xl font-bold">Selecciona Método de Pago</h1>
+        <h1 className="text-3xl font-bold">{t("reservation.selectPaymentMethod")}</h1>
         <p className="text-muted-foreground text-lg">
-          Total a pagar: <span className="font-bold text-primary text-2xl">${totalPrice}</span>
+          {t("reservation.totalToPay")}: <span className="font-bold text-primary text-2xl">${totalPrice}</span>
         </p>
       </div>
 
@@ -25,7 +27,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
         {/* Zelle */}
         <PaymentMethodButton
           label="Zelle"
-          description="Transferencia bancaria en EE.UU."
+          description={t("reservation.zelleDescription")}
           icon="/zelle.svg"
           onClick={() => hook.goToStep('payment-zelle')}
         />
@@ -33,7 +35,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
         {/* Bizum */}
         <PaymentMethodButton
           label="Bizum"
-          description="Transferencia instantánea en España"
+          description={t("reservation.bizumDescription")}
           icon="/bizum.svg"
           onClick={() => hook.goToStep('payment-bizum')}
         />
@@ -41,7 +43,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
         {/* Stripe */}
         <PaymentMethodButton
           label="Stripe"
-          description="Visa, Mastercard, American Express"
+          description={t("reservation.stripeDescription")}
           icon="/stripe.svg"
           onClick={() => submitPayment('stripe')}
           disabled={submitting}
@@ -55,7 +57,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
       {/* Back button */}
       <div className="pt-4">
         <Button variant="outline" onClick={() => hook.previousStep()} className="w-full">
-          ← Volver a detalles
+          ← {t("reservation.backToDetails")}
         </Button>
       </div>
     </div>
@@ -104,7 +106,8 @@ interface PayPalPaymentMethodProps {
 }
 
 function PayPalPaymentMethod({ hook }: PayPalPaymentMethodProps) {
-  const selectedRoom = null; // This will be passed from parent if needed
+  const { t } = useLanguage();
+  const selectedRoom = null;
 
   return (
     <div className="w-full border-2 border-border rounded-lg p-4">
@@ -112,10 +115,10 @@ function PayPalPaymentMethod({ hook }: PayPalPaymentMethodProps) {
         <img src="/paypal.svg" alt="PayPal" width={32} height={32} className="w-8 h-8 object-contain" />
         <div className="flex-1">
           <h3 className="font-semibold text-lg">PayPal</h3>
-          <p className="text-sm text-muted-foreground">Paga de forma segura con PayPal</p>
+          <p className="text-sm text-muted-foreground">{t("reservation.paypalDescription")}</p>
         </div>
       </div>
-      <Suspense fallback={<p className="text-sm text-muted-foreground">Cargando PayPal...</p>}>
+      <Suspense fallback={<p className="text-sm text-muted-foreground">{t("reservation.loadingPaypal")}</p>}>
         <LazyPayPalCheckout hook={hook} room={selectedRoom} />
       </Suspense>
     </div>

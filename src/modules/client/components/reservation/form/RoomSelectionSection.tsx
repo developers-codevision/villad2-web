@@ -2,6 +2,7 @@ import { Label } from '@/modules/shared/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/modules/shared/components/ui/select';
 import type { Room } from '@/modules/shared/types/api.types';
 import { getErrorClassName } from '../utils';
+import { useLanguage } from '@/modules/client/contexts';
 
 interface RoomSelectionSectionProps {
   roomId: number | undefined;
@@ -20,16 +21,18 @@ export default function RoomSelectionSection({
   onRoomSelect,
   validationErrors = [],
 }: RoomSelectionSectionProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-2">
-      <Label>Habitación</Label>
+      <Label>{t("reservation.room")}</Label>
       <Select
         value={roomId?.toString() || ''}
         onValueChange={(value) => onRoomSelect(parseInt(value))}
         disabled={loadingRooms || disabled}
       >
         <SelectTrigger className={getErrorClassName('habitación', validationErrors)}>
-          <SelectValue placeholder={loadingRooms ? "Cargando..." : "Seleccionar habitación"} />
+          <SelectValue placeholder={loadingRooms ? t("reservation.loading") : t("reservation.selectRoom")} />
         </SelectTrigger>
         <SelectContent>
           {rooms.map((r) => (
