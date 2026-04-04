@@ -34,7 +34,7 @@ export default function PaymentBizumStep({
           </div>
           <div>
             <p className="text-sm text-muted-foreground">{t("reservation.receiverName")}:</p>
-            <p className="font-bold text-lg">Villa D2</p>
+            <p className="font-bold text-lg">Luis Manuel López González</p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">{t("reservation.amountToTransfer")}:</p>
