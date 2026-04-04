@@ -220,7 +220,6 @@ export const es = {
 
   // Validation & Errors
   'reservation.roomNotAvailable': 'Habitación no disponible',
-  'reservation.selectRoomFirst': 'Por favor, seleccione una habitación primero.',
   'reservation.selectDatesFirst': 'Por favor selecciona las fechas de tu estadía.',
   'reservation.fillRequiredFields': 'Por favor completa todos los campos requeridos.',
   'reservation.completeRequiredFields': 'Completa los campos señalados en rojo',

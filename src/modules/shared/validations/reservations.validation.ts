@@ -1,7 +1,6 @@
 // Shared Reservations Validations
 
 import { ReservationFormDataBase, ClientReservationFormData } from '@/modules/shared/types/reservations.types';
-import { isPhoneNumber } from 'class-validator';
 
 /**
  * Check if two dates refer to the same calendar day
@@ -29,6 +28,16 @@ function timeToMinutes(time: string): number | null {
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+}
+
+/**
+ * Simple phone validation - checks for international format with digits and common separators
+ */
+function isPhoneNumber(phone: string): boolean {
+  // Allow phone numbers with digits, spaces, dashes, parentheses, and plus sign
+  // At least 7 digits required for a valid phone number
+  const cleaned = phone.replace(/[\s\-()]/g, '');
+  return /^\+?[0-9]{7,}$/.test(cleaned);
 }
 
 /**
