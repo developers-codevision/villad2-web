@@ -116,7 +116,7 @@ export default function RoomDetail() {
               >
                 <ChevronLeft size={16} /> {t("room.allRooms")}
               </Button>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{room.name}</h1>
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">#{room.id} : {room.name}</h1>
               <p className="text-white/90 text-lg max-w-2xl">{description}</p>
               <div className="flex items-center gap-4 mt-4">
 
