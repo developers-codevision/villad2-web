@@ -28,6 +28,8 @@ export const es = {
   'room.notAvailable': 'Esta habitación no está disponible',
   'room.notAvailableDesc': 'La habitación que buscas no se encuentra disponible en este momento.',
   'room.viewAvailable': 'Ver habitaciones disponibles',
+  'room.additionalServices': 'Servicios Adicionales en Recepción',
+  'room.additionalServicesDesc': 'Puedes contratar servicios adicionales como tours guiados, alquiler de bicicletas, traslados al aeropuerto y mucho más directamente en recepción.',
 
   // Promotions
   'promo.exclusive': 'Ofertas exclusivas',

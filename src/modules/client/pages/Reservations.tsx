@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { CheckCircle } from "lucide-react";
+import { useSearchParams, Link } from "react-router-dom";
+import { CheckCircle, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Button } from "@/modules/shared/components/ui/button";
@@ -10,11 +10,13 @@ import { useRooms } from "@/modules/client/hooks/useRooms";
 import { useClientReservation } from "@/modules/client/hooks/useClientReservation";
 import { usePrices } from "@/modules/shared/hooks";
 import { ReservationForm } from "@/modules/client/components/reservation";
+import { useLanguage } from "@/modules/client/contexts";
 import type { DateRange } from "react-day-picker";
 
 export default function Reservations() {
   const [searchParams] = useSearchParams();
   const preselectedRoomId = searchParams.get("room");
+  const { t } = useLanguage();
 
   const { rooms, availableRooms, loading: loadingRooms } = useRooms();
   const { prices } = usePrices();
@@ -124,6 +126,21 @@ export default function Reservations() {
             rooms={availableRooms}
             loadingRooms={loadingRooms}
           />
+
+          {/* Additional Services CTA */}
+          <section className="text-center py-12 mt-16 bg-accent/30 rounded-2xl">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              {t("room.additionalServices")} <span className="text-primary">{t("nav.services")}</span>
+            </h2>
+            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+              {t("room.additionalServicesDesc")}
+            </p>
+            <Link to="/servicios">
+              <Button size="lg" className="font-semibold text-lg px-8">
+                {t("room.exploreServices")} <ArrowRight size={18} />
+              </Button>
+            </Link>
+          </section>
         </div>
       </main>
       <Footer />

@@ -28,6 +28,8 @@ export const en = {
   'room.notAvailable': 'This room is not available',
   'room.notAvailableDesc': 'The room you are looking for is not available at this time.',
   'room.viewAvailable': 'View available rooms',
+  'room.additionalServices': 'Additional Services at Reception',
+  'room.additionalServicesDesc': 'You can book additional services such as guided tours, bicycle rentals, airport transfers and much more directly at reception.',
 
   // Promotions
   'promo.exclusive': 'Exclusive offers',
