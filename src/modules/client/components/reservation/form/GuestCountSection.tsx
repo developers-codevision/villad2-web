@@ -29,7 +29,7 @@ export default function GuestCountSection({
         disabled={disabled}
       >
         <SelectTrigger className={getErrorClassName('huéspedes', validationErrors)}>
-          <SelectValue placeholder={t("reservation.selectDates")} />
+          <SelectValue placeholder={t("reservation.totalGuests")} />
         </SelectTrigger>
         <SelectContent>
           {Array.from({ length: Math.max(maxCapacity, 1) }, (_, i) => i + 1).map((n) => (
