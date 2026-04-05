@@ -8,3 +8,4 @@ export { default as TermsAndConditionsSection } from './TermsAndConditionsSectio
 export { default as FAQSection } from './FAQSection';
 export { default as ExchangeRateSection } from './ExchangeRateSection';
 export { ReservationForm } from './reservation';
+export { default as PrivacyPolicySection } from './PrivacyPolicySection';

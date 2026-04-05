@@ -11,3 +11,4 @@ export { default as StripeReturn } from './StripeReturn';
 export { default as RefundPolicies } from './RefundPolicies';
 export { default as TermsAndConditions } from './TermsAndConditions';
 export { default as FAQ } from './FAQ';
+export { default as PrivacyPolicy } from './PrivacyPolicy';

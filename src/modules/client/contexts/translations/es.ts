@@ -148,6 +148,7 @@ export const es = {
   'footer.faq': 'Preguntas Frecuentes',
   'footer.refundPolicy': 'Política de Reembolsos',
   'footer.terms': 'Términos y Condiciones',
+  'footer.privacyPolicy': 'Política de Privacidad',
   'footer.contact': 'Contacto',
   'footer.phones': 'Teléfonos:',
   'footer.copyright': 'Todos los derechos reservados.',
@@ -284,4 +285,3 @@ export const es = {
   'reservation.loadingRooms': 'Cargando...',
   'reservation.selectRoomPlaceholder': 'Seleccionar habitación',
 };
-

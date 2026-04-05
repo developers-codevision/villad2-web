@@ -148,6 +148,7 @@ export const en = {
   'footer.faq': 'Frequently Asked Questions',
   'footer.refundPolicy': 'Refund Policy',
   'footer.terms': 'Terms and Conditions',
+  'footer.privacyPolicy': 'Privacy Policy',
   'footer.contact': 'Contact',
   'footer.phones': 'Phones:',
   'footer.copyright': 'All rights reserved.',
@@ -283,4 +284,3 @@ export const en = {
   'reservation.loadingRooms': 'Loading...',
   'reservation.selectRoomPlaceholder': 'Select room',
 };
-
