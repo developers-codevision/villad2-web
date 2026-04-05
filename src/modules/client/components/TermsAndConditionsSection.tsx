@@ -101,9 +101,21 @@ const TermsAndConditionsSection = () => {
           {/* Contacto */}
           <div className="bg-card border-2 border-primary/30 rounded-lg p-6 shadow-sm">
             <h3 className="text-lg font-bold mb-2">{parseBilingualText('¿Preguntas sobre nuestros términos? / Questions about our terms?', language)}</h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              {parseBilingualText('Si tienes dudas sobre nuestros términos y condiciones, no dudes en contactarnos. Email: hostal.villad2@villad2.com Teléfono: +53 78820045 Whatsapp: +53 50970588 / 59713605 / If you have questions about our terms and conditions, do not hesitate to contact us. Email: hostal.villad2@villad2.com Phone: +53 78820045 Whatsapp: +53 50970588 / 59713605', language)}
-            </p>
+            {language === 'es' ? (
+              <div className="text-muted-foreground text-sm mb-4">
+                <p>Si tienes dudas sobre nuestros términos y condiciones, no dudes en contactarnos.</p>
+                <p className="mt-2"><span className="font-semibold">Email:</span> hostal.villad2@villad2.com</p>
+                <p><span className="font-semibold">Teléfono:</span> +53 78820045</p>
+                <p><span className="font-semibold">Whatsapp:</span> +53 50970588 / 59713605</p>
+              </div>
+            ) : (
+              <div className="text-muted-foreground text-sm mb-4">
+                <p>If you have questions about our terms and conditions, do not hesitate to contact us.</p>
+                <p className="mt-2"><span className="font-semibold">Email:</span> hostal.villad2@villad2.com</p>
+                <p><span className="font-semibold">Phone:</span> +53 78820045</p>
+                <p><span className="font-semibold">Whatsapp:</span> +53 50970588 / 59713605</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
