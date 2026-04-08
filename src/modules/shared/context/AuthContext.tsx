@@ -32,15 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (!authService.getRefreshToken()) {
-        if (storedUser) {
-          await authService.logout();
-          setUser(null);
-        }
-        setIsLoading(false);
-        return;
-      }
-
       try {
         await authService.refreshToken();
 

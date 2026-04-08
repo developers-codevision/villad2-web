@@ -4,7 +4,6 @@ import { AuthResponse, LoginDto, RegisterDto, User, RefreshTokenResponse } from 
 import { apiClient } from './api';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const REFRESH_TOKEN_KEY = 'villad2_refresh_token';
 const USER_KEY = 'villad2_user';
 
 class AuthService {
@@ -15,13 +14,6 @@ class AuthService {
    */
   getToken(): string | null {
     return this.accessToken;
-  }
-
-  /**
-   * Get the stored refresh token
-   */
-  getRefreshToken(): string | null {
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
   }
 
   /**
@@ -55,12 +47,9 @@ class AuthService {
   /**
    * Store authentication data
    */
-  private storeAuth(token: string, user: User, refreshToken?: string): void {
+  private storeAuth(token: string, user: User): void {
     this.accessToken = token;
     localStorage.setItem(USER_KEY, JSON.stringify(user));
-    if (refreshToken) {
-      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-    }
   }
 
   /**
@@ -68,7 +57,6 @@ class AuthService {
    */
   private clearAuth(): void {
     this.accessToken = null;
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   }
 
@@ -77,7 +65,7 @@ class AuthService {
    */
   async login(credentials: LoginDto): Promise<AuthResponse> {
     const data = await apiClient.post<AuthResponse>('/auth/login', credentials);
-    this.storeAuth(data.accessToken, data.user, data.refreshToken);
+    this.storeAuth(data.accessToken, data.user);
     return data;
   }
 
@@ -86,7 +74,7 @@ class AuthService {
    */
   async register(userData: RegisterDto): Promise<AuthResponse> {
     const data = await apiClient.post<AuthResponse>('/auth/register', userData);
-    this.storeAuth(data.accessToken, data.user, data.refreshToken);
+    this.storeAuth(data.accessToken, data.user);
     return data;
   }
 
@@ -117,24 +105,13 @@ class AuthService {
   }
 
   /**
-   * Refresh access token using refresh token
+   * Refresh access token using refresh token from HTTP-only cookie
    */
   async refreshToken(): Promise<string> {
-    const refreshToken = this.getRefreshToken();
-    if (!refreshToken) {
-      this.clearAuth();
-      throw new Error('No refresh token available');
-    }
-
     try {
-      const data = await apiClient.post<RefreshTokenResponse>('/auth/refresh', {
-        refreshToken,
-      });
+      const data = await apiClient.post<RefreshTokenResponse>('/auth/refresh', {});
 
       this.accessToken = data.accessToken;
-      if (data.refreshToken) {
-        localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
-      }
 
       return data.accessToken;
     } catch (error) {
