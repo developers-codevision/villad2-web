@@ -208,8 +208,8 @@ export const es = {
 
   // Check-in/Check-out Options
   'reservation.checkInCheckOutOptions': 'Opciones de Llegada y Salida',
-  'reservation.earlyCheckIn': 'Check-in Temprano',
-  'reservation.lateCheckOut': 'Check-out Tardío',
+  'reservation.earlyCheckIn': 'Early Check-in ',
+  'reservation.lateCheckOut': 'Late Check-out',
 
   // Transport Services
   'reservation.transportServices': 'Servicios de Transporte',

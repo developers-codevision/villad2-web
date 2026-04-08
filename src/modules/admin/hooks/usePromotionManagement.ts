@@ -232,7 +232,9 @@ export function usePromotionManagement() {
     try {
       const formDataObj = new FormData();
       formDataObj.append('title', formData.title);
-      formDataObj.append('description', formData.description);
+   if (formData.description.trim()) {  // Only append if description has content
+     formDataObj.append('description', formData.description);
+   }
       if (formData.maxPeople > 0)
         formDataObj.append('maxPeople', formData.maxPeople.toString());
       if (formData.minPeople > 0)
