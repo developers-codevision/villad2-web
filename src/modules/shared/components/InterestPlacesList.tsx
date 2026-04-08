@@ -45,7 +45,7 @@ export default function InterestPlacesList() {
                 </a>
               ) : (
                 <p className="text-muted-foreground text-sm mt-2">
-                  {t("places.checkAvailability")}
+
                 </p>
               )}
             </div>
