@@ -125,28 +125,36 @@ export default function PayPalCheckout({ hook, room }: Props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(createDto),
           });
-          console.log(createDto)
 
           if (!res.ok) {
-            const err = await res.text();
-            throw new Error(err || 'Failed to create order');
+            const errBody = await res.json().catch(() => null);
+            const errMsg = errBody?.message || errBody?.error || 'Error al procesar la reserva';
+            toast.error(`No se pudo generar la reserva: ${errMsg}`);
+            throw new Error(errMsg);
           }
 
           const data = await res.json();
           const orderId = data?.paypalOrder?.orderId || data?.data?.orderId || data?.orderId;
-          if (!orderId) throw new Error('No order id returned from server');
+          if (!orderId) {
+            toast.error('Respuesta inválida del servidor al crear el pago.');
+            throw new Error('No order id returned from server');
+          }
           return orderId;
         } catch (error) {
           console.error('createOrder error', error);
-          toast.error('No se pudo iniciar el pago con PayPal');
+          toast.error('Error de conexión o validación. Intenta nuevamente.');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
           throw error;
         } finally {
           setLoading(false);
         }
       },
-      onApprove: async (data) => {
+      onApprove: async (data: PayPalButtonApproveData) => {
         try {
           if (!data.orderID) {
+            toast.error('Error interno de PayPal.');
             throw new Error('Missing PayPal order ID');
           }
 
@@ -157,8 +165,9 @@ export default function PayPalCheckout({ hook, room }: Props) {
           });
 
           if (!res.ok) {
-            const err = await res.text();
-            throw new Error(err || 'Failed to capture payment');
+            const errBody = await res.json().catch(() => null);
+            const errMsg = errBody?.message || errBody?.error || 'Error al capturar el pago';
+            throw new Error(errMsg);
           }
 
           const captureResult = await res.json();
@@ -171,24 +180,27 @@ export default function PayPalCheckout({ hook, room }: Props) {
           finalizeReservationAfterPayment(reservationId ? Number(reservationId) : -1, 'paypal');
         } catch (error) {
           console.error('onApprove error', error);
-          toast.error('No se pudo completar el pago.');
-          previousStep();
-          window.location.reload();
+          toast.error('Hubo un problema confirmando el pago. Serás redirigido al inicio.');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2500);
         } finally {
           setLoading(false);
         }
       },
-      onCancel: (data) => {
+      onCancel: (data: PayPalButtonCancelData) => {
         console.warn('PayPal checkout cancelled', data);
-        toast('El pago fue cancelado.');
-        previousStep();
-        window.location.reload();
+        toast.error('El pago fue cancelado. Redirigiendo...');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1500);
       },
-      onError: (err) => {
+      onError: (err: unknown) => {
         console.error('PayPal Buttons error', err);
-        toast.error('Error en PayPal. Por favor intenta de nuevo.');
-        previousStep();
-        window.location.reload();
+        toast.error('Ocurrió un error inesperado con PayPal. Redirigiendo...');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
       },
     });
 
