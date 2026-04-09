@@ -10,12 +10,23 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
+    // 1. Check URL parameters first for SEO/Bots compatibility
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang === 'en' || urlLang === 'es') {
+      return urlLang;
+    }
+
+    // 2. Fallback to localStorage
     const saved = localStorage.getItem('language');
     return (saved === 'en' || saved === 'es') ? saved : 'es';
   });
+
   useEffect(() => {
     localStorage.setItem('language', language);
+    document.documentElement.lang = language; // Important for SEO: Updates <html lang="..."> dynamically
   }, [language]);
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
   };
