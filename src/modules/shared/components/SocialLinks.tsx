@@ -8,7 +8,7 @@ interface SocialLinksProps {
 export default function SocialLinks({ facebookUrl, twitterUrl, youtubeUrl, whatsappUrl }: SocialLinksProps) {
   return (
     <div className="flex items-center gap-3">
-      <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+      <a href={facebookUrl} target="_blank" rel="me noopener noreferrer" aria-label="Facebook">
         <img
           src="/facebook.png"
           alt="Facebook"
@@ -20,10 +20,10 @@ export default function SocialLinks({ facebookUrl, twitterUrl, youtubeUrl, whats
         />
         {/* Facebook iconos creados por Freepik - Flaticon */}
       </a>
-      <a href={twitterUrl} target="_blank" rel="noopener noreferrer" aria-label="X">
+      <a href={twitterUrl} target="_blank" rel="me noopener noreferrer" aria-label="X (Twitter)">
         <img
           src="/x.png"
-          alt="X"
+          alt="X (Twitter)"
           width={32}
           height={32}
           loading="lazy"
@@ -32,7 +32,7 @@ export default function SocialLinks({ facebookUrl, twitterUrl, youtubeUrl, whats
         />
         {/* Pío iconos creados por Freepik - Flaticon */}
       </a>
-      <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="Youtube">
+      <a href={youtubeUrl} target="_blank" rel="me noopener noreferrer" aria-label="Youtube">
         <img
           src="/youtube.png"
           alt="Youtube"
