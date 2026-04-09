@@ -51,6 +51,7 @@ export function ReservationTable({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID / Reserva</TableHead>
               <TableHead>Habitación</TableHead>
               <TableHead>Cliente</TableHead>
               <TableHead>Entrada</TableHead>
@@ -71,6 +72,20 @@ export function ReservationTable({
                 className="cursor-pointer hover:bg-muted/60 transition-colors"
                 onClick={() => setSelectedReservation(reservation)}
               >
+                {/* ID Info */}
+                <TableCell>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-medium text-xs text-muted-foreground bg-muted px-2 py-1 rounded inline-block whitespace-nowrap w-max">
+                      ID: {String(reservation.id).slice(0, 8).toUpperCase()}
+                    </span>
+                    {reservation.reservationNumber && (
+                      <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-1 rounded inline-block whitespace-nowrap w-max">
+                        {reservation.reservationNumber}
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+
                 {/* Room Info */}
                 <TableCell>
                   <div className="flex items-center gap-2">
@@ -205,14 +220,24 @@ export function ReservationTable({
             className="border rounded-lg p-4 bg-card hover:bg-muted/60 transition-colors cursor-pointer"
             onClick={() => setSelectedReservation(reservation)}
           >
-            {/* Room and Status */}
+            {/* Header: Room & Status */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
                 <BedDouble size={18} className="text-muted-foreground shrink-0" />
                 <div>
-                  <p className="font-semibold text-base">
-                    {reservation.room?.number || `#${reservation.roomId}`}
-                  </p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-semibold text-base">
+                      {reservation.room?.number || `#${reservation.roomId}`}
+                    </p>
+                    <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded font-mono">
+                      ID: {String(reservation.id).slice(0, 8).toUpperCase()}
+                    </span>
+                    {reservation.reservationNumber && (
+                      <span className="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded font-mono">
+                        {reservation.reservationNumber}
+                      </span>
+                    )}
+                  </div>
                   {reservation.room?.name && (
                     <p className="text-sm text-muted-foreground">
                       {reservation.room.name}
