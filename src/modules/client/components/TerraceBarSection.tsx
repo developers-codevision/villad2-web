@@ -17,7 +17,7 @@ const TerraceBarSection = () => {
             <img
               key={i}
               src={`/terraza${i}.jpg`}
-              alt={`Terraza ${i}`}
+              alt={`Terraza-Bar del Hostal Villa D2 en Vedado, La Habana - Vista ${i}`}
               width={1280}
               height={853}
               loading="lazy"

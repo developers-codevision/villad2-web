@@ -17,7 +17,7 @@ const ReceptionSection = () => {
             <img
               key={i}
               src={`/recepcion${i}.jpg`}
-              alt={`Recepción ${i}`}
+              alt={`Recepción del Hostal Villa D2 en Vedado, La Habana - Vista ${i}`}
               width={1280}
               height={853}
               loading="lazy"
