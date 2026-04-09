@@ -75,7 +75,7 @@ async function loadPayPalSdk(clientId: string, currency: string): Promise<PayPal
 }
 
 export default function PayPalCheckout({ hook, room }: Props) {
-  const { formData, reservationSummary, finalizeReservationAfterPayment } = hook;
+  const { formData, reservationSummary, finalizeReservationAfterPayment, previousStep } = hook;
   const { totalPrice } = reservationSummary(room);
   const [loading, setLoading] = useState(false);
   const [sdkReady, setSdkReady] = useState(false);
@@ -172,6 +172,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
         } catch (error) {
           console.error('onApprove error', error);
           toast.error('No se pudo completar el pago.');
+          previousStep();
           window.location.reload();
         } finally {
           setLoading(false);
@@ -180,11 +181,13 @@ export default function PayPalCheckout({ hook, room }: Props) {
       onCancel: (data) => {
         console.warn('PayPal checkout cancelled', data);
         toast('El pago fue cancelado.');
+        previousStep();
         window.location.reload();
       },
       onError: (err) => {
         console.error('PayPal Buttons error', err);
         toast.error('Error en PayPal. Por favor intenta de nuevo.');
+        previousStep();
         window.location.reload();
       },
     });
@@ -194,7 +197,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
     return () => {
       instance.close();
     };
-  }, [apiUrl, createDto, finalizeReservationAfterPayment, room, sdkReady]);
+  }, [apiUrl, createDto, finalizeReservationAfterPayment, previousStep, room, sdkReady]);
 
   if (!room) return null;
 
