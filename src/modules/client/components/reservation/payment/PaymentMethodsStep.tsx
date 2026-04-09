@@ -40,9 +40,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
           onClick={() => hook.goToStep('payment-bizum')}
         />
 
-
-        {/* Stripe
-
+        {/* Stripe */}
         <PaymentMethodButton
           label="Stripe"
           description={t("reservation.stripeDescription")}
@@ -50,7 +48,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
           onClick={() => submitPayment('stripe')}
           disabled={submitting}
           highlighted
-        />*/}
+        />
 
         {/* PayPal */}
         <PayPalPaymentMethod hook={hook} />
