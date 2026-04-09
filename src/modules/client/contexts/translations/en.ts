@@ -283,4 +283,6 @@ export const en = {
   'reservation.totalGuests': 'Total Guests',
   'reservation.loadingRooms': 'Loading...',
   'reservation.selectRoomPlaceholder': 'Select room',
+  'reservation.pageTitle': 'Make your Reservation',
+  'reservation.pageSubtitle': 'Select the room, dates and complete your details.',
 };

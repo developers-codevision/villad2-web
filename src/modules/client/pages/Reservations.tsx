@@ -112,12 +112,12 @@ export default function Reservations() {
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto max-w-4xl">
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Haz tu <span className="text-primary">Reserva</span>
+            {t("reservation.pageTitle")}
           </h1>
 
           {!hideCalendarAndHeader && (
             <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-              Selecciona la habitación, fechas y completa tus datos.
+              {t("reservation.pageSubtitle")}
             </p>
           )}
 

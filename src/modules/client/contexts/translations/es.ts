@@ -284,4 +284,6 @@ export const es = {
   'reservation.totalGuests': 'Huéspedes Totales',
   'reservation.loadingRooms': 'Cargando...',
   'reservation.selectRoomPlaceholder': 'Seleccionar habitación',
+  'reservation.pageTitle': 'Haz tu Reserva',
+  'reservation.pageSubtitle': 'Selecciona la habitación, fechas y completa tus datos.',
 };
