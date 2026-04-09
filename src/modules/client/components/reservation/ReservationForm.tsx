@@ -3,7 +3,7 @@ import type { ReservationFormProps } from './types';
 import { usePricesData, handleTotalGuestsChange } from './utils';
 import { useLanguage } from '@/modules/client/contexts';
 
-// ...existing code...
+// Payment components
 import { PaymentMethodsStep, PaymentZelleStep, PaymentBizumStep } from './payment';
 
 // Confirmation component
@@ -99,6 +99,7 @@ export default function ReservationForm({
       <PaymentMethodsStep
         hook={hook}
         totalPrice={totalPrice}
+        selectedRoom={selectedRoom}
       />
     );
   }

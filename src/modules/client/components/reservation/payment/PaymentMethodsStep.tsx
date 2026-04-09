@@ -1,6 +1,7 @@
 import { Button } from '@/modules/shared/components/ui/button';
 import { lazy, Suspense } from 'react';
 import type { ReservationHook } from '../types';
+import type { Room } from '@/modules/shared/types/api.types';
 import { useLanguage } from '@/modules/client/contexts';
 
 const LazyPayPalCheckout = lazy(() => import('../../PayPalCheckout'));
@@ -8,9 +9,10 @@ const LazyPayPalCheckout = lazy(() => import('../../PayPalCheckout'));
 interface PaymentMethodsStepProps {
   hook: ReservationHook;
   totalPrice: number;
+  selectedRoom?: Room;
 }
 
-export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsStepProps) {
+export default function PaymentMethodsStep({ hook, totalPrice, selectedRoom }: PaymentMethodsStepProps) {
   const { submitting, submitPayment } = hook;
   const { t } = useLanguage();
 
@@ -51,7 +53,7 @@ export default function PaymentMethodsStep({ hook, totalPrice }: PaymentMethodsS
         />
 
         {/* PayPal */}
-        <PayPalPaymentMethod hook={hook} />
+        <PayPalPaymentMethod hook={hook} selectedRoom={selectedRoom} />
       </div>
 
       {/* Back button */}
@@ -103,11 +105,11 @@ function PaymentMethodButton({
 
 interface PayPalPaymentMethodProps {
   hook: ReservationHook;
+  selectedRoom?: Room;
 }
 
-function PayPalPaymentMethod({ hook }: PayPalPaymentMethodProps) {
+function PayPalPaymentMethod({ hook, selectedRoom }: PayPalPaymentMethodProps) {
   const { t } = useLanguage();
-  const selectedRoom = null;
 
   return (
     <div className="w-full border-2 border-border rounded-lg p-4">
@@ -124,9 +126,3 @@ function PayPalPaymentMethod({ hook }: PayPalPaymentMethodProps) {
     </div>
   );
 }
-
-
-
-
-
-
