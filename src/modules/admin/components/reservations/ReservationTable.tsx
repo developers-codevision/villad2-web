@@ -232,6 +232,7 @@ export function ReservationTable({
                     <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded font-mono">
                       ID: {String(reservation.id).slice(0, 8).toUpperCase()}
                     </span>
+
                     {reservation.reservationNumber && (
                       <span className="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded font-mono">
                         {reservation.reservationNumber}
