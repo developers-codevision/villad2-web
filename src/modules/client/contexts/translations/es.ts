@@ -46,7 +46,7 @@ export const es = {
 
   // Rooms Page
   'rooms.title': 'Nuestras Habitaciones',
-  'rooms.subtitle': 'Encuentra la habitación ideal para tu estancia. Todas incluyen WiFi gratuito y desayuno.',
+  'rooms.subtitle': 'Encuentra la habitación ideal para tu estancia.',
   'rooms.error': 'Por favor, intenta nuevamente más tarde.',
   'rooms.noRooms': 'No hay habitaciones disponibles en este momento.',
 

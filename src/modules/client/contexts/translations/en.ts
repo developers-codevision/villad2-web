@@ -46,7 +46,7 @@ export const en = {
 
   // Rooms Page
   'rooms.title': 'Our Rooms',
-  'rooms.subtitle': 'Find the perfect room for your stay. All include free WiFi and breakfast.',
+  'rooms.subtitle': 'Find the perfect room for your stay.',
   'rooms.error': 'Please try again later.',
   'rooms.noRooms': 'No rooms available at this time.',
 
