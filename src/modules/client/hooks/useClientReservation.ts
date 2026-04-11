@@ -65,8 +65,8 @@ export function useClientReservation(prices?: PricesResponse) {
       // Use prices from settings, fallback to 0 if not loaded yet
       // Force Number() to avoid string concatenation (API returns prices as strings)
       const PRICE_BREAKFAST = Number(activePrices?.breakfastPrice ?? 0);
-      const PRICE_EARLY_CHECKIN = room.pricePerNight * 0.08;
-      const PRICE_LATE_CHECKOUT = room.pricePerNight * 0.08;
+      const PRICE_EARLY_CHECKIN = Number((room.pricePerNight * 0.08).toFixed(2));
+      const PRICE_LATE_CHECKOUT = Number((room.pricePerNight * 0.08).toFixed(2));
       const PRICE_TRANSFER_IDA = Number(activePrices?.transferOneWayPrice ?? 0);
       const PRICE_TRANSFER_VUELTA = Number(activePrices?.transferRoundTripPrice ?? 0);
 
@@ -76,7 +76,7 @@ export function useClientReservation(prices?: PricesResponse) {
       const transferOneWayCost = formData.transferOneWay ? PRICE_TRANSFER_IDA : 0;
       const transferReturnCost = formData.transferRoundTrip ? PRICE_TRANSFER_VUELTA : 0;
 
-      const totalPrice = baseTotal + breakfastsCost + earlyCheckInCost + lateCheckOutCost + transferOneWayCost + transferReturnCost;
+      const totalPrice = Number((baseTotal + breakfastsCost + earlyCheckInCost + lateCheckOutCost + transferOneWayCost + transferReturnCost).toFixed(2));
 
       // Return a detailed breakdown so the UI can present subtotals and avoid duplicating logic
       return {
