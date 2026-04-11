@@ -65,8 +65,10 @@ export function useClientReservation(prices?: PricesResponse) {
       // Use prices from settings, fallback to 0 if not loaded yet
       // Force Number() to avoid string concatenation (API returns prices as strings)
       const PRICE_BREAKFAST = Number(activePrices?.breakfastPrice ?? 0);
-      const PRICE_EARLY_CHECKIN = Number((room.pricePerNight * 0.08).toFixed(2));
-      const PRICE_LATE_CHECKOUT = Number((room.pricePerNight * 0.08).toFixed(2));
+      const earlyCheckInMultiplier = activePrices?.earlyCheckInPrice ? Number(activePrices.earlyCheckInPrice) / 100 : 0.08;
+      const PRICE_EARLY_CHECKIN = Number((room.pricePerNight * earlyCheckInMultiplier).toFixed(2));
+      const lateCheckOutMultiplier = activePrices?.lateCheckOutPrice ? Number(activePrices.lateCheckOutPrice) / 100 : 0.08;
+      const PRICE_LATE_CHECKOUT = Number((room.pricePerNight * lateCheckOutMultiplier).toFixed(2));
       const PRICE_TRANSFER_IDA = Number(activePrices?.transferOneWayPrice ?? 0);
       const PRICE_TRANSFER_VUELTA = Number(activePrices?.transferRoundTripPrice ?? 0);
 

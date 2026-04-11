@@ -11,15 +11,16 @@ interface PriceFieldProps {
   value: string;
   onChange: (v: string) => void;
   disabled: boolean;
+  isPercentage?: boolean;
 }
 
-function PriceField({ label, description, value, onChange, disabled }: PriceFieldProps) {
+function PriceField({ label, description, value, onChange, disabled, isPercentage }: PriceFieldProps) {
   return (
     <div className="space-y-1.5">
       <Label className="text-sm font-medium">{label}</Label>
       <p className="text-xs text-muted-foreground">{description}</p>
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+        {!isPercentage && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>}
         <Input
           type="number"
           min="0"
@@ -27,8 +28,9 @@ function PriceField({ label, description, value, onChange, disabled }: PriceFiel
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className="pl-7"
+          className={!isPercentage ? "pl-7" : "pr-7"}
         />
+        {isPercentage && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">%</span>}
       </div>
     </div>
   );
@@ -75,18 +77,20 @@ export default function AdminSettings() {
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <PriceField
-                label="Early check-in "
-                description="Cargo por llegada antes de la hora estándar"
+                label="Early check-in"
+                description="Porcentaje adicional por llegada antes de la hora estándar"
                 value={formData.earlyCheckInPrice}
                 onChange={(v) => handleFieldChange("earlyCheckInPrice", v)}
                 disabled={saving}
+                isPercentage
               />
               <PriceField
-                label="Late check-out "
-                description="Cargo por salida después de la hora estándar"
+                label="Late check-out"
+                description="Porcentaje adicional por salida después de la hora estándar"
                 value={formData.lateCheckOutPrice}
                 onChange={(v) => handleFieldChange("lateCheckOutPrice", v)}
                 disabled={saving}
+                isPercentage
               />
               <PriceField
                 label="Recogida del aeropuerto"
