@@ -257,7 +257,7 @@ export const es = {
   'reservation.receiverName': 'Nombre del receptor',
   'reservation.bizumStep1': 'Abre tu aplicación bancaria y ve a Bizum',
   'reservation.bizumStep2': 'Selecciona "Enviar dinero"',
-  'reservation.bizumStep3': 'Ingresa el número +34 600 123 456',
+  'reservation.bizumStep3': 'Ingresa el número +34 699482520',
   'reservation.bizumStep4': 'Monto: ${amount}',
   'reservation.bizumStep5': 'En el concepto, incluye tu número de reserva (si es posible)',
   'reservation.bizumStep6': 'Confirma la transacción',
