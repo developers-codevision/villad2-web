@@ -81,9 +81,9 @@ export default function PayPalCheckout({ hook, room }: Props) {
   const [sdkReady, setSdkReady] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test';
+  const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID ;
   const currency = 'USD';
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const createDto = useMemo(
     () => clientFormDataToCreateDto(formData, 'paypal'),
