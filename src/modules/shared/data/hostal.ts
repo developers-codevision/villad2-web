@@ -27,7 +27,7 @@ export const HOSTAL = {
     phone: "+53 78820045 / +53 63511623 /  +53 50970588",
     email: "hostal.villad2@gmail.com",
     whatsapp: "+53 63511623",
-    address: "calle 37 #14 e/Paseo y calle 2. Vedado, Plaza",
+    address: "Calle 37 #14 e/Paseo y Calle 2 en el Vedado , La Habana , Cuba ",
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3669.231226280096!2d-82.39041!3d23.125222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDA3JzMwLjgiTiA4MsKwMjMnMjUuNSJX!5e0!3m2!1ses!2sus!4v1771298124259!5m2!1ses!2sus",
     social: {
         instagram: "https://instagram.com/hostalsolyluna",
