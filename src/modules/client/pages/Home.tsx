@@ -62,7 +62,7 @@ const Index = () => {
             alt="Hostal Villa D2"
             width={1920}
             height={1080}
-            fetchpriority="high"
+            fetchPriority="high"
             loading="eager"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-center"
@@ -75,14 +75,6 @@ const Index = () => {
             </h1>
           </div>
         </div>
-        {/* Botón debajo de la imagen */}
-        <div className="flex justify-center py-5 bg-background">
-          <Link to="/reservas">
-            <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
-              {t("home.bookNow")}
-            </Button>
-          </Link>
-        </div>
       </div>
 
       {/* DESK hero */}
@@ -92,7 +84,7 @@ const Index = () => {
           alt="Hostal Villa D2"
           width={1920}
           height={1080}
-          fetchpriority="high"
+          fetchPriority="high"
           loading="eager"
           decoding="async"
           className="absolute inset-0 mt-10 h-[calc(100%-2.5rem)] w-full object-cover object-center"
@@ -117,15 +109,6 @@ const Index = () => {
             decoding="async"
             className="h-24 lg:h-28 w-auto drop-shadow-2xl"
           />
-        </div>
-
-        {/* Botón - Centro inferior */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
-          <Link to="/reservas">
-            <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-2xl">
-              {t("home.bookNow")}
-            </Button>
-          </Link>
         </div>
       </section>
 
@@ -163,6 +146,16 @@ const Index = () => {
       </section>*/}
 
       <DescriptionSection />
+
+      {/* Botón de reservar (movido aquí desde el hero) */}
+      <div className="flex justify-center pb-12 bg-background">
+        <Link to="/reservas">
+          <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
+            {t("home.bookNow")}
+          </Button>
+        </Link>
+      </div>
+
       <TerraceBarSection />
       <ReceptionSection />
       {/*<ExchangeRateSection />*/}
