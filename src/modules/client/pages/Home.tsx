@@ -15,6 +15,7 @@ import { HOSTAL } from "@/modules/shared/data/hostal";
 import { reviewsService } from "@/modules/shared/services";
 import { Review, ReviewStatus } from "@/modules/shared/types/api.types";
 import logo from "@/assets/logo.png";
+import DescriptionSection from "@/modules/client/components/DescriptionSection";
 import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
 import ReceptionSection from "@/modules/client/components/ReceptionSection";
 import ExchangeRateSection from "@/modules/client/components/ExchangeRateSection";
@@ -118,15 +119,6 @@ const Index = () => {
           />
         </div>
 
-        {/* Descripción */}
-        <div className="absolute bottom-12 right-8 z-10 max-w-xl">
-          <div className="bg-[#00ffdd] border-l-4 border-primary px-6 py-4 rounded-r-lg">
-            <p className="text-lg lg:text-xl">
-              {parseBilingualText(HOSTAL.tagline, language)}
-            </p>
-          </div>
-        </div>
-
         {/* Botón - Centro inferior */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
           <Link to="/reservas">
@@ -170,9 +162,10 @@ const Index = () => {
         </div>
       </section>*/}
 
+      <DescriptionSection />
       <TerraceBarSection />
       <ReceptionSection />
-      <ExchangeRateSection />
+      {/*<ExchangeRateSection />*/}
 
       {/* Services */}
       <section className="py-20 px-4 bg-accent/30">

@@ -131,8 +131,12 @@ export const en = {
   'terrace.description': 'The Terrace-Bar is decorated making allusion to the "Keys of Cuba", where the archipelagos of Jardines del Rey, Jardines de la Reina, the Canarreos archipelago and the Colorados are reflected, as an integral part of the territory of Cuba and its history.',
 
   // Reception Section
-  'reception.title': 'The Reception',
-  'reception.description': 'At reception, guests are also informed about visit programs to all tourist, cultural and recreational sites of interest, and arrangements are made for transportation to museums and recreational centers.',
+  'reception.title': '24-Hour Reception',
+  'reception.description': 'Our attentive staff is available 24 hours a day to assist you, ensure your safety, and help with tourist information, taxi reservations, and any needs during your stay.',
+
+  // Description Section
+  'description.title': 'General Description',
+  'description.content': 'Hostal Boutique Villa D2 is centrally located in the capital\'s Vedado neighborhood, just 150 meters from the emblematic Plaza de la Revolución, 100 meters from the National Theater of Cuba, and very close to various tourist and recreational sites in Havana.',
 
   // Exchange Rate Section
   'exchange.title': 'Exchange Rates',
