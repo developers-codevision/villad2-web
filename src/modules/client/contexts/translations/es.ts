@@ -172,7 +172,7 @@ export const es = {
   'reservation.male': 'Masculino',
   'reservation.female': 'Femenino',
   'reservation.other': 'Otro',
-  'reservation.idNumber': 'CI o Pasaporte',
+  'reservation.idNumber': 'ID o Pasaporte',
   'reservation.idNumberPlaceholder': '12345678',
   'reservation.country': 'País *',
   'reservation.specialRequests': 'Solicitudes Especiales',
