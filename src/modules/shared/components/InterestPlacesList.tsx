@@ -24,14 +24,14 @@ export default function InterestPlacesList() {
             key={idx}
             className="bg-card border border-border rounded-lg p-5 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow"
           >
-            <div className="bg-primary/10 rounded-full p-3 shrink-0 mt-0.5">
-              <MapPin size={20} className="text-primary" />
+            <div className="bg-[#00c3ff]/10 rounded-full p-3 shrink-0 mt-0.5">
+              <MapPin size={20} className="text-[#00c3ff]" />
             </div>
             <div className="flex-1">
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-semibold text-base">{parseBilingualText(place.name, language)}</h3>
                 {place.url && (
-                  <ExternalLink size={16} className="text-primary flex-shrink-0 mt-0.5" />
+                  <ExternalLink size={16} className="text-[#00c3ff] flex-shrink-0 mt-0.5" />
                 )}
               </div>
               {place.url ? (
@@ -39,7 +39,7 @@ export default function InterestPlacesList() {
                   href={place.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary hover:underline text-sm mt-2 inline-flex items-center gap-1"
+                  className="text-[#00c3ff] hover:underline text-sm mt-2 inline-flex items-center gap-1"
                 >
                   {t("places.visitSite")}
                 </a>
