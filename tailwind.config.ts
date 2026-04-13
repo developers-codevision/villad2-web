@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       screens: {
-        desk: "1700px",
+        desk: "1250px",
       },
       colors: {
         border: "hsl(var(--border))",
