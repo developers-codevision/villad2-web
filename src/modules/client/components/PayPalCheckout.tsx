@@ -180,10 +180,10 @@ export default function PayPalCheckout({ hook, room }: Props) {
           finalizeReservationAfterPayment(reservationId ? Number(reservationId) : -1, 'paypal');
         } catch (error) {
           console.error('onApprove error', error);
-          toast.error('Hubo un problema confirmando el pago. Serás redirigido al inicio.');
-          // setTimeout(() => {
-          //   window.location.href = '/';
-          // }, 2500);
+          toast.error('Hubo un problema confirmando el pago. Revise su conexión a internet . Serás redirigido al inicio.');
+          setTimeout(() => {
+            window.location.href = '/';
+           }, 2500);
         } finally {
           setLoading(false);
         }
@@ -191,16 +191,16 @@ export default function PayPalCheckout({ hook, room }: Props) {
       onCancel: (data: PayPalButtonCancelData) => {
         console.warn('PayPal checkout cancelled', data);
         toast.error('El pago fue cancelado. Redirigiendo...');
-        // setTimeout(() => {
-        //   window.location.href = '/';
-        // }, 1500);
+         setTimeout(() => {
+           window.location.href = '/';
+         }, 1500);
       },
       onError: (err: unknown) => {
         console.error('PayPal Buttons error', err);
-        toast.error('Ocurrió un error inesperado con PayPal. Redirigiendo...');
-        // setTimeout(() => {
-        //   window.location.href = '/';
-        // }, 2000);
+        toast.error('Ocurrió un error inesperado con PayPal. Revise su conexión a internet . Redirigiendo...');
+        setTimeout(() => {
+         window.location.href = '/';
+         }, 2000);
       },
     });
 
