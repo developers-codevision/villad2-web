@@ -1,4 +1,5 @@
 import {
+    User,
     Wifi,
     Coffee,
     Car,
@@ -17,7 +18,7 @@ import {
     Shirt,
     Beer,
     Gift,
-    Scissors
+    Utensils
 } from "lucide-react";
 
 export const HOSTAL = {
@@ -106,6 +107,11 @@ export const SERVICES_SECURITY = [
         name: "Señalética Completa / Complete Signage",
         description: "Señalización clara de todas las áreas, salidas de emergencia y servicios. / Clear signage of all areas, emergency exits and services."
     },
+      {
+        icon: User,
+        name: "Agentes de Seguridad 24h / 24h Security Agents",
+        description: "El hostal cuenta con agentes de seguridad  custodiando el inmueble las 24 horas. / The hostel has 24-hour security agents guarding the property."
+    }
 ];
 
 export const SERVICES_INCLUDED = [
@@ -138,7 +144,8 @@ export const SERVICES_INCLUDED = [
         icon: Lock,
         name: "Caja de Seguridad / Safety Deposit Box",
         description: "Cajas de seguridad individuales en cada habitación. / Individual safety deposit boxes in each room."
-    },
+    }
+
 ];
 
 export const SERVICES_ADDITIONAL = [
@@ -182,10 +189,10 @@ export const SERVICES_ADDITIONAL = [
         name: "Venta de Souvenirs / Souvenir Sales",
         description: "Souvenirs y artículos identificativos de la Villa. / Souvenirs and identifying items of the Villa."
     },
-    {
-        icon: Scissors,
-        name: "Servicios de Belleza / Beauty Services",
-        description: "Peluquería, barbería, peinados y servicios de belleza en general. / Hairdressing, barber, hairstyles and general beauty services."
+      {
+        icon: Utensils,
+        name: "Salón Restaurante / Restaurant Lounge",
+        description: "Se ofrecen cenas y almuerzos a la carta. / À la carte lunches and dinners are offered."
     },
 ];
 
