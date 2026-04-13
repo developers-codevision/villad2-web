@@ -114,7 +114,7 @@ export default function DateSelection({
   return (
     <div className="space-y-2">
       <Label className="text-base">{t("reservation.stayDates")}</Label>
-      <div className={`border rounded-lg p-4 md:p-6 w-full overflow-hidden ${hasDateError() ? 'border-red-500' : 'border-border'}`}>
+      <div className={`border rounded-lg  md:p-6 w-full overflow-hidden ${hasDateError() ? 'border-red-500' : 'border-border'}`}>
         <div className="w-full flex justify-center -mx-4 md:-mx-6 px-4 md:px-6" onClick={handleCalendarClick}>
           <div className="w-full max-w-full overflow-x-auto">
             <Calendar

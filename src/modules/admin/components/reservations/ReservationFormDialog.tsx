@@ -237,7 +237,7 @@ export function ReservationFormDialog({
           {bookingMode === 'single' && (
             <div className="space-y-2">
               <Label className="text-base">Fecha de la reserva</Label>
-              <div className="border border-border rounded-lg p-4 flex justify-center">
+              <div className="border border-border rounded-lg  flex justify-center">
                 <Calendar
                   mode="single"
                   selected={formData.checkIn ?? undefined}
