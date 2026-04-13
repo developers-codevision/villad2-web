@@ -83,8 +83,8 @@ export const interestPlaces = [
     name: "Heladería Coppelia / Coppelia Ice Cream Parlor",
     url: "https://es.wikipedia.org/wiki/Coppelia_(helader%C3%ADa)"
   },
-  {
-    name: "Edificio FOCSA / FOCSA Building",
+ {
+    name: "Restaurant La Torre en el Edificio Focsa / La Torre Restaurant in the Focsa Building",
     url: "https://es.wikipedia.org/wiki/FOCSA"
   },
   {
