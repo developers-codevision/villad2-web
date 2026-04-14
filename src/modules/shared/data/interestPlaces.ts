@@ -60,8 +60,8 @@ export const interestPlaces = [
     url: "https://es.wikipedia.org/wiki/Casa_de_las_Am%C3%A9ricas"
   },
   {
-    name: "Museo Memorial Fidel Castro Ruz / Fidel Castro Ruz Memorial Museum",
-    url: null
+    name: "Salón Rojo del Hotel Capri",
+    url: "https://es.wikipedia.org/wiki/Hotel_Capri_(La_Habana)"
   },
   {
     name: "Avenida de los presidentes o Calle G. / Avenue of Presidents or G Street",
@@ -144,4 +144,3 @@ export const interestPlaces = [
     url: "https://es.wikipedia.org/wiki/La_Habana_Vieja"
   }
 ];
-
