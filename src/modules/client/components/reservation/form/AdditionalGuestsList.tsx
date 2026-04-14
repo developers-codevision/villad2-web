@@ -48,7 +48,7 @@ export default function AdditionalGuestsList({
                 onChange={(e) =>
                   onGuestChange(index, { ...guest, firstName: e.target.value })
                 }
-                placeholder="Juan"
+                placeholder=""
                 className={hasError(index, 'nombre') ? "border-red-500 focus:border-red-500" : ""}
               />
             </div>
@@ -59,7 +59,7 @@ export default function AdditionalGuestsList({
                 onChange={(e) =>
                   onGuestChange(index, { ...guest, lastName: e.target.value })
                 }
-                placeholder="Pérez"
+                placeholder=""
                 className={hasError(index, 'apellido') ? "border-red-500 focus:border-red-500" : ""}
               />
             </div>
@@ -73,7 +73,7 @@ export default function AdditionalGuestsList({
               }
             >
               <SelectTrigger className={hasError(index, 'sexo') ? "border-red-500 focus:border-red-500" : ""}>
-                <SelectValue placeholder={t("reservation.selectSex")} />
+                <SelectValue placeholder="" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="M">{t("reservation.male")}</SelectItem>
@@ -89,7 +89,7 @@ export default function AdditionalGuestsList({
               onChange={(e) =>
                 onGuestChange(index, { ...guest, idNumber: e.target.value })
               }
-              placeholder={t("reservation.idNumberPlaceholder")}
+              placeholder={""}
               className=""
             />
           </div>

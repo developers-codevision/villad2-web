@@ -21,7 +21,7 @@ export default function SpecialRequests({
         rows={3}
         value={notes}
         onChange={(e) => onNotesChange(e.target.value)}
-        placeholder={t("reservation.specialRequestsPlaceholder")}
+        placeholder=""
       />
     </div>
   );

@@ -293,7 +293,7 @@ export function ReservationFormDialog({
               <div className="space-y-2">
                 <Label>Nombre *</Label>
                 <Input
-                  placeholder="Juan"
+                  placeholder=""
                   value={formData.guestFirstName}
                   onChange={e => onFormChange('guestFirstName', e.target.value)}
                 />
@@ -301,7 +301,7 @@ export function ReservationFormDialog({
               <div className="space-y-2">
                 <Label>Apellido *</Label>
                 <Input
-                  placeholder="Pérez"
+                  placeholder=""
                   value={formData.guestLastName || ''}
                   onChange={e => onFormChange('guestLastName', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
@@ -312,7 +312,7 @@ export function ReservationFormDialog({
             <div className="space-y-2">
               <Label>CI o Pasaporte</Label>
               <Input
-                placeholder="12345678"
+                placeholder=""
                 value={formData.guestIdNumber || ''}
                 onChange={e => onFormChange('guestIdNumber', e.target.value.trim() === '' ? undefined : e.target.value)}
               />
@@ -340,7 +340,7 @@ export function ReservationFormDialog({
                 <Label>Email *</Label>
                 <Input
                   type="email"
-                  placeholder="juan@email.com"
+                  placeholder=""
                   value={formData.guestEmail || ''}
                   onChange={e => onFormChange('guestEmail', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
@@ -349,7 +349,7 @@ export function ReservationFormDialog({
                 <Label>Teléfono *</Label>
                 <Input
                   type="tel"
-                  placeholder="+51 987 654 321"
+                  placeholder=""
                   value={formData.guestPhone || ''}
                   onChange={e => onFormChange('guestPhone', e.target.value.trim() === '' ? undefined : e.target.value)}
                 />
@@ -395,7 +395,7 @@ export function ReservationFormDialog({
                           newGuests[index] = { ...newGuests[index], firstName: e.target.value };
                           onFormChange('additionalGuests', newGuests);
                         }}
-                        placeholder="Juan"
+                        placeholder=""
                       />
                     </div>
                     <div className="space-y-2">
@@ -407,7 +407,7 @@ export function ReservationFormDialog({
                           newGuests[index] = { ...newGuests[index], lastName: e.target.value };
                           onFormChange('additionalGuests', newGuests);
                         }}
-                        placeholder="Pérez"
+                        placeholder=""
                       />
                     </div>
                   </div>
@@ -494,7 +494,7 @@ export function ReservationFormDialog({
             <Label>Notas o Peticiones Especiales (Opcional)</Label>
             <Textarea
               rows={3}
-              placeholder="Llegada tardía, cuna para bebé, etc."
+              placeholder=""
               value={formData.notes}
               onChange={e => onFormChange('notes', e.target.value)}
             />

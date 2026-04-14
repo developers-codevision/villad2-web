@@ -48,7 +48,7 @@ export default function PrimaryGuestDetails({
             id="firstName"
             value={firstName}
             onChange={(e) => onFirstNameChange(e.target.value)}
-            placeholder="Juan"
+            placeholder=""
             className={getErrorClassName('nombre', validationErrors)}
           />
         </div>
@@ -58,7 +58,7 @@ export default function PrimaryGuestDetails({
             id="lastName"
             value={lastName}
             onChange={(e) => onLastNameChange(e.target.value)}
-            placeholder="Pérez"
+            placeholder=""
             className={getErrorClassName('apellido', validationErrors)}
           />
         </div>
@@ -69,7 +69,7 @@ export default function PrimaryGuestDetails({
           id="idNumber"
           value={idNumber}
           onChange={(e) => onIdNumberChange(e.target.value)}
-          placeholder={t("reservation.idNumberPlaceholder")}
+          placeholder={""}
           className={getErrorClassName('identificación', validationErrors)}
         />
       </div>
@@ -94,7 +94,7 @@ export default function PrimaryGuestDetails({
             type="email"
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
-            placeholder="tu@email.com"
+            placeholder=""
             className={getErrorClassName('email', validationErrors)}
           />
         </div>
@@ -105,7 +105,7 @@ export default function PrimaryGuestDetails({
             type="tel"
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
-            placeholder="+51 987 654 321"
+            placeholder=""
             className={getErrorClassName('teléfono', validationErrors)}
           />
         </div>
