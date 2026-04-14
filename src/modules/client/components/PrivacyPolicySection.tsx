@@ -74,12 +74,14 @@ const PrivacyPolicySection = () => {
                 <p className="mb-2">Si tienes consultas sobre la política de privacidad, contáctanos:</p>
                 <p><span className="font-semibold">Email:</span> hostal.villad2@gmail.com</p>
                 <p><span className="font-semibold">Teléfono:</span> +53 78820045</p>
+                <p><span className="font-semibold">Whatsapp:</span> +53 50970588 / 59713605</p>
               </div>
             ) : (
               <div className="text-muted-foreground text-sm">
                 <p className="mb-2">If you have any questions about the privacy policy, contact us:</p>
                 <p><span className="font-semibold">Email:</span> hostal.villad2@gmail.com</p>
                 <p><span className="font-semibold">Phone:</span> +53 78820045</p>
+                <p><span className="font-semibold">Whatsapp:</span> +53 50970588 / 59713605</p>
               </div>
             )}
           </div>
