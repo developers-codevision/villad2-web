@@ -132,7 +132,7 @@ export const en = {
 
   // Reception Section
   'reception.title': '24-Hour Reception',
-  'reception.description': 'Our attentive staff is available 24 hours a day to assist you, ensure your safety, and help with tourist information, taxi reservations, and any needs during your stay.',
+  'reception.description': 'Attentive staff available 24 hours a day to assist you, ensure your safety, and help with tourist information, taxi reservations, and any needs during your stay.',
 
   // Description Section
   'description.title': 'General Description',

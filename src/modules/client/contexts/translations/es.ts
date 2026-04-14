@@ -131,7 +131,7 @@ export const es = {
 
     // Reception Section
     "reception.title": "Recepción 24 Horas",
-    "reception.description": "Nuestro atento personal está disponible las 24 horas para atenderle, garantizar su seguridad y ayudarle con información turística, reservas de taxis y cualquier necesidad durante su estancia.",
+    "reception.description": "Atento personal disponible las 24 horas para atenderle, garantizar su seguridad y ayudarle con información turística, reservas de taxis y cualquier necesidad durante su estancia.",
 
     "description.title": "Descripción General",
     "description.content": "El Hostal Boutique Villa D2 tiene una céntrica ubicación en el Vedado capitalino, a sólo 150 metros de la emblemática Plaza de la Revolución, a 100 metros del Teatro Nacional de Cuba y muy cercana a diversos sitios de interés turístico y recreativo de la Ciudad de la Habana.",
