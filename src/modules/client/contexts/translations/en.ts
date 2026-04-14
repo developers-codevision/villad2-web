@@ -127,7 +127,7 @@ export const en = {
   'home.clickHere': '(Click here)',
 
   // Terrace Bar Section
-  'terrace.title': 'The Terrace-Bar',
+  'terrace.title': 'Terrace-Bar Villa D2',
   'terrace.description': 'The Terrace-Bar is decorated making allusion to the "Keys of Cuba", where the archipelagos of Jardines del Rey, Jardines de la Reina, the Canarreos archipelago and the Colorados are reflected, as an integral part of the territory of Cuba and its history.',
 
   // Reception Section

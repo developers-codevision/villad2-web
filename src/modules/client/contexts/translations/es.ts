@@ -127,7 +127,6 @@ export const es = {
   'home.clickHere': '(Haz clic aquí)',
 
     // Terrace Bar Section
-    'terrace.title': 'La Terraza-Bar',
     'terrace.description': 'La Terraza-Bar, está decorada haciendo alusión a los "Cayos de Cuba", donde se reflejan los archipiélagos de Jardines del Rey, Jardines de la Reina, el archipiélago de los Canarreos y de los Colorados, como parte integrante del territorio de Cuba y su historia.',
 
     // Reception Section
@@ -137,7 +136,7 @@ export const es = {
     "description.title": "Descripción General",
     "description.content": "El Hostal Boutique Villa D2 tiene una céntrica ubicación en el Vedado capitalino, a sólo 150 metros de la emblemática Plaza de la Revolución, a 100 metros del Teatro Nacional de Cuba y muy cercana a diversos sitios de interés turístico y recreativo de la Ciudad de la Habana.",
 
-    "terrace.title": "Nuestra Terraza Bar",
+    "terrace.title": "Terraza-Bar Villa D2",
 
   // Exchange Rate Section
   'exchange.title': 'Tipos de Cambio',
