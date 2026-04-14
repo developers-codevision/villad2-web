@@ -51,7 +51,7 @@ export const es = {
   'rooms.noRooms': 'No hay habitaciones disponibles en este momento.',
 
   // Services Page
-  'services.title': 'Nuestros Servicios',
+  'services.title': 'Servicios Villa D2',
   'services.subtitle': 'Todo lo que necesitas para disfrutar al máximo tu estancia.',
   'services.security': 'Seguridad del Hostal',
   'services.included': 'Servicios Incluidos',
@@ -109,7 +109,7 @@ export const es = {
   // Home Page
   'home.heroTitle': 'Hostal Boutique',
   'home.bookNow': 'Reservar Ahora',
-  'home.servicesTitle': 'Nuestros Servicios',
+  'home.servicesTitle': 'Servicios Villa D2',
   'home.servicesSubtitle': 'Desde seguridad 24/7 hasta servicios premium, tenemos todo lo que necesitas para una estancia perfecta.',
   'home.viewAllServices': 'Ver Todos los Servicios',
   'home.reviewsTitle': 'Lo que dicen nuestros Huéspedes',

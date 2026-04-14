@@ -51,7 +51,7 @@ export const en = {
   'rooms.noRooms': 'No rooms available at this time.',
 
   // Services Page
-  'services.title': 'Our Services',
+  'services.title': 'Villa D2 Services',
   'services.subtitle': 'Everything you need to enjoy your stay to the fullest.',
   'services.security': 'Hostal Security',
   'services.included': 'Included Services',
@@ -109,7 +109,7 @@ export const en = {
   // Home Page
   'home.heroTitle': 'Boutique Hostal',
   'home.bookNow': 'Book Now',
-  'home.servicesTitle': 'Our Services',
+  'home.servicesTitle': 'Villa D2 Services',
   'home.servicesSubtitle': 'From 24/7 security to premium services, we have everything you need for a perfect stay.',
   'home.viewAllServices': 'View All Services',
   'home.reviewsTitle': 'What Our Guests Say',
