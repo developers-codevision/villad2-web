@@ -1,4 +1,4 @@
-import { Users, BedDouble, Bath, CheckCircle, ArrowRight, ChevronLeft } from "lucide-react";
+import { Users, BedDouble, Bath, ArrowRight, ChevronLeft, CheckCircle } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
@@ -98,32 +98,32 @@ export default function RoomDetail() {
       <Navbar />
       <main className="pb-20">
         {/* Hero */}
-        <section className="relative h-[70vh] md:h-[80vh] overflow-hidden mt-16">
+        <section className="h-[70vh] md:h-[80vh] overflow-hidden mt-16">
           <ImageWithPlaceholder
             src={mainImage}
             alt={room.name}
             className="w-full h-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-            <div className="container mx-auto">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white/80 hover:text-white hover:bg-white/10 mb-4"
-                onClick={() => navigate("/habitaciones")}
-              >
-                <ChevronLeft size={16} /> {t("room.allRooms")}
-              </Button>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">#{room.id} : {room.name}</h1>
-              <p className="text-white/90 text-lg max-w-2xl">{description}</p>
-              <div className="flex items-center gap-4 mt-4">
+        </section>
 
-                <span className="flex items-center gap-1 text-white/80">
-                  <Users size={16} /> {t("room.upTo")} {capacity} {capacity === 1 ? t("room.person") : t("room.persons")}
-                </span>
-              </div>
+        {/* Room Info */}
+        <section className="py-12 px-4 bg-background">
+          <div className="container mx-auto">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mb-4"
+              onClick={() => navigate("/habitaciones")}
+            >
+              <ChevronLeft size={16} /> {t("room.allRooms")}
+            </Button>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">#{room.id} : {room.name}</h1>
+            <p className="text-lg max-w-2xl mb-6">{description}</p>
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <Users size={16} /> {t("room.upTo")} {capacity} {capacity === 1 ? t("room.person") : t("room.persons")}
+              </span>
             </div>
           </div>
         </section>
