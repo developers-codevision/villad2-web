@@ -34,7 +34,7 @@ const FAQSection = () => {
       answer: "No está incluido en el precio de la habitación, lo puedes reservar y pagar o concertarlo durante el check in. El horario del desayuno es de 7:00 AM a 11:00 AM con flexibilidad de horario. Si tienes necesidades dietéticas especiales, avísanos con anticipación. / Breakfast is not included in the room price, you can book and pay for it or arrange it during check-in. Breakfast hours are from 7:00 AM to 11:00 AM with schedule flexibility. If you have special dietary needs, let us know in advance."
     },
     {
-      question: "Ofrecen otros servicios de alimentación además de los desayunos? / Do you offer other food services besides breakfast?",
+      question: "¿Ofrecen otros servicios de alimentación además de los desayunos? / Do you offer other food services besides breakfast?",
       answer: "Sí, hay otras opciones de alimentos y bebidas: • Carta variada de snacks / Varied snacks menu • Carta variada de bebidas y cocteles / Varied drinks and cocktails menu • Tables para almuerzos y cenas / Platters for lunches and dinners / Yes, there are additional food and beverage options including a varied snacks menu, drinks and cocktails, and platters for lunch and dinner."
     },
     {
