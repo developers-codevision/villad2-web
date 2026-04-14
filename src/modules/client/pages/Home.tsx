@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {useEffect, useRef ,useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import {
@@ -25,9 +25,6 @@ import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 const Index = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
-  const [isMapVisible, setIsMapVisible] = useState(false);
-  const [userHasInteractedWithMap, setUserHasInteractedWithMap] = useState(false);
-  const mapSectionRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
 
   // Cargar reseñas aprobadas desde la API
@@ -275,57 +272,45 @@ const Index = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 rounded-full p-3"><Phone className="text-primary" /></div>
+                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><Phone className="text-[#00c3ff]" /></div>
                       <div>
                         <p className="font-semibold">{t("home.phones")}</p>
                         <p className="text-muted-foreground">{HOSTAL.phone}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 rounded-full p-3"><Mail className="text-primary" /></div>
+                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><Mail className="text-[#00c3ff]" /></div>
                       <div>
                         <p className="font-semibold">{t("home.email")}</p>
                         <p className="text-muted-foreground">{HOSTAL.email}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 rounded-full p-3"><MessageCircle className="text-primary" /></div>
+                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><MessageCircle className="text-[#00c3ff]" /></div>
                       <div>
                         <p className="font-semibold">{t("home.whatsapp")}</p>
                         <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 rounded-full p-3"><MapPin className="text-primary" /></div>
+                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><MapPin className="text-[#00c3ff]" /></div>
                       <div>
                         <p className="font-semibold">{t("home.address")}</p>
                         <p className="text-muted-foreground">{HOSTAL.address}</p>
                       </div>
                     </div>
                   </div>
-                  <div
-                    ref={mapSectionRef}
-                    className="relative rounded-lg overflow-hidden shadow-lg h-[350px] cursor-pointer group bg-gray-200"
-                    onClick={() => setUserHasInteractedWithMap(true)}
-                  >
-                    {(isMapVisible || userHasInteractedWithMap) ? (
-                      <iframe
-                        src={HOSTAL.mapEmbedUrl}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title={t("home.mapTitle")}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center">
-                         <MapPin className="w-12 h-12 text-primary/50 mb-4" />
-                         <p className="font-semibold text-muted-foreground">{t("home.loadMap")}</p>
-                         <p className="text-sm text-muted-foreground/80">{t("home.clickHere")}</p>
-                      </div>
-                    )}
+                  <div className="relative rounded-lg overflow-hidden shadow-lg h-[350px]">
+                    <iframe
+                      src={HOSTAL.mapEmbedUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={t("home.mapTitle")}
+                    />
                   </div>
                 </div>
               </div>
