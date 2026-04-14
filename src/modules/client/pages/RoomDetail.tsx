@@ -134,12 +134,12 @@ export default function RoomDetail() {
             {roomAmenities.length > 0 && (
               <div>
                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                  <BedDouble size={22} className="text-primary" /> {t("room.includes")}
+                  <BedDouble size={22} className="text-[#00c3ff]" /> {t("room.includes")}
                 </h2>
                 <div className="grid grid-cols-2 gap-3">
                   {roomAmenities.map((a, index) => (
                     <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
-                      <CheckCircle size={16} className="text-primary shrink-0" />
+                      <CheckCircle size={16} className="text-[#00c3ff] shrink-0" />
                       <span className="text-sm font-medium">{a}</span>
                     </div>
                   ))}
@@ -149,12 +149,12 @@ export default function RoomDetail() {
             {bathroomAmenities.length > 0 && (
               <div>
                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                  <Bath size={22} className="text-primary" /> {t("room.bathroom")}
+                  <Bath size={22} className="text-[#00c3ff]" /> {t("room.bathroom")}
                 </h2>
                 <div className="grid grid-cols-2 gap-3">
                   {bathroomAmenities.map((a, index) => (
                     <div key={index} className="flex items-center gap-2 bg-accent/50 rounded-lg px-4 py-3">
-                      <CheckCircle size={16} className="text-primary shrink-0" />
+                      <CheckCircle size={16} className="text-[#00c3ff] shrink-0" />
                       <span className="text-sm font-medium">{a}</span>
                     </div>
                   ))}
