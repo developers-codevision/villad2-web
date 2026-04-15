@@ -296,10 +296,8 @@ export function useClientReservation(prices?: PricesResponse) {
 
       try {
         const createDto = clientFormDataToCreateDto(formData, method);
-        console.log('Creating reservation with payment method:', method, createDto);
 
         const response = await reservationsService.createWithPayment(createDto);
-        console.log('Payment response:', response);
 
         if (method === 'stripe' && response.paymentSession?.url) {
           // Redirect to Stripe-hosted checkout page
