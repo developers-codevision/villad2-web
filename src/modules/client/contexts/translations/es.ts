@@ -121,6 +121,7 @@ export const es = {
   'home.phones': 'Teléfonos',
   'home.email': 'Email',
   'home.whatsapp': 'WhatsApp',
+  'common.whatsapp.tooltip': '¿Tienes dudas? Escríbenos',
   'home.address': 'Dirección',
   'home.mapTitle': 'Ubicación del hostal',
   'home.loadMap': 'Cargar mapa interactivo',

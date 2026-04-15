@@ -121,6 +121,7 @@ export const en = {
   'home.phones': 'Phones',
   'home.email': 'Email',
   'home.whatsapp': 'WhatsApp',
+  'common.whatsapp.tooltip': 'Have questions? Write to us',
   'home.address': 'Address',
   'home.mapTitle': 'Hostal location',
   'home.loadMap': 'Load interactive map',

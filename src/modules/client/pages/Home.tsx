@@ -201,18 +201,18 @@ const Index = () => {
               <p className="text-muted-foreground">{t("home.noReviews")}</p>
             </div>
           ) : (
-            <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-5xl mx-auto">
+            <Carousel className="w-full mx-auto">
               <CarouselContent className="-ml-4">
                 {reviews.map((review) => {
                   return (
-                    <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                      <div className="group relative rounded-2xl border-l-4 border-l-yellow-400 bg-gradient-to-br from-yellow-50 to-amber-50 backdrop-blur-sm shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-64 overflow-hidden">
+                    <CarouselItem key={review.id} className="pl-4 md:basis-1/3 lg:basis-1/3">
+                      <div className="group relative rounded-2xl border-l-4 border-l-yellow-400 bg-gradient-to-br from-yellow-50 to-amber-50 backdrop-blur-sm shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
                         {/* Decorative quote */}
                         <div className="absolute top-4 right-4 text-6xl font-serif text-primary/10 leading-none select-none pointer-events-none group-hover:text-primary/20 transition-colors">
                           "
                         </div>
 
-                        <div className="relative p-6 flex flex-col h-full z-10">
+                        <div className="relative p-4 flex flex-col h-full z-10">
                           {/* TOP: Avatar + name/country + stars */}
                           <div className="flex items-center gap-3 mb-4">
                             <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-sm shrink-0">
@@ -238,9 +238,9 @@ const Index = () => {
 
                           {/* MIDDLE: title + content */}
                           {review.title && (
-                            <p className="font-semibold text-sm mb-2">{review.title}</p>
+                            <p className="font-semibold text-xs mb-2">{review.title}</p>
                           )}
-                          <p className="text-xs leading-relaxed text-foreground/90 flex-1 mb-4 line-clamp-5">
+                          <p className="text-xs leading-relaxed text-foreground/90 mb-4 line-clamp-5 text-left">
                             "{review.content}"
                           </p>
 
