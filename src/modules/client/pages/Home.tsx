@@ -70,9 +70,9 @@ const Index = () => {
               {t("home.heroTitle")}{" "}
               <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
             </h1>
-            <p className="text-right uppercase text-fuchsia-700 mt-2 drop-shadow-2xl font-bold text-lg lg:text-xl pr-4">
-              Tu hogar lejos de casa
-            </p>
+      <p className="text-right uppercase text-fuchsia-700 pl-16 mt-0.5 drop-shadow-2xl font-bold text-xs pr-4">
+        Tu hogar lejos de casa
+      </p>
           </div>
         </div>
       </div>
