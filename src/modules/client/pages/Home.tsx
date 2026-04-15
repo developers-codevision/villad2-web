@@ -65,11 +65,14 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Título sobre la imagen */}
-          <div className="absolute inset-0 flex items-start p-4 pt-3">
+          <div className="absolute inset-0 flex flex-col items-start p-4 pt-3">
             <h1 className="text-2xl font-extrabold leading-tight text-white drop-shadow-2xl">
               {t("home.heroTitle")}{" "}
               <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
             </h1>
+            <p className="text-right uppercase text-purple-900 mt-2 drop-shadow-2xl font-bold text-lg lg:text-xl pr-4">
+              Tu hogar lejos de casa
+            </p>
           </div>
         </div>
       </div>
@@ -88,11 +91,14 @@ const Index = () => {
         />
 
         {/* Título - Esquina superior izquierda */}
-        <div className="absolute top-24 left-8 z-10">
-          <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl">
+        <div className="absolute top-24 left-8 z-10 flex flex-col ">
+          <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-2xl whitespace-nowrap">
             {t("home.heroTitle")}{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
+          <p className="uppercase text-purple-900 mt-2 drop-shadow-2xl pr-12 font-bold text-sm sm:text-base md:text-lg lg:text-2xl xl:text-3xl ml-auto">
+            Tu hogar lejos de casa
+          </p>
         </div>
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
