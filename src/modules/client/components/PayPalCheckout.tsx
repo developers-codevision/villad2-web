@@ -192,7 +192,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
         console.warn('PayPal checkout cancelled', data);
         toast.error('El pago fue cancelado. Redirigiendo...');
          setTimeout(() => {
-           window.location.href = '/';
+          // window.location.href = '/';
          }, 1500);
       },
       onError: (err: unknown) => {
