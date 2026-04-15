@@ -144,6 +144,15 @@ const Index = () => {
 
       <DescriptionSection />
 
+      {/* Botón de reservar (movido aquí desde el hero) */}
+      <div className="flex justify-center pb-12 bg-background">
+        <Link to="/reservas">
+          <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
+            {t("home.bookNow")}
+          </Button>
+        </Link>
+      </div>
+
       {/* Reviews */}
       <section className="py-20 px-4 bg-gradient-to-b from-background via-accent/20 to-background">
         <div className="container mx-auto">
@@ -230,16 +239,6 @@ const Index = () => {
           )}
         </div>
       </section>
-
-      {/* Botón de reservar (movido aquí desde el hero) */}
-      <div className="flex justify-center pb-12 bg-background">
-        <Link to="/reservas">
-          <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
-            {t("home.bookNow")}
-          </Button>
-        </Link>
-      </div>
-
       <TerraceBarSection />
       <ReceptionSection />
       {/*<ExchangeRateSection />*/}
