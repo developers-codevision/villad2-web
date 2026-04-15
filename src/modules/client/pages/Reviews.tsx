@@ -33,6 +33,15 @@ const Reviews = () => {
       return;
     }
 
+    if (content.length > 350) {
+      toast({
+        title: t("reviews.maxLengthTitle"),
+        description: t("reviews.maxLengthDesc"),
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -127,6 +136,9 @@ const Reviews = () => {
                     rows={4}
                     disabled={isSubmitting}
                   />
+                  <p className="text-xs text-muted-foreground text-right">
+                    {content.length}/350 {t("reviews.characters")}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
