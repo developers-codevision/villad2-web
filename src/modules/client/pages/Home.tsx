@@ -240,7 +240,7 @@ const Index = () => {
                           {review.title && (
                             <p className="font-semibold text-xs mb-2">{review.title}</p>
                           )}
-                          <p className="text-xs leading-relaxed text-foreground/90 mb-4 line-clamp-5 text-left">
+                          <p className="text-xs leading-relaxed text-foreground/90 mb-4 line-clamp-6 text-left">
                             "{review.content}"
                           </p>
 
