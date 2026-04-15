@@ -144,39 +144,6 @@ const Index = () => {
 
       <DescriptionSection />
 
-      {/* Botón de reservar (movido aquí desde el hero) */}
-      <div className="flex justify-center pb-12 bg-background">
-        <Link to="/reservas">
-          <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
-            {t("home.bookNow")}
-          </Button>
-        </Link>
-      </div>
-
-      <TerraceBarSection />
-      <ReceptionSection />
-      {/*<ExchangeRateSection />*/}
-
-      {/* Services */}
-      <section className="py-20 px-4 bg-accent/30">
-        <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            {t("home.servicesTitle")}
-          </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            {t("home.servicesSubtitle")}
-          </p>
-
-          <div className="text-center">
-            <Link to="/servicios">
-              <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                {t("home.viewAllServices")}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Reviews */}
       <section className="py-20 px-4 bg-gradient-to-b from-background via-accent/20 to-background">
         <div className="container mx-auto">
@@ -263,58 +230,92 @@ const Index = () => {
           )}
         </div>
       </section>
-            {/* Contact + Map */}
-            <section className="py-20 px-4">
-              <div className="container mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                  {t("home.contactTitle")}
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><Phone className="text-[#00c3ff]" /></div>
-                      <div>
-                        <p className="font-semibold">{t("home.phones")}</p>
-                        <p className="text-muted-foreground">{HOSTAL.phone}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><Mail className="text-[#00c3ff]" /></div>
-                      <div>
-                        <p className="font-semibold">{t("home.email")}</p>
-                        <p className="text-muted-foreground">{HOSTAL.email}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><MessageCircle className="text-[#00c3ff]" /></div>
-                      <div>
-                        <p className="font-semibold">{t("home.whatsapp")}</p>
-                        <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-[#00c3ff]/10 rounded-full p-3"><MapPin className="text-[#00c3ff]" /></div>
-                      <div>
-                        <p className="font-semibold">{t("home.address")}</p>
-                        <p className="text-muted-foreground">{HOSTAL.address}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative rounded-lg overflow-hidden shadow-lg h-[350px]">
-                    <iframe
-                      src={HOSTAL.mapEmbedUrl}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={t("home.mapTitle")}
-                    />
-                  </div>
+
+      {/* Botón de reservar (movido aquí desde el hero) */}
+      <div className="flex justify-center pb-12 bg-background">
+        <Link to="/reservas">
+          <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
+            {t("home.bookNow")}
+          </Button>
+        </Link>
+      </div>
+
+      <TerraceBarSection />
+      <ReceptionSection />
+      {/*<ExchangeRateSection />*/}
+
+      {/* Services */}
+      <section className="py-20 px-4 bg-accent/30">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+            {t("home.servicesTitle")}
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+            {t("home.servicesSubtitle")}
+          </p>
+
+          <div className="text-center">
+            <Link to="/servicios">
+              <Button variant="outline" size="lg" className="font-semibold border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                {t("home.viewAllServices")}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact + Map */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+            {t("home.contactTitle")}
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-[#00c3ff]/10 rounded-full p-3"><Phone className="text-[#00c3ff]" /></div>
+                <div>
+                  <p className="font-semibold">{t("home.phones")}</p>
+                  <p className="text-muted-foreground">{HOSTAL.phone}</p>
                 </div>
               </div>
-            </section>
+              <div className="flex items-center gap-4">
+                <div className="bg-[#00c3ff]/10 rounded-full p-3"><Mail className="text-[#00c3ff]" /></div>
+                <div>
+                  <p className="font-semibold">{t("home.email")}</p>
+                  <p className="text-muted-foreground">{HOSTAL.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="bg-[#00c3ff]/10 rounded-full p-3"><MessageCircle className="text-[#00c3ff]" /></div>
+                <div>
+                  <p className="font-semibold">{t("home.whatsapp")}</p>
+                  <p className="text-muted-foreground">{HOSTAL.whatsapp}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="bg-[#00c3ff]/10 rounded-full p-3"><MapPin className="text-[#00c3ff]" /></div>
+                <div>
+                  <p className="font-semibold">{t("home.address")}</p>
+                  <p className="text-muted-foreground">{HOSTAL.address}</p>
+                </div>
+              </div>
+            </div>
+            <div className="relative rounded-lg overflow-hidden shadow-lg h-[350px]">
+              <iframe
+                src={HOSTAL.mapEmbedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={t("home.mapTitle")}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       <Footer />
