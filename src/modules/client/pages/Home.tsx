@@ -220,7 +220,7 @@ const Index = () => {
                             </div>
                             <div className="min-w-0 flex-1">
                               <p className="font-semibold text-sm truncate">{review.name}</p>
-                              <p className="text-xs text-muted-foreground truncate">{review.country}</p>
+                              {review.country && <p className="text-xs text-muted-foreground truncate">{review.country}</p>}
                             </div>
                             <div className="flex items-center gap-0.5 shrink-0">
                               {Array.from({ length: 5 }).map((_, s) => (

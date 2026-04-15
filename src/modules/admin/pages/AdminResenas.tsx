@@ -81,9 +81,11 @@ export default function AdminResenas() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <CardTitle className="text-lg">{review.name}</CardTitle>
-                      <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
-                        {review.country}
-                      </span>
+                      {review.country && (
+                        <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                          {review.country}
+                        </span>
+                      )}
                     </div>
                     <CardDescription>
                       {new Date(review.createdAt).toLocaleDateString('es-ES', {

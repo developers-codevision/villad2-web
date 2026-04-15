@@ -78,6 +78,9 @@ export const es = {
   'reviews.errorDesc': 'No pudimos procesar tu reseña. Intenta de nuevo.',
   'reviews.requiredFields': 'Campos requeridos',
   'reviews.requiredFieldsDesc': 'Por favor completa tu nombre, puntuación y comentario.',
+  'reviews.maxLengthTitle': 'Demasiados caracteres',
+  'reviews.maxLengthDesc': 'La descripción no puede tener más de 350 caracteres.',
+  'reviews.characters': 'caracteres',
 
   // Login Page
   'login.title': 'Acceso Administración',
