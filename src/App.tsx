@@ -24,6 +24,8 @@ const RefundPolicies = lazy(() => import("@/modules/client/pages/RefundPolicies"
 const TermsAndConditions = lazy(() => import("@/modules/client/pages/TermsAndConditions"));
 const FAQ = lazy(() => import("@/modules/client/pages/FAQ"));
 const PrivacyPolicy = lazy(() => import("@/modules/client/pages/PrivacyPolicy"));
+const CookiePolicy = lazy(() => import("@/modules/client/pages/CookiePolicy"));
+const LegalNotice = lazy(() => import("@/modules/client/pages/LegalNotice"));
 
 // Admin pages
 const AdminLayout = lazy(() => import("@/modules/admin/pages/AdminLayout"));
@@ -98,6 +100,8 @@ const RoutesWrapper = () => {
         <Route path="/terminos-condiciones" element={<TermsAndConditions />} />
         <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/politica-de-cookies" element={<CookiePolicy />} />
+        <Route path="/aviso-legal" element={<LegalNotice />} />
         <Route path="/preguntas-frecuentes" element={<FAQ />} />
         <Route path="/admin-selector" element={<ProtectedRoute requireAdmin><AdminSelector /></ProtectedRoute>} />
         <Route path="/gestion" element={<ProtectedRoute requireAdmin><GestionHome /></ProtectedRoute>} />

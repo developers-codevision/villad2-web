@@ -37,6 +37,8 @@ export default function Footer() {
               <li><Link to="/politicas-reembolso" className="hover:text-primary transition-colors">{t("footer.refundPolicy")}</Link></li>
               <li><Link to="/terminos-condiciones" className="hover:text-primary transition-colors">{t("footer.terms")}</Link></li>
               <li><Link to="/politica-privacidad" className="hover:text-primary transition-colors">{t("footer.privacyPolicy")}</Link></li>
+              <li><Link to="/politica-de-cookies" className="hover:text-primary transition-colors">{t("footer.cookiePolicy")}</Link></li>
+              <li><Link to="/aviso-legal" className="hover:text-primary transition-colors">{t("footer.legalNotice")}</Link></li>
             </ul>
           </div>
 

@@ -157,6 +157,8 @@ export const en = {
   'footer.refundPolicy': 'Refund Policy',
   'footer.terms': 'Terms and Conditions',
   'footer.privacyPolicy': 'Privacy Policy',
+  'footer.cookiePolicy': 'Cookie Policy',
+  'footer.legalNotice': 'Legal Notice',
   'footer.contact': 'Contact',
   'footer.phones': 'Phones:',
   'footer.copyright': 'All rights reserved.',
