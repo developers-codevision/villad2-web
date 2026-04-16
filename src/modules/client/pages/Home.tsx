@@ -187,7 +187,7 @@ const Index = () => {
               <CarouselContent className="-ml-4">
                 {reviews.map((review) => {
                   return (
-                    <CarouselItem key={review.id} className="pl-4 basis-2/3 md:basis-1/3 lg:basis-1/3">
+                    <CarouselItem key={review.id} className="pl-4 basis-full md:basis-1/3 lg:basis-1/3">
                       <div className="group relative rounded-2xl border-l-4 border-l-yellow-400 bg-gradient-to-br from-yellow-50 to-amber-50 backdrop-blur-sm shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-[28rem] md:h-80 overflow-hidden">
                         {/* Decorative quote */}
                         <div className="absolute top-4 right-4 text-6xl font-serif text-primary/10 leading-none select-none pointer-events-none group-hover:text-primary/20 transition-colors">
