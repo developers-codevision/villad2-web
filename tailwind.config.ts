@@ -88,6 +88,16 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            '--tw-prose-bullets': 'hsl(var(--foreground))',
+            '--tw-prose-counters': 'hsl(var(--foreground))',
+            '--tw-prose-invert-bullets': 'hsl(var(--foreground))',
+            '--tw-prose-invert-counters': 'hsl(var(--foreground))',
+          },
+        },
+      },
     },
   },
   plugins: [
