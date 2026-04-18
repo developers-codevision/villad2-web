@@ -6,10 +6,6 @@ import Color from '@tiptap/extension-color';
 import { 
   Bold, 
   Italic, 
-  List, 
-  ListOrdered, 
-  Heading2,
-  Quote,
   Undo,
   Redo,
   Palette
@@ -82,7 +78,7 @@ export default function TipTapEditor({ content, onChange, className }: TipTapEdi
 
   return (
     <div className={cn("border rounded-lg overflow-hidden", className)}>
-      <div className="flex flex-wrap items-center gap-1 p-2 border-b bg-muted/30">
+<div className="flex flex-wrap items-center gap-1 p-2 border-b bg-muted/30">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           isActive={editor.isActive('bold')}
@@ -101,40 +97,6 @@ export default function TipTapEditor({ content, onChange, className }: TipTapEdi
 
         <div className="w-px h-6 bg-border mx-1" />
 
-        <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          isActive={editor.isActive('heading', { level: 2 })}
-          title="Título"
-        >
-          <Heading2 className="h-4 w-4" />
-        </ToolbarButton>
-
-        <ToolbarButton
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          isActive={editor.isActive('bulletList')}
-          title="Lista con viñetas"
-        >
-          <List className="h-4 w-4" />
-        </ToolbarButton>
-
-        <ToolbarButton
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          isActive={editor.isActive('orderedList')}
-          title="Lista numerada"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </ToolbarButton>
-
-        <ToolbarButton
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          isActive={editor.isActive('blockquote')}
-          title="Cita"
-        >
-          <Quote className="h-4 w-4" />
-        </ToolbarButton>
-
-        <div className="w-px h-6 bg-border mx-1" />
-
         <input
           type="color"
           value={editor.getAttributes('textStyle').color || '#000000'}
@@ -142,13 +104,6 @@ export default function TipTapEditor({ content, onChange, className }: TipTapEdi
           className="w-8 h-8 rounded cursor-pointer border"
           title="Color de texto"
         />
-
-        <ToolbarButton
-          onClick={() => editor.commands.focus().setColor('#000000')}
-          title="Color negro"
-        >
-          <Palette className="h-4 w-4" />
-        </ToolbarButton>
 
         <div className="w-px h-6 bg-border mx-1" />
 
