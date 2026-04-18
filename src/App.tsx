@@ -28,14 +28,20 @@ const CookiePolicy = lazy(() => import("@/modules/client/pages/CookiePolicy"));
 const LegalNotice = lazy(() => import("@/modules/client/pages/LegalNotice"));
 
 // Admin pages
+const AdminSelector = lazy(() => import("@/modules/admin/pages/AdminSelector"));
+const GestionHome = lazy(() => import("@/modules/admin/pages/GestionHome"));
 const AdminLayout = lazy(() => import("@/modules/admin/pages/AdminLayout"));
 const AdminReservas = lazy(() => import("@/modules/admin/pages/AdminReservas"));
 const AdminHabitaciones = lazy(() => import("@/modules/admin/pages/AdminHabitaciones"));
 const AdminPromociones = lazy(() => import("@/modules/admin/pages/AdminPromociones"));
+const AdminBlog = lazy(() => import("@/modules/admin/pages/AdminBlog"));
+const BlogEditor = lazy(() => import("@/modules/admin/pages/BlogEditor"));
 const AdminResenas = lazy(() => import("@/modules/admin/pages/AdminResenas"));
 const AdminSettings = lazy(() => import("@/modules/admin/pages/AdminSettings"));
-const AdminSelector = lazy(() => import("@/modules/admin/pages/AdminSelector"));
-const GestionHome = lazy(() => import("@/modules/admin/pages/GestionHome"));
+
+// Client pages
+const Blog = lazy(() => import("@/modules/client/pages/Blog"));
+const BlogPost = lazy(() => import("@/modules/client/pages/BlogPost"));
 
 const queryClient = new QueryClient();
 
@@ -93,6 +99,8 @@ const RoutesWrapper = () => {
         <Route path="/reservas" element={<Reservations />} />
         <Route path="/resenas" element={<Reviews />} />
         <Route path="/promociones" element={<Promociones />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/login" element={<Login />} />
         <Route path="/lugares-interes" element={<InterestPlaces />} />
         <Route path="/payment/success" element={<StripeReturn />} />
@@ -109,6 +117,9 @@ const RoutesWrapper = () => {
           <Route index element={<AdminReservas />} />
           <Route path="habitaciones" element={<AdminHabitaciones />} />
           <Route path="promociones" element={<AdminPromociones />} />
+          <Route path="blog" element={<AdminBlog />} />
+          <Route path="blog/nuevo" element={<BlogEditor />} />
+          <Route path="blog/:id" element={<BlogEditor />} />
           <Route path="resenas" element={<AdminResenas />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

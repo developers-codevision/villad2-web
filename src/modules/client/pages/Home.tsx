@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {useEffect, useState} from 'react'
-import { Phone, Mail, MapPin, MessageCircle, Star } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Star, FileText, ArrowRight } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import {
   Carousel,
@@ -245,6 +245,31 @@ const Index = () => {
           )}
         </div>
       </section>
+
+      <section className="py-20 px-4 bg-gradient-to-b from-background via-primary/5 to-background">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-12 bg-primary/40" />
+            <FileText className="h-5 w-5 text-primary" />
+            <div className="h-px w-12 bg-primary/40" />
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+            Descubre nuestro blog
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+            Consejos, experiencias y recomendaciones para tu estancia
+          </p>
+          <div className="text-center">
+            <Link to="/blog">
+              <Button size="lg" className="gap-2">
+                Ver artículos
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <TerraceBarSection />
       <ReceptionSection />
       {/*<ExchangeRateSection />*/}

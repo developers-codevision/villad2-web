@@ -7,6 +7,7 @@ export { usersService } from './users.service';
 export { reservationsService } from './reservations.service';
 export { reviewsService } from './reviews.service';
 export { promotionsService } from './promotions.service';
+export { blogService } from './blog.service';
 export { settingsService } from './settings.service';
 
 

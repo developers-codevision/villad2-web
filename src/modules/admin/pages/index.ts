@@ -7,4 +7,5 @@ export { default as AdminResenas } from './AdminResenas';
 export { default as AdminSettings } from './AdminSettings';
 export { default as AdminSelector } from './AdminSelector';
 export { default as GestionHome } from './GestionHome';
+export { default as AdminBlog } from './AdminBlog';
 
