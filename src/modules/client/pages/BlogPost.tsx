@@ -4,7 +4,7 @@ import { ArrowLeft, FileText, Calendar } from "lucide-react";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { blogService } from "@/modules/shared/services";
-import { BlogPost } from "@/modules/shared/types/blog.types";
+import { BlogPost, BlogPostStatus } from "@/modules/shared/types/blog.types";
 import { getMediaUrl } from "@/modules/shared/services";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

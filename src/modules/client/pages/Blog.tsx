@@ -81,8 +81,8 @@ export default function Blog() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredPosts.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
@@ -107,9 +107,12 @@ export default function Blog() {
                         ? format(new Date(post.publishedAt), "dd MMM yyyy", { locale: es })
                         : ""}
                     </p>
-                    <h2 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                    <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                       {post.title}
                     </h2>
+                    {post.description && (
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{post.description}</p>
+                    )}
                     <div className="flex items-center text-primary font-medium text-sm">
                       Leer más <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </div>
