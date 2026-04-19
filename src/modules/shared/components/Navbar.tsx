@@ -29,7 +29,7 @@ export default function Navbar() {
  };
 
  return (
-  <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+  <header className={`fixed top-0 left-0 right-0 z-50 ${location.pathname === '/blog' ? 'bg-white border-b border-border' : 'bg-background/90 backdrop-blur-md border-b border-border'}`}>
   <nav className="container mx-auto flex items-center h-16 px-4">
 
    {/* Logo — solo mobile */}
@@ -101,7 +101,7 @@ export default function Navbar() {
 
    {/* Mobile menu */}
    {open && (
-    <div className="desk:hidden bg-background border-b border-border px-4 pb-6">
+    <div className={`desk:hidden ${location.pathname === '/blog' ? 'bg-white' : 'bg-background'} border-b border-border px-4 pb-6`}>
 <ul className="flex flex-col gap-3">
        {links.map((l) => {
         const isBlog = l.to === '/blog';

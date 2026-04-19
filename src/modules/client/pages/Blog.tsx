@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FileText, ArrowRight } from "lucide-react";
+import { FileText, ArrowRight, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
@@ -12,6 +12,12 @@ import { es } from "date-fns/locale";
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -29,21 +35,31 @@ export default function Blog() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#00c3ff]">
       <Navbar />
 
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-14">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
-              Blog
-            </span>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
               Nuestro Blog
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+            <p className="text-white/90 max-w-2xl mx-auto text-base md:text-xl font-bolden ">
               Descubre consejos, experiencias y consejos sobre la zona.
             </p>
+          </div>
+
+          <div className="bg-card rounded-2xl p-4 mb-10 border shadow-sm">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Buscar por título..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
           </div>
 
           {loading ? (
@@ -52,15 +68,19 @@ export default function Blog() {
                 <div key={i} className="rounded-2xl bg-muted animate-pulse h-[400px]" />
               ))}
             </div>
-          ) : posts.length === 0 ? (
+          ) : filteredPosts.length === 0 ? (
             <div className="border border-dashed border-border rounded-2xl p-16 flex flex-col items-center justify-center text-muted-foreground">
               <FileText size={56} className="mb-5 opacity-20" />
-              <p className="font-semibold text-lg">Sin artículos</p>
-              <p className="text-sm mt-2">Pronto tendremos nuevo contenido.</p>
+              <p className="font-semibold text-lg">
+                {searchTerm ? "No se encontraron resultados" : "Sin artículos"}
+              </p>
+              <p className="text-sm mt-2">
+                {searchTerm ? "Intenta con otros filtros" : "Pronto tendremos nuevo contenido."}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
+              {filteredPosts.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
