@@ -45,6 +45,82 @@ const Index = () => {
     loadApprovedReviews();
   }, []);
 
+  // Inject JSON-LD for reviews & aggregate rating to improve SEO
+  useEffect(() => {
+    if (loadingReviews) return;
+
+    try {
+      const reviewCount = reviews.length;
+
+      const ratingValue =
+        reviewCount > 0
+          ? (reviews.reduce((sum, r) => sum + (r.stars || 0), 0) / reviewCount).toFixed(1)
+          : undefined;
+
+      const jsonLd: any = {
+        "@context": "https://schema.org",
+        "@type": "LodgingBusiness",
+        name: HOSTAL.name,
+        url:
+          typeof window !== "undefined" && window.location && window.location.origin
+            ? window.location.origin
+            : undefined,
+        aggregateRating:
+          reviewCount > 0
+            ? {
+                "@type": "AggregateRating",
+                ratingValue: ratingValue,
+                reviewCount: reviewCount,
+              }
+            : undefined,
+        review: reviews.map((r) => {
+          const reviewObj: any = {
+            "@type": "Review",
+            author: r.name ? { "@type": "Person", name: r.name } : undefined,
+            reviewBody: r.content,
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: String(r.stars ?? 0),
+              bestRating: "5",
+              worstRating: "1",
+            },
+          };
+
+          if ((r as any).createdAt) reviewObj.datePublished = (r as any).createdAt;
+          if (r.title) reviewObj.name = r.title;
+
+          // Remove undefined fields per review
+          Object.keys(reviewObj).forEach((k) => {
+            if (reviewObj[k] === undefined || reviewObj[k] === null) delete reviewObj[k];
+          });
+
+          return reviewObj;
+        }),
+      };
+
+      // Clean top-level undefineds
+      const cleaned: any = {};
+      Object.entries(jsonLd).forEach(([k, v]) => {
+        if (v === undefined || v === null) return;
+        cleaned[k] = v;
+      });
+
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.text = JSON.stringify(cleaned);
+      document.head.appendChild(script);
+
+      return () => {
+        if (script && script.parentNode) script.parentNode.removeChild(script);
+      };
+    } catch (err) {
+      // Don't break the UI if JSON-LD generation fails
+      // eslint-disable-next-line no-console
+      console.warn("Error building JSON-LD for reviews", err);
+    }
+    // stringify reviews to ensure effect runs when review contents change
+  }, [loadingReviews, JSON.stringify(reviews)]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
