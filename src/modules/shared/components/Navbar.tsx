@@ -102,20 +102,23 @@ export default function Navbar() {
    {/* Mobile menu */}
    {open && (
     <div className="desk:hidden bg-background border-b border-border px-4 pb-6">
-     <ul className="flex flex-col gap-3">
-      {links.map((l) => (
-       <li key={l.to}>
-        <Link
-         to={l.to}
-         onClick={() => setOpen(false)}
-         className={`block py-2 text-sm font-medium ${
-          location.pathname === l.to ? "text-primary" : "text-foreground"
-         }`}
-        >
-         {l.label}
-        </Link>
-       </li>
-      ))}
+<ul className="flex flex-col gap-3">
+       {links.map((l) => {
+        const isBlog = l.to === '/blog';
+        return (
+        <li key={l.to}>
+         <Link
+          to={l.to}
+          onClick={() => setOpen(false)}
+          className={`block py-2 text-sm font-medium ${
+           location.pathname === l.to ? "text-primary" : "text-foreground"
+          } ${isBlog ? "px-4 py-2 rounded-full bg-[#00c3ff] text-white font-semibold" : ""}`}
+         >
+          {l.label}
+         </Link>
+        </li>
+       );
+       })}
       <li className="pt-2">
        <Link to="/reservas" onClick={() => setOpen(false)}>
         <Button className="w-full font-semibold">{t("nav.bookNow")}</Button>
@@ -131,14 +134,13 @@ export default function Navbar() {
         <span className="text-sm font-medium">{language === 'es' ? 'Español' : 'English'}</span>
        </button>
       </li>
-      <li className="flex justify-center pt-5 mt-3 border-t border-border">
-       <SocialLinks
-        facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
-        twitterUrl="https://x.com/villad2"
-        youtubeUrl="https://youtube.com/villad2"
-        whatsappUrl="https://wa.me/5350970588"
-       />
-      </li>
+<li className="flex justify-center pt-5 mt-3 border-t border-border">
+        <SocialLinks
+         facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
+         youtubeUrl="https://youtube.com/@villad2"
+         whatsappUrl="https://wa.me/5350970588"
+        />
+       </li>
      </ul>
     </div>
    )}
