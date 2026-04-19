@@ -8,13 +8,14 @@ import SocialLinks from "./SocialLinks";
 import { useLanguage } from "@/modules/client/contexts";
 
 const getLinks = (t: (key: string) => string) => [
- { to: "/", label: t("nav.home") },
- { to: "/habitaciones", label: t("nav.rooms") },
- { to: "/servicios", label: t("nav.services") },
- { to: "/promociones", label: t("nav.promotions") },
- { to: "/reservas", label: t("nav.reservations") },
- { to: "/resenas", label: t("nav.reviews") },
- { to: "/lugares-interes", label: t("nav.places") },
+  { to: "/", label: t("nav.home") },
+  { to: "/habitaciones", label: t("nav.rooms") },
+  { to: "/servicios", label: t("nav.services") },
+  { to: "/promociones", label: t("nav.promotions") },
+  { to: "/reservas", label: t("nav.reservations") },
+  { to: "/blog", label: t("nav.blog") },
+  { to: "/resenas", label: t("nav.reviews") },
+  { to: "/lugares-interes", label: t("nav.places") },
 ];
 
 export default function Navbar() {
@@ -49,20 +50,23 @@ export default function Navbar() {
     <div />
 
     {/* Columna centro — links */}
-    <ul className="flex items-center justify-center p-6 gap-8">
-     {links.map((l) => (
-      <li key={l.to}>
-       <Link
-        to={l.to}
-        className={`text-sm font-medium transition-colors hover:text-primary whitespace-nowrap ${
-         location.pathname === l.to ? "text-primary" : "text-foreground"
-        }`}
-       >
-        {l.label}
-       </Link>
-      </li>
-     ))}
-    </ul>
+<ul className="flex items-center justify-center p-6 gap-8">
+      {links.map((l) => {
+        const isBlog = l.to === '/blog';
+        return (
+       <li key={l.to}>
+        <Link
+         to={l.to}
+         className={`text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+          location.pathname === l.to ? "text-primary" : "text-foreground"
+         } ${isBlog ? "px-4 py-1.5 rounded-full bg-[#00c3ff] text-white hover:shadow-lg hover:shadow-[#00c3ff]/30 hover:scale-105 font-semibold" : "hover:text-primary"}`}
+        >
+         {l.label}
+        </Link>
+       </li>
+      );
+      })}
+     </ul>
 
     {/* Columna derecha — redes + botón + idioma */}
     <div className="flex items-center justify-end gap-6">

@@ -32,6 +32,11 @@ export default function Footer() {
               <li><Link to="/" className="hover:text-primary transition-colors">{t("footer.home")}</Link></li>
               <li><Link to="/habitaciones" className="hover:text-primary transition-colors">{t("footer.rooms")}</Link></li>
               <li><Link to="/servicios" className="hover:text-primary transition-colors">{t("footer.services")}</Link></li>
+              <li>
+                <Link to="/blog" className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#00c3ff] text-white font-medium hover:shadow-lg hover:shadow-[#00c3ff]/30 hover:scale-105 transition-all duration-300">
+                  {t("footer.blog")}
+                </Link>
+              </li>
               <li><Link to="/reservas" className="hover:text-primary transition-colors">{t("footer.reservations")}</Link></li>
               <li><Link to="/preguntas-frecuentes" className="hover:text-primary transition-colors">{t("footer.faq")}</Link></li>
               <li><Link to="/politicas-reembolso" className="hover:text-primary transition-colors">{t("footer.refundPolicy")}</Link></li>

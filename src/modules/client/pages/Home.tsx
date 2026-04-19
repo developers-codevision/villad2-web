@@ -70,9 +70,6 @@ const Index = () => {
               {t("home.heroTitle")}{" "}
               <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
             </h1>
-      <p className="text-right uppercase text-fuchsia-700 pl-16 mt-0.5 drop-shadow-2xl font-bold text-xs pr-4">
-        Tu hogar lejos de casa
-      </p>
           </div>
         </div>
       </div>
@@ -96,9 +93,6 @@ const Index = () => {
             {t("home.heroTitle")}{" "}
             <span className="text-primary drop-shadow-2xl">{HOSTAL.name}</span>
           </h1>
-          <p className="uppercase text-fuchsia-700 mt-2 drop-shadow-2xl pr-12 font-bold text-sm sm:text-base md:text-lg lg:text-2xl xl:text-3xl ml-auto">
-            Tu hogar lejos de casa
-          </p>
         </div>
 
         {/* Logo - Esquina superior derecha (sin fondo) */}
