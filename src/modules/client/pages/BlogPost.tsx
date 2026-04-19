@@ -18,10 +18,15 @@ export default function BlogPostPage() {
   useEffect(() => {
     const loadPost = async () => {
       if (!slug) return;
-      
+
       try {
         const data = await blogService.getByIdOrSlug(slug);
-        setPost(data);
+        // Only show post if it's visible (safety check)
+        if (data.status !== BlogPostStatus.VISIBLE) {
+          setError('Artículo no encontrado');
+        } else {
+          setPost(data);
+        }
       } catch (err) {
         console.error("Error loading blog post:", err);
         setError("Artículo no encontrado");

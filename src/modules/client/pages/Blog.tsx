@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { blogService } from "@/modules/shared/services";
-import { BlogPost } from "@/modules/shared/types/blog.types";
+import { BlogPost, BlogPostStatus } from "@/modules/shared/types/blog.types";
 import { getMediaUrl } from "@/modules/shared/services";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -23,7 +23,9 @@ export default function Blog() {
     const loadPosts = async () => {
       try {
         const visiblePosts = await blogService.getVisible();
-        setPosts(visiblePosts);
+        // Safety: ensure we only display posts marked VISIBLE in frontend
+        const filtered = visiblePosts.filter((p) => p.status === BlogPostStatus.VISIBLE);
+        setPosts(filtered);
       } catch (error) {
         console.error("Error loading blog posts:", error);
       } finally {

@@ -270,9 +270,10 @@ export function useBlogManagement() {
             ? BlogPostStatus.HIDDEN
             : BlogPostStatus.VISIBLE;
 
-        await blogService.changeStatus(post.id, newStatus);
+        // Call API and update the specific post with the server response
+        const updated = await blogService.changeStatus(post.id, newStatus);
+        setPosts((prev) => prev.map((p) => (p.id === post.id ? updated : p)));
         toast.success('Estado actualizado');
-        await loadPosts();
       } catch (error) {
         console.error('Error toggling status:', error);
         toast.error('Error al cambiar el estado');

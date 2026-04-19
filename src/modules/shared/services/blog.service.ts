@@ -10,17 +10,22 @@ function mapApiBlogToPost(apiBlog: any): BlogPost {
     description: apiBlog.description,
     content: apiBlog.content,
     image: apiBlog.image,
-    status: apiBlog.status as BlogPostStatus,
+    // API status: 'PUBLISHED' | 'HIDDEN' -> Frontend: 'VISIBLE' | 'HIDDEN'
+    status:
+      String(apiBlog.status).toUpperCase() === 'PUBLISHED'
+        ? BlogPostStatus.VISIBLE
+        : BlogPostStatus.HIDDEN,
     publishedAt: apiBlog.publishedAt ? new Date(apiBlog.publishedAt).toISOString() : undefined,
     createdAt: apiBlog.createdAt ? new Date(apiBlog.createdAt).toISOString() : undefined,
     updatedAt: apiBlog.updatedAt ? new Date(apiBlog.updatedAt).toISOString() : undefined,
   } as BlogPost;
 }
 
-function mapStatusFrontendToApi(status?: BlogPostStatus) {
+function mapStatusFrontendToApi(status?: BlogPostStatus | string) {
   // Frontend uses VISIBLE/HIDDEN; API uses PUBLISHED/HIDDEN
   if (!status) return undefined;
-  if (status === BlogPostStatus.VISIBLE) return 'PUBLISHED';
+  const s = String(status).toUpperCase();
+  if (s === 'VISIBLE' || s === 'PUBLISHED') return 'PUBLISHED';
   return 'HIDDEN';
 }
 
@@ -55,12 +60,34 @@ export const blogService = {
 
   // Admin methods (use authenticated client)
   async create(formData: FormData): Promise<BlogPost> {
-    const res = await authenticatedApiClient.postFormData<any>('/blog', formData);
+    // Normalize FormData: map frontend status (VISIBLE/HIDDEN) to API status (PUBLISHED/HIDDEN)
+    const normalized = new FormData();
+    for (const [key, value] of Array.from(formData.entries())) {
+      if (key === 'status' && typeof value === 'string') {
+        const mapped = mapStatusFrontendToApi(value as BlogPostStatus) || value;
+        normalized.append('status', mapped);
+      } else {
+        // value can be File or string
+        normalized.append(key, value as any);
+      }
+    }
+
+    const res = await authenticatedApiClient.postFormData<any>('/blog', normalized);
     return mapApiBlogToPost(res);
   },
 
   async update(id: number, formData: FormData): Promise<BlogPost> {
-    const res = await authenticatedApiClient.patchFormData<any>(`/blog/${id}`, formData);
+    const normalized = new FormData();
+    for (const [key, value] of Array.from(formData.entries())) {
+      if (key === 'status' && typeof value === 'string') {
+        const mapped = mapStatusFrontendToApi(value as BlogPostStatus) || value;
+        normalized.append('status', mapped);
+      } else {
+        normalized.append(key, value as any);
+      }
+    }
+
+    const res = await authenticatedApiClient.patchFormData<any>(`/blog/${id}`, normalized);
     return mapApiBlogToPost(res);
   },
 
