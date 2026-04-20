@@ -1,55 +1,110 @@
 import * as React from "react";
-import { MapPin, ExternalLink } from "lucide-react";
-import { interestPlaces } from "@/modules/shared/data/interestPlaces";
 import { useLanguage } from "@/modules/client/contexts";
-import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/shared/components/ui/accordion";
+import { interestPlacesData } from "@/modules/shared/data/interestPlaces";
+
+const categories = [
+  { key: "museos", icon: "🏛️" },
+  { key: "culturales", icon: "🏛️" },
+  { key: "vidaNocturna", icon: "🎵" },
+  { key: "paseos", icon: "🌊" },
+  { key: "gastronomia", icon: "🍽️" },
+  { key: "excursiones", icon: "🏛️" },
+];
+
+const categoryTitles = {
+  museos: {
+    es: "Museos",
+    en: "Museums",
+  },
+  culturales: {
+    es: "Culturales",
+    en: "Cultural",
+  },
+  vidaNocturna: {
+    es: "Música, Cabarets y Vida Nocturna",
+    en: "Music, Cabarets and Nightlife",
+  },
+  paseos: {
+    es: "Paseos y Espacios Abiertos",
+    en: "Walks and Open Spaces",
+  },
+  gastronomia: {
+    es: "Gastronomía y Ocio",
+    en: "Gastronomy and Leisure",
+  },
+  excursiones: {
+    es: "Excursiones",
+    en: "Excursions",
+  },
+};
 
 export default function InterestPlacesList() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
+  const isEnglish = language === "en";
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          {t("places.title")}
+          {isEnglish ? "Tourist Places of Interest" : "Lugares de Interés Turístico"}
         </h2>
         <p className="text-muted-foreground text-center max-w-xl mx-auto">
-          {t("places.subtitle")}
+          {isEnglish
+            ? "Discover the best museums, theaters, cabarets and restaurants in Vedado, all a few minutes from Villa D2 Boutique Hostel, you have walking access to the most emblematic places of Havana. Presentation of a selection of tourist, cultural and recreational sites near the Villa. At reception we can organize other transfers, tickets and various excursions, join them by WhatsApp or consult us at check-in."
+            : "Descubre los mejores museos, teatros, cabarets y restaurantes del Vedado de La Habana, todos a pocos minutos del Hostal Boutique Villa D2, tienes acceso a pie a de los lugares más emblemáticos de La Habana. Presentación de una selección de sitios turísticos, culturales y recreativos cercanos a la Villa. En recepción podemos organizarles otros traslados, entradas y excursiones diversas, únete a ellos por WhatsApp o consúltanos al hacer el check-in."}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {interestPlaces.map((place, idx) => (
-          <div
-            key={idx}
-            className="bg-card border border-border rounded-lg p-5 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow"
-          >
-            <div className="bg-[#00c3ff]/10 rounded-full p-3 shrink-0 mt-0.5">
-              <MapPin size={20} className="text-[#00c3ff]" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-semibold text-base">{parseBilingualText(place.name, language)}</h3>
-                {place.url && (
-                  <ExternalLink size={16} className="text-[#00c3ff] flex-shrink-0 mt-0.5" />
-                )}
-              </div>
-              {place.url ? (
-                <a
-                  href={place.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#00c3ff] hover:underline text-sm mt-2 inline-flex items-center gap-1"
-                >
-                  {t("places.visitSite")}
-                </a>
-              ) : (
-                <p className="text-muted-foreground text-sm mt-2">
-
-                </p>
-              )}
-            </div>
-          </div>
+        {categories.map((category) => (
+          <Accordion type="single" collapsible key={category.key}>
+            <AccordionItem
+              value={category.key}
+              className="bg-card border border-border rounded-lg px-4"
+            >
+              <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                <span className="flex items-center gap-2">
+                  <span>{category.icon}</span>
+                  <span>
+                    {categoryTitles[category.key as keyof typeof categoryTitles][
+                      isEnglish ? "en" : "es"
+                    ]}
+                  </span>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-4 pt-2">
+                  {interestPlacesData[category.key as keyof typeof interestPlacesData].map(
+                    (place: {
+                      name: string;
+                      description: string;
+                      descriptionEn?: string;
+                    }) => (
+                      <div
+                        key={place.name}
+                        className="bg-muted/30 rounded-lg p-4 border border-border/50"
+                      >
+                        <h4 className="font-semibold text-base mb-2 text-foreground">
+                          {place.name}
+                        </h4>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                          {isEnglish && place.descriptionEn
+                            ? place.descriptionEn
+                            : place.description}
+                        </p>
+                      </div>
+                    )
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         ))}
       </div>
     </div>
