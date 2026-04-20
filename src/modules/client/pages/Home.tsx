@@ -326,7 +326,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
     Descubre nuestro <span style={{ color: '#00c3ff' }}>blog</span>
   </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+          <p className="text-muted-foreground text-left mb-12 max-w-xl mx-auto">
             Guías, Consejos y curiosidades para tener una estancia aún más placentera.
           </p>
           <div className="text-center">
@@ -350,7 +350,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
             {t("home.servicesTitle")}
           </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+          <p className="text-muted-foreground text-left mb-12 max-w-xl mx-auto">
             {t("home.servicesSubtitle")}
           </p>
 

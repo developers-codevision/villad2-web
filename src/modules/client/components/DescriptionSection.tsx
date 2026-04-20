@@ -9,7 +9,7 @@ const DescriptionSection = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
           {t("description.title")}
         </h2>
-        <p className="text-muted-foreground text-center max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-left max-w-2xl mx-auto">
           {t("description.content")}
         </p>
       </div>

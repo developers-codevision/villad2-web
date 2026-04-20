@@ -9,7 +9,7 @@ const ReceptionSection = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
           {t("reception.title")}
         </h2>
-        <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-left mb-12 max-w-2xl mx-auto">
           {t("reception.description")}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

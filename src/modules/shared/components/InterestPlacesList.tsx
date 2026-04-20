@@ -54,7 +54,7 @@ export default function InterestPlacesList() {
         <h2 className="text-3xl md:text-4xl font-bold mb-3">
           {isEnglish ? "Tourist Places of Interest" : "Lugares de Interés Turístico"}
         </h2>
-        <p className="text-muted-foreground text-center max-w-xl mx-auto">
+        <p className="text-muted-foreground text-left max-w-xl mx-auto">
           {isEnglish
             ? "Discover the best museums, theaters, cabarets and restaurants in Vedado, all a few minutes from Villa D2 Boutique Hostel, you have walking access to the most emblematic places of Havana. Presentation of a selection of tourist, cultural and recreational sites near the Villa. At reception we can organize other transfers, tickets and various excursions, join them by WhatsApp or consult us at check-in."
             : "Descubre los mejores museos, teatros, cabarets y restaurantes del Vedado de La Habana, todos a pocos minutos del Hostal Boutique Villa D2, tienes acceso a pie a de los lugares más emblemáticos de La Habana. Presentación de una selección de sitios turísticos, culturales y recreativos cercanos a la Villa. En recepción podemos organizarles otros traslados, entradas y excursiones diversas, únete a ellos por WhatsApp o consúltanos al hacer el check-in."}
@@ -93,7 +93,7 @@ export default function InterestPlacesList() {
                         <h4 className="font-semibold text-base mb-2 text-foreground">
                           {place.name}
                         </h4>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
+                        <p className="text-muted-foreground text-sm text-left leading-relaxed">
                           {isEnglish && place.descriptionEn
                             ? place.descriptionEn
                             : place.description}
