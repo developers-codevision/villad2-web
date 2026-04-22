@@ -323,20 +323,20 @@ const Index = () => {
             <FileText className="h-5 w-5 text-primary" />
             <div className="h-px w-12 bg-primary/40" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-    Descubre nuestro <span style={{ color: '#00c3ff' }}>blog</span>
+<h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+    {language === 'es' ? 'Nuestro ' : 'Our '}<span style={{ color: '#00c3ff' }}>{language === 'es' ? 'Blog' : 'Blog'}</span>
   </h2>
-          <p className="text-muted-foreground text-left mb-12 max-w-xl mx-auto">
-            Guías, Consejos y curiosidades para tener una estancia aún más placentera.
-          </p>
-          <div className="text-center">
-            <Link to="/blog">
-              <Button size="lg" className="gap-2">
-                Ver artículos
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
+  <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+    {t('blog.subtitle')}
+  </p>
+  <div className="text-center">
+    <Link to="/blog">
+      <Button size="lg" className="gap-2">
+        {language === 'es' ? 'Ver artículos' : 'View articles'}
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+    </Link>
+  </div>
         </div>
       </section>
 
@@ -350,7 +350,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
             {t("home.servicesTitle")}
           </h2>
-          <p className="text-muted-foreground text-left mb-12 max-w-xl mx-auto">
+<p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
             {t("home.servicesSubtitle")}
           </p>
 

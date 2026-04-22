@@ -297,4 +297,18 @@ export const en = {
   'reservation.selectRoomPlaceholder': 'Select room',
   'reservation.pageTitle': 'Make your Reservation',
   'reservation.pageSubtitle': 'Select the room, dates and complete your details.',
+
+  // Blog
+  'blog.title': 'Our Blog',
+  'blog.subtitle': 'Discover tips, experiences and advice about the area.',
+  'blog.readMore': 'Read more',
+  'blog.noArticles': 'No articles',
+  'blog.noArticlesDesc': 'We will have new content soon.',
+  'blog.noResults': 'No results found',
+  'blog.tryAgain': 'Try with other filters',
+  'blog.searchPlaceholder': 'Search by title...',
+  'blog.backToBlog': 'Back to blog',
+  'blog.articleNotFound': 'Article not found',
+  'blog.articleNotFoundDesc': 'The article you are looking for does not exist or has been deleted.',
+  'blog.articles': 'articles',
 };

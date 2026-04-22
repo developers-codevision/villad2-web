@@ -14,7 +14,7 @@ export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   const getTitle = (post: BlogPost) => language === 'en' && post.title_en ? post.title_en : post.title_es;
   const getSlug = (post: BlogPost) => language === 'en' && post.slug_en ? post.slug_en : post.slug_es;
@@ -51,10 +51,10 @@ export default function Blog() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-14">
             <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
-              Nuestro Blog
+              {t('blog.title')}
             </h1>
             <p className="text-white/90 max-w-2xl mx-auto text-base md:text-xl font-bolden ">
-              Descubre consejos, experiencias y consejos sobre la zona.
+              {t('blog.subtitle')}
             </p>
           </div>
 
@@ -63,7 +63,7 @@ export default function Blog() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Buscar por título..."
+                placeholder={t('blog.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -81,10 +81,10 @@ export default function Blog() {
             <div className="border border-dashed border-border rounded-2xl p-16 flex flex-col items-center justify-center text-muted-foreground">
               <FileText size={56} className="mb-5 opacity-20" />
               <p className="font-semibold text-lg">
-                {searchTerm ? "No se encontraron resultados" : "Sin artículos"}
+                {searchTerm ? t('blog.noResults') : t('blog.noArticles')}
               </p>
               <p className="text-sm mt-2">
-                {searchTerm ? "Intenta con otros filtros" : "Pronto tendremos nuevo contenido."}
+                {searchTerm ? t('blog.tryAgain') : t('blog.noArticlesDesc')}
               </p>
             </div>
           ) : (
@@ -121,7 +121,7 @@ export default function Blog() {
                       <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{getDescription(post)}</p>
                     )}
                     <div className="flex items-center text-primary font-medium text-sm">
-                      Leer más <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      {t('blog.readMore')} <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </Link>

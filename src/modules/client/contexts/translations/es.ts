@@ -298,4 +298,18 @@ export const es = {
   'reservation.selectRoomPlaceholder': 'Seleccionar habitación',
   'reservation.pageTitle': 'Haz tu Reserva',
   'reservation.pageSubtitle': 'Selecciona la habitación, fechas y completa tus datos.',
+
+  // Blog
+  'blog.title': 'Nuestro Blog',
+  'blog.subtitle': 'Descubre consejos, experiencias y consejos sobre la zona.',
+  'blog.readMore': 'Leer más',
+  'blog.noArticles': 'Sin artículos',
+  'blog.noArticlesDesc': 'Pronto tendremos nuevo contenido.',
+  'blog.noResults': 'No se encontraron resultados',
+  'blog.tryAgain': 'Intenta con otros filtros',
+  'blog.searchPlaceholder': 'Buscar por título...',
+  'blog.backToBlog': 'Volver al blog',
+  'blog.articleNotFound': 'Artículo no encontrado',
+  'blog.articleNotFoundDesc': 'El artículo que buscas no existe o ha sido eliminado.',
+  'blog.articles': 'artículos',
 };

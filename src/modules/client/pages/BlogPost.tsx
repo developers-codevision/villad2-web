@@ -15,7 +15,7 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   const title = post ? (language === 'en' && post.title_en ? post.title_en : post.title_es) : '';
   const content = post ? (language === 'en' && post.content_en ? post.content_en : post.content_es) : '';
@@ -28,13 +28,13 @@ export default function BlogPostPage() {
         const data = await blogService.getByIdOrSlug(slug);
         // Only show post if it's visible (safety check)
         if (data.status !== BlogPostStatus.VISIBLE) {
-          setError('Artículo no encontrado');
+          setError(t('blog.articleNotFound'));
         } else {
           setPost(data);
         }
       } catch (err) {
         console.error("Error loading blog post:", err);
-        setError("Artículo no encontrado");
+        setError(t('blog.articleNotFound'));
       } finally {
         setLoading(false);
       }
@@ -75,14 +75,14 @@ export default function BlogPostPage() {
           <div className="container mx-auto max-w-4xl">
             <div className="text-center py-20">
               <FileText size={64} className="mx-auto mb-6 text-muted-foreground/30" />
-              <h1 className="text-2xl font-bold mb-4">Artículo no encontrado</h1>
-              <p className="text-muted-foreground mb-8">El artículo que buscas no existe o ha sido eliminado.</p>
+              <h1 className="text-2xl font-bold mb-4">{t('blog.articleNotFound')}</h1>
+              <p className="text-muted-foreground mb-8">{t('blog.articleNotFoundDesc')}</p>
               <Link
                 to="/blog"
                 className="inline-flex items-center text-primary hover:underline"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver al blog
+                {t('blog.backToBlog')}
               </Link>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function BlogPostPage() {
             className="inline-flex items-center text-muted-foreground hover:text-primary mb-8 transition-colors"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver al blog
+            {t('blog.backToBlog')}
           </Link>
 
           <header className="mb-10">
