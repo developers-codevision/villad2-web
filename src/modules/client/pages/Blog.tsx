@@ -8,14 +8,21 @@ import { BlogPost, BlogPostStatus } from "@/modules/shared/types/blog.types";
 import { getMediaUrl } from "@/modules/shared/services";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { language } = useLanguage();
+
+  const getTitle = (post: BlogPost) => language === 'en' && post.title_en ? post.title_en : post.title_es;
+  const getSlug = (post: BlogPost) => language === 'en' && post.slug_en ? post.slug_en : post.slug_es;
+  const getDescription = (post: BlogPost) => language === 'en' && post.description_en ? post.description_en : post.description_es;
 
   const filteredPosts = posts.filter((post) => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = getTitle(post);
+    const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
 
@@ -85,14 +92,14 @@ export default function Blog() {
                   {filteredPosts.map((post) => (
                 <Link
                   key={post.id}
-                  to={`/blog/${post.slug}`}
+                  to={`/blog/${getSlug(post)}`}
                   className="group block bg-card rounded-2xl overflow-hidden border hover:shadow-lg transition-all duration-300"
                 >
                   <div className="aspect-[16/10] overflow-hidden">
                     {post.image ? (
                       <img
                         src={getMediaUrl(post.image)}
-                        alt={post.title}
+                        alt={getTitle(post)}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
@@ -108,10 +115,10 @@ export default function Blog() {
                         : ""}
                     </p>
                     <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                      {post.title}
+                      {getTitle(post)}
                     </h2>
-                    {post.description && (
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{post.description}</p>
+                    {getDescription(post) && (
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{getDescription(post)}</p>
                     )}
                     <div className="flex items-center text-primary font-medium text-sm">
                       Leer más <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />

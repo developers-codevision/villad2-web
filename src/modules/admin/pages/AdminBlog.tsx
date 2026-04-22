@@ -74,7 +74,7 @@ export default function AdminBlog() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Imagen</TableHead>
-                  <TableHead>Título</TableHead>
+                  <TableHead>Título (ES / EN)</TableHead>
                   <TableHead className="hidden sm:table-cell">Slug</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead>Fecha</TableHead>
@@ -86,16 +86,20 @@ export default function AdminBlog() {
                   <TableRow key={post.id}>
                     <TableCell>
                       {post.image ? (
-                        <img src={getMediaUrl(post.image)} alt={post.title} className="h-12 w-16 rounded object-cover" />
+                        <img src={getMediaUrl(post.image)} alt={post.title_es} className="h-12 w-16 rounded object-cover" />
                       ) : (
                         <div className="h-12 w-16 rounded bg-muted flex items-center justify-center">
                           <FileText className="h-5 w-5 text-muted-foreground/40" />
                         </div>
                       )}
                     </TableCell>
-                    <TableCell className="font-medium">{post.title}</TableCell>
+                    <TableCell className="font-medium">
+                      {post.title_es}
+                      {post.title_en && <span className="text-muted-foreground"> / {post.title_en}</span>}
+                    </TableCell>
                     <TableCell className="hidden sm:table-cell text-muted-foreground text-sm">
-                      {post.slug}
+                      {post.slug_es}
+                      {post.slug_en && <span className="block">{post.slug_en}</span>}
                     </TableCell>
                     <TableCell>
                       <Button
@@ -135,15 +139,15 @@ export default function AdminBlog() {
               <div key={post.id} className="border rounded-lg p-4 bg-card space-y-3">
                 <div className="flex items-start gap-3">
                   {post.image ? (
-                    <img src={getMediaUrl(post.image)} alt={post.title} className="h-16 w-20 rounded object-cover shrink-0" />
+                    <img src={getMediaUrl(post.image)} alt={post.title_es} className="h-16 w-20 rounded object-cover shrink-0" />
                   ) : (
                     <div className="h-16 w-20 rounded bg-muted flex items-center justify-center shrink-0">
                       <FileText className="h-6 w-6 text-muted-foreground/40" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-base mb-1">{post.title}</h3>
-                    <p className="text-sm text-muted-foreground">{post.slug}</p>
+                    <h3 className="font-semibold text-base mb-1">{post.title_es}{post.title_en && <span className="text-muted-foreground"> / {post.title_en}</span>}</h3>
+                    <p className="text-sm text-muted-foreground">{post.slug_es}{post.slug_en && <span className="block">{post.slug_en}</span>}</p>
                   </div>
                 </div>
 

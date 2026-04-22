@@ -8,12 +8,17 @@ import { BlogPost, BlogPostStatus } from "@/modules/shared/types/blog.types";
 import { getMediaUrl } from "@/modules/shared/services";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useLanguage } from "@/modules/client/contexts";
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { language } = useLanguage();
+
+  const title = post ? (language === 'en' && post.title_en ? post.title_en : post.title_es) : '';
+  const content = post ? (language === 'en' && post.content_en ? post.content_en : post.content_es) : '';
 
   useEffect(() => {
     const loadPost = async () => {
@@ -103,7 +108,7 @@ export default function BlogPostPage() {
 
           <header className="mb-10">
             <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              {post.title}
+              {title}
             </h1>
             <div className="flex items-center gap-4 text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -121,7 +126,7 @@ export default function BlogPostPage() {
             <div className="mb-10">
               <img
                 src={getMediaUrl(post.image)}
-                alt={post.title}
+                alt={title}
                 className="w-full aspect-[2/1] object-cover rounded-2xl"
               />
             </div>
@@ -129,7 +134,7 @@ export default function BlogPostPage() {
 
           <div
             className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: content }}
           />
         </article>
       </main>

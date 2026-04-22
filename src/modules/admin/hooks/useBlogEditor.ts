@@ -2,10 +2,7 @@ import { useState, useCallback, useEffect, useReducer } from 'react';
 import { toast } from 'sonner';
 import { blogService, getMediaUrl } from '@/modules/shared/services';
 import { convertWordToHtml } from '@/modules/shared/utils/wordToHtml';
-import {
-  BlogPost,
-  BlogPostStatus,
-} from '@/modules/shared/types/blog.types';
+import { BlogPostStatus } from '@/modules/shared/types/blog.types';
 
 function generateSlug(title: string): string {
   return title
@@ -19,10 +16,14 @@ function generateSlug(title: string): string {
 }
 
 export interface BlogEditorFormData {
-  title: string;
-  slug: string;
-  description: string;
-  content: string;
+  title_es: string;
+  title_en: string;
+  slug_es: string;
+  slug_en: string;
+  description_es: string;
+  description_en: string;
+  content_es: string;
+  content_en: string;
   image: File | null;
   imagePreview: string;
   status: BlogPostStatus;
@@ -39,10 +40,14 @@ export function useBlogEditor(postId?: number) {
   const [resetKey, setResetKey] = useState(0);
 
   const [formData, setFormData] = useState<BlogEditorFormData>({
-    title: '',
-    slug: '',
-    description: '',
-    content: '',
+    title_es: '',
+    title_en: '',
+    slug_es: '',
+    slug_en: '',
+    description_es: '',
+    description_en: '',
+    content_es: '',
+    content_en: '',
     image: null,
     imagePreview: '',
     status: BlogPostStatus.VISIBLE,
@@ -60,10 +65,14 @@ export function useBlogEditor(postId?: number) {
     try {
       const post = await blogService.getByIdOrSlug(id.toString());
       setFormData({
-        title: post.title,
-        slug: post.slug,
-        description: post.description || '',
-        content: post.content || '',
+        title_es: post.title_es || '',
+        title_en: post.title_en || '',
+        slug_es: post.slug_es || '',
+        slug_en: post.slug_en || '',
+        description_es: post.description_es || '',
+        description_en: post.description_en || '',
+        content_es: post.content_es || '',
+        content_en: post.content_en || '',
         image: null,
         imagePreview: post.image ? getMediaUrl(post.image) : '',
         status: post.status,
@@ -79,11 +88,17 @@ export function useBlogEditor(postId?: number) {
 
   const handleFormChange = useCallback(
     (field: keyof BlogEditorFormData, value: string) => {
-      if (field === 'title') {
+      if (field === 'title_es') {
         setFormData((prev) => ({
           ...prev,
-          title: value,
-          slug: generateSlug(value),
+          title_es: value,
+          slug_es: generateSlug(value),
+        }));
+      } else if (field === 'title_en') {
+        setFormData((prev) => ({
+          ...prev,
+          title_en: value,
+          slug_en: generateSlug(value),
         }));
       } else {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -92,8 +107,8 @@ export function useBlogEditor(postId?: number) {
     []
   );
 
-  const handleSlugChange = useCallback((slug: string) => {
-    setFormData((prev) => ({ ...prev, slug }));
+  const handleSlugChange = useCallback((field: 'slug_es' | 'slug_en', slug: string) => {
+    setFormData((prev) => ({ ...prev, [field]: slug }));
   }, []);
 
   const handleImageChange = useCallback((file: File | null) => {
@@ -138,10 +153,14 @@ export function useBlogEditor(postId?: number) {
       const newContent = cleanContent;
       
       setFormData({
-        title: newTitle,
-        slug: newSlug,
-        description: '',
-        content: newContent,
+        title_es: newTitle,
+        title_en: '',
+        slug_es: newSlug,
+        slug_en: '',
+        description_es: '',
+        description_en: '',
+        content_es: newContent,
+        content_en: '',
         image: null,
         imagePreview: '',
         status: BlogPostStatus.VISIBLE,
@@ -158,16 +177,16 @@ export function useBlogEditor(postId?: number) {
   }, []);
 
   const validateForm = useCallback((): boolean => {
-    if (!formData.title.trim()) {
-      toast.error('El título es obligatorio');
+    if (!formData.title_es.trim()) {
+      toast.error('El título en español es obligatorio');
       return false;
     }
-    if (!formData.slug.trim()) {
-      toast.error('El slug es obligatorio');
+    if (!formData.slug_es.trim()) {
+      toast.error('El slug en español es obligatorio');
       return false;
     }
     return true;
-  }, [formData.title, formData.slug]);
+  }, [formData.title_es, formData.slug_es]);
 
   const savePost = useCallback(async () => {
     if (!validateForm()) return;
@@ -176,10 +195,14 @@ export function useBlogEditor(postId?: number) {
 
     try {
       const formDataObj = new FormData();
-      formDataObj.append('title', formData.title);
-      formDataObj.append('slug', formData.slug);
-      formDataObj.append('description', formData.description);
-      formDataObj.append('content', formData.content);
+      formDataObj.append('titleEs', formData.title_es);
+      if (formData.title_en) formDataObj.append('titleEn', formData.title_en);
+      formDataObj.append('slugEs', formData.slug_es);
+      if (formData.slug_en) formDataObj.append('slugEn', formData.slug_en);
+      if (formData.description_es) formDataObj.append('descriptionEs', formData.description_es);
+      if (formData.description_en) formDataObj.append('descriptionEn', formData.description_en);
+      formDataObj.append('contentEs', formData.content_es);
+      if (formData.content_en) formDataObj.append('contentEn', formData.content_en);
       formDataObj.append('status', formData.status);
       formDataObj.append('publishedAt', formData.publishedAt);
       if (formData.image) {
@@ -208,9 +231,14 @@ export function useBlogEditor(postId?: number) {
   const resetForm = useCallback(() => {
     const today = new Date().toISOString().split('T')[0];
     setFormData({
-      title: '',
-      slug: '',
-      content: '',
+      title_es: '',
+      title_en: '',
+      slug_es: '',
+      slug_en: '',
+      description_es: '',
+      description_en: '',
+      content_es: '',
+      content_en: '',
       image: null,
       imagePreview: '',
       status: BlogPostStatus.VISIBLE,

@@ -1,9 +1,13 @@
 export interface BlogPost {
   id: number;
-  title: string;
-  slug: string;
-  description?: string;
-  content: string;
+  title_es: string;
+  title_en?: string;
+  slug_es: string;
+  slug_en?: string;
+  description_es?: string;
+  description_en?: string;
+  content_es: string;
+  content_en?: string;
   image?: string;
   status: BlogPostStatus;
   publishedAt: string;
@@ -17,20 +21,28 @@ export enum BlogPostStatus {
 }
 
 export interface CreateBlogPostDto {
-  title: string;
-  slug: string;
-  description?: string;
-  content: string;
+  title_es: string;
+  title_en?: string;
+  slug_es: string;
+  slug_en?: string;
+  description_es?: string;
+  description_en?: string;
+  content_es: string;
+  content_en?: string;
   image?: string;
   status: BlogPostStatus;
   publishedAt: string;
 }
 
 export interface UpdateBlogPostDto {
-  title?: string;
-  slug?: string;
-  description?: string;
-  content?: string;
+  title_es?: string;
+  title_en?: string;
+  slug_es?: string;
+  slug_en?: string;
+  description_es?: string;
+  description_en?: string;
+  content_es?: string;
+  content_en?: string;
   image?: string;
   status?: BlogPostStatus;
   publishedAt?: string;

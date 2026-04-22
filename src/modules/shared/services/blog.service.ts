@@ -5,10 +5,14 @@ import { BlogPost, BlogPostStatus } from '../types/blog.types';
 function mapApiBlogToPost(apiBlog: any): BlogPost {
   return {
     id: apiBlog.id,
-    title: apiBlog.title,
-    slug: apiBlog.slug,
-    description: apiBlog.description,
-    content: apiBlog.content,
+    title_es: apiBlog.titleEs || apiBlog.title || '',
+    title_en: apiBlog.titleEn || '',
+    slug_es: apiBlog.slugEs || apiBlog.slug || '',
+    slug_en: apiBlog.slugEn || '',
+    description_es: apiBlog.descriptionEs || apiBlog.description || '',
+    description_en: apiBlog.descriptionEn || '',
+    content_es: apiBlog.contentEs || apiBlog.content || '',
+    content_en: apiBlog.contentEn || '',
     image: apiBlog.image,
     // API status: 'PUBLISHED' | 'HIDDEN' -> Frontend: 'VISIBLE' | 'HIDDEN'
     status:
