@@ -48,14 +48,41 @@ export default function BlogEditor() {
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-[1600px] mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/admin/blog')}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al blog
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/admin/blog')}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Volver al blog
+            </Button>
+            <div className="flex items-center gap-2 ml-2 pl-2 border-l">
+              <span className="text-sm text-muted-foreground">Idioma:</span>
+              <button
+                type="button"
+                onClick={() => setActiveLang('es')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  activeLang === 'es'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-transparent text-muted-foreground hover:text-foreground border border-transparent hover:border-input'
+                }`}
+              >
+                ES
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveLang('en')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  activeLang === 'en'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-transparent text-muted-foreground hover:text-foreground border border-transparent hover:border-input'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+          </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleReset} title="Limpiar formulario">
               <RotateCcw className="h-4 w-4 mr-2" />
@@ -91,30 +118,6 @@ export default function BlogEditor() {
         <div className="border rounded-xl shadow-sm overflow-hidden">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 p-8 border-b">
             <div className="max-w-[1400px] mx-auto">
-              <div className="flex gap-4 mb-4">
-                <button
-                  type="button"
-                  onClick={() => setActiveLang('es')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    activeLang === 'es'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white dark:bg-black text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  Español
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveLang('en')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    activeLang === 'en'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white dark:bg-black text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  English
-                </button>
-              </div>
               <input
                 key={`${resetKey}-title-${activeLang}`}
                 type="text"
