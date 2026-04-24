@@ -143,9 +143,9 @@ export default function PayPalCheckout({ hook, room }: Props) {
         } catch (error) {
           console.error('createOrder error', error);
           toast.error('Error de conexión o validación. Intenta nuevamente.');
-          // setTimeout(() => {
-          //   window.location.href = '/';
-          // }, 2000);
+           setTimeout(() => {
+             window.location.href = '/';
+          }, 2000);
           throw error;
         } finally {
           setLoading(false);
@@ -182,7 +182,7 @@ export default function PayPalCheckout({ hook, room }: Props) {
           console.error('onApprove error', error);
           toast.error('Hubo un problema confirmando el pago. Revise su conexión a internet . Serás redirigido al inicio.');
           setTimeout(() => {
-           // window.location.href = '/';
+            window.location.href = '/';
            }, 2500);
         } finally {
           setLoading(false);
@@ -192,14 +192,14 @@ export default function PayPalCheckout({ hook, room }: Props) {
         console.warn('PayPal checkout cancelled', data);
         toast.error('El pago fue cancelado. Redirigiendo...');
          setTimeout(() => {
-          // window.location.href = '/';
+           window.location.href = '/';
          }, 1500);
       },
       onError: (err: unknown) => {
         console.error('PayPal Buttons error', err);
         toast.error('Ocurrió un error inesperado con PayPal. Revise su conexión a internet . Redirigiendo...');
         setTimeout(() => {
-        //window.location.href = '/';
+        window.location.href = '/';
          }, 2000);
       },
     });
