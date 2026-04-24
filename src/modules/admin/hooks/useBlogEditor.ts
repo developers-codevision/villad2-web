@@ -181,12 +181,28 @@ export function useBlogEditor(postId?: number) {
       toast.error('El título en español es obligatorio');
       return false;
     }
+    if (!formData.title_en.trim()) {
+      toast.error('El título en inglés es obligatorio');
+      return false;
+    }
     if (!formData.slug_es.trim()) {
       toast.error('El slug en español es obligatorio');
       return false;
     }
+    if (!formData.slug_en.trim()) {
+      toast.error('El slug en inglés es obligatorio');
+      return false;
+    }
+    if (!formData.content_es.trim()) {
+      toast.error('El contenido en español es obligatorio');
+      return false;
+    }
+    if (!formData.content_en.trim()) {
+      toast.error('El contenido en inglés es obligatorio');
+      return false;
+    }
     return true;
-  }, [formData.title_es, formData.slug_es]);
+  }, [formData.title_es, formData.title_en, formData.slug_es, formData.slug_en, formData.content_es, formData.content_en]);
 
   const savePost = useCallback(async () => {
     if (!validateForm()) return;
@@ -196,13 +212,13 @@ export function useBlogEditor(postId?: number) {
     try {
       const formDataObj = new FormData();
       formDataObj.append('titleEs', formData.title_es);
-      if (formData.title_en) formDataObj.append('titleEn', formData.title_en);
+      formDataObj.append('titleEn', formData.title_en);
       formDataObj.append('slugEs', formData.slug_es);
-      if (formData.slug_en) formDataObj.append('slugEn', formData.slug_en);
-      if (formData.description_es) formDataObj.append('descriptionEs', formData.description_es);
-      if (formData.description_en) formDataObj.append('descriptionEn', formData.description_en);
+      formDataObj.append('slugEn', formData.slug_en);
+      formDataObj.append('descriptionEs', formData.description_es);
+      formDataObj.append('descriptionEn', formData.description_en);
       formDataObj.append('contentEs', formData.content_es);
-      if (formData.content_en) formDataObj.append('contentEn', formData.content_en);
+      formDataObj.append('contentEn', formData.content_en);
       formDataObj.append('status', formData.status);
       formDataObj.append('publishedAt', formData.publishedAt);
       if (formData.image) {
