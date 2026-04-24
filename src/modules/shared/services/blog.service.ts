@@ -1,5 +1,5 @@
 // Blog Service - integrate with backend API
-import { apiClient, authenticatedApiClient } from './api';
+import { apiClient, authenticatedApiClient, getMediaUrl } from './api';
 import { BlogPost, BlogPostStatus } from '../types/blog.types';
 
 function mapApiBlogToPost(apiBlog: any): BlogPost {
@@ -13,7 +13,7 @@ function mapApiBlogToPost(apiBlog: any): BlogPost {
     description_en: apiBlog.descriptionEn || '',
     content_es: apiBlog.contentEs || apiBlog.content || '',
     content_en: apiBlog.contentEn || '',
-    image: apiBlog.image,
+    image: apiBlog.image ? getMediaUrl(apiBlog.image) : '',
     // API status: 'PUBLISHED' | 'HIDDEN' -> Frontend: 'VISIBLE' | 'HIDDEN'
     status:
       String(apiBlog.status).toUpperCase() === 'PUBLISHED'
@@ -48,6 +48,19 @@ export const blogService = {
 
   async getVisible(): Promise<BlogPost[]> {
     return this.getAll(BlogPostStatus.VISIBLE);
+  },
+
+  async getLatest(): Promise<BlogPost | null> {
+    const params = new URLSearchParams();
+    params.append('status', 'PUBLISHED');
+    params.append('page', '1');
+    params.append('limit', '1');
+
+    const res = await apiClient.get<{ blogs: any[] }>(`/blog?${params.toString()}`);
+    if (res.blogs && res.blogs.length > 0) {
+      return mapApiBlogToPost(res.blogs[0]);
+    }
+    return null;
   },
 
   async getByIdOrSlug(idOrSlug: string): Promise<BlogPost> {

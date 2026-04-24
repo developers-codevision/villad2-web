@@ -12,8 +12,9 @@ import {
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { HOSTAL } from "@/modules/shared/data/hostal";
-import { reviewsService } from "@/modules/shared/services";
+import { reviewsService, blogService } from "@/modules/shared/services";
 import { Review, ReviewStatus } from "@/modules/shared/types/api.types";
+import { BlogPost } from "@/modules/shared/types/blog.types";
 import logo from "@/assets/logo.png";
 import DescriptionSection from "@/modules/client/components/DescriptionSection";
 import TerraceBarSection from "@/modules/client/components/TerraceBarSection";
@@ -25,6 +26,8 @@ import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 const Index = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+  const [latestPost, setLatestPost] = useState<BlogPost | null>(null);
+  const [loadingBlog, setLoadingBlog] = useState(true);
   const { t, language } = useLanguage();
 
   // Cargar reseñas aprobadas desde la API
@@ -43,6 +46,23 @@ const Index = () => {
     };
 
     loadApprovedReviews();
+  }, []);
+
+  // Cargar último artículo del blog
+  useEffect(() => {
+    const loadLatestPost = async () => {
+      try {
+        const post = await blogService.getLatest();
+        setLatestPost(post);
+      } catch (error) {
+        console.error("Error loading latest post:", error);
+        setLatestPost(null);
+      } finally {
+        setLoadingBlog(false);
+      }
+    };
+
+    loadLatestPost();
   }, []);
 
   // Inject JSON-LD for reviews & aggregate rating to improve SEO
@@ -316,27 +336,68 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gradient-to-b from-background via-primary/5 to-background">
+<section className="py-20 px-4 bg-gradient-to-b from-background via-primary/5 to-background">
         <div className="container mx-auto">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="h-px w-12 bg-primary/40" />
             <FileText className="h-5 w-5 text-primary" />
             <div className="h-px w-12 bg-primary/40" />
           </div>
-<h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-    {language === 'es' ? 'Nuestro ' : 'Our '}<span style={{ color: '#00c3ff' }}>{language === 'es' ? 'Blog' : 'Blog'}</span>
-  </h2>
-  <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-    {t('blog.subtitle')}
-  </p>
-  <div className="text-center">
-    <Link to="/blog">
-      <Button size="lg" className="gap-2">
-        {language === 'es' ? 'Ver artículos' : 'View articles'}
-        <ArrowRight className="h-4 w-4" />
-      </Button>
-    </Link>
-  </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+            {language === 'es' ? 'Nuestro Blog' : 'Our Blog'}
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+            {t('blog.subtitle')}
+          </p>
+          
+{loadingBlog ? (
+            <div className="text-center py-8">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+            </div>
+          ) : latestPost ? (
+            <div className="max-w-md mx-auto">
+              <div className="bg-card border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                {latestPost.image && (
+                  <div className="aspect-[16/9] overflow-hidden">
+                    <img 
+                      src={latestPost.image} 
+                      alt={language === 'es' ? latestPost.title_es : latestPost.title_en}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold mb-2 line-clamp-1">
+                    {language === 'es' ? latestPost.title_es : latestPost.title_en}
+                  </h3>
+                  {language === 'es' ? latestPost.description_es : latestPost.description_en ? (
+                    <p className="text-muted-foreground text-xs mb-3 line-clamp-2">
+                      {language === 'es' ? latestPost.description_es : latestPost.description_en}
+                    </p>
+                  ) : null}
+                  <div className="flex items-center gap-2">
+                    <Link 
+                      to={`/blog/${language === 'es' ? latestPost.slug_es : latestPost.slug_en}`}
+                    >
+                      <Button variant="link" className="gap-1 h-auto p-0 text-primary text-sm">
+                        {language === 'es' ? 'Lee nuestro último artículo' : 'Read our latest article'}
+                        <ArrowRight className="h-3 w-3" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center">
+              <Link to="/blog">
+                <Button size="lg" className="gap-2">
+                  {language === 'es' ? 'Ver artículos' : 'View articles'}
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
