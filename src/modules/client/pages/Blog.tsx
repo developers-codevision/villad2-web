@@ -43,6 +43,46 @@ export default function Blog() {
     loadPosts();
   }, []);
 
+  useEffect(() => {
+    document.title = t('blog.title') + ' | Villa D2';
+    const desc = t('blog.subtitle');
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+    let metaOgDesc = document.querySelector('meta[property="og:description"]');
+    if (metaOgDesc) metaOgDesc.setAttribute('content', desc);
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', t('blog.title') + ' | Villa D2');
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', 'https://villad2.com/blog');
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', 'https://villad2.com/blog');
+    
+    let oldHrefEs = document.querySelector('link[hreflang="es"]');
+    let oldHrefEn = document.querySelector('link[hreflang="en"]');
+    let oldHrefDefault = document.querySelector('link[hreflang="x-default"]');
+    if (!oldHrefEs) {
+      const linkEs = document.createElement('link');
+      linkEs.rel = 'alternate';
+      linkEs.hreflang = 'es';
+      linkEs.href = 'https://villad2.com/blog';
+      document.head.appendChild(linkEs);
+    }
+    if (!oldHrefEn) {
+      const linkEn = document.createElement('link');
+      linkEn.rel = 'alternate';
+      linkEn.hreflang = 'en';
+      linkEn.href = 'https://villad2.com/blog?lang=en';
+      document.head.appendChild(linkEn);
+    }
+    if (!oldHrefDefault) {
+      const linkDefault = document.createElement('link');
+      linkDefault.rel = 'alternate';
+      linkDefault.hreflang = 'x-default';
+      linkDefault.href = 'https://villad2.com/blog';
+      document.head.appendChild(linkDefault);
+    }
+  }, [language, t]);
+
   return (
     <div className="min-h-screen bg-[#00c3ff]">
       <Navbar />

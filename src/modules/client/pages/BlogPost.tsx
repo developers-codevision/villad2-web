@@ -43,6 +43,23 @@ export default function BlogPostPage() {
     loadPost();
   }, [slug]);
 
+  useEffect(() => {
+    if (post && !loading) {
+      const pageTitle = title + ' | Villa D2';
+      document.title = pageTitle;
+      let desc = document.querySelector('meta[name="description"]');
+      if (desc) desc.setAttribute('content', post.description_es || title);
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', pageTitle);
+      let ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', post.description_es || title);
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', `https://villad2.com/blog/${slug}`);
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute('href', `https://villad2.com/blog/${slug}`);
+    }
+  }, [post, loading, slug, title]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
