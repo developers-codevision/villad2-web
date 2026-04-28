@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- HOMEPAGE -->
+  <url>
+    <loc>https://villad2.com/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/"/>
+  </url>
+
+  <!-- HABITACIONES / ROOMS -->
+  <url>
+    <loc>https://villad2.com/habitaciones</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/habitaciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/habitaciones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/habitaciones"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/habitaciones?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/habitaciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/habitaciones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/habitaciones"/>
+  </url>
+
+  <!-- SERVICIOS -->
+  <url>
+    <loc>https://villad2.com/servicios</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/servicios"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/servicios?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/servicios"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/servicios?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/servicios"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/servicios?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/servicios"/>
+  </url>
+
+  <!-- RESERVAS -->
+  <url>
+    <loc>https://villad2.com/reservas</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/reservas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/reservas?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/reservas"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/reservas?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/reservas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/reservas?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/reservas"/>
+  </url>
+
+  <!-- RESEÑAS -->
+  <url>
+    <loc>https://villad2.com/resenas</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/resenas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/resenas?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/resenas"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/resenas?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/resenas"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/resenas?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/resenas"/>
+  </url>
+
+  <!-- PROMOCIONES -->
+  <url>
+    <loc>https://villad2.com/promociones</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/promociones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/promociones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/promociones"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/promociones?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/promociones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/promociones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/promociones"/>
+  </url>
+
+  <!-- BLOG -->
+  <url>
+    <loc>https://villad2.com/blog</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/blog?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/blog"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/blog?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/blog?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/blog"/>
+  </url>
+
+  <!-- LUGARES DE INTERÉS -->
+  <url>
+    <loc>https://villad2.com/lugares-interes</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/lugares-interes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/lugares-interes?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/lugares-interes"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/lugares-interes?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/lugares-interes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/lugares-interes?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/lugares-interes"/>
+  </url>
+
+  <!-- CONTACTO -->
+  <url>
+    <loc>https://villad2.com/contacto</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/contacto"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/contacto?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/contacto"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/contacto?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/contacto"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/contacto?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/contacto"/>
+  </url>
+
+  <!-- POLÍTICAS DE REEMBOLSO -->
+  <url>
+    <loc>https://villad2.com/politicas-reembolso</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politicas-reembolso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politicas-reembolso?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politicas-reembolso"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/politicas-reembolso?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politicas-reembolso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politicas-reembolso?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politicas-reembolso"/>
+  </url>
+
+  <!-- TÉRMINOS Y CONDICIONES -->
+  <url>
+    <loc>https://villad2.com/terminos-condiciones</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/terminos-condiciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/terminos-condiciones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/terminos-condiciones"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/terminos-condiciones?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/terminos-condiciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/terminos-condiciones?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/terminos-condiciones"/>
+  </url>
+
+  <!-- POLÍTICA DE PRIVACIDAD -->
+  <url>
+    <loc>https://villad2.com/politica-privacidad</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politica-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politica-privacidad?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politica-privacidad"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/politica-privacidad?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politica-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politica-privacidad?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politica-privacidad"/>
+  </url>
+  <!-- Privacy Policy English -->
+  <url>
+    <loc>https://villad2.com/privacy-policy</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politica-privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/privacy-policy?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politica-privacidad"/>
+  </url>
+
+  <!-- POLÍTICA DE COOKIES -->
+  <url>
+    <loc>https://villad2.com/politica-de-cookies</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politica-de-cookies"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politica-de-cookies?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politica-de-cookies"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/politica-de-cookies?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/politica-de-cookies"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/politica-de-cookies?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/politica-de-cookies"/>
+  </url>
+
+  <!-- AVISO LEGAL -->
+  <url>
+    <loc>https://villad2.com/aviso-legal</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/aviso-legal?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/aviso-legal"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/aviso-legal?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/aviso-legal?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/aviso-legal"/>
+  </url>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <url>
+    <loc>https://villad2.com/preguntas-frecuentes</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/preguntas-frecuentes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/preguntas-frecuentes?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/preguntas-frecuentes"/>
+  </url>
+  <url>
+    <loc>https://villad2.com/preguntas-frecuentes?lang=en</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://villad2.com/preguntas-frecuentes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://villad2.com/preguntas-frecuentes?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://villad2.com/preguntas-frecuentes"/>
+  </url>
+</urlset>
