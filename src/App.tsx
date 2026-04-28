@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
 import WhatsAppFloatingButton from "@/modules/shared/components/WhatsAppFloatingButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
 import { LanguageProvider } from "@/modules/client/contexts";
@@ -89,6 +89,42 @@ const App = () => (
 const RoutesWrapper = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/admin-selector") || location.pathname.startsWith("/gestion");
+
+  useEffect(() => {
+    if (isAdminRoute) return;
+
+    const path = location.pathname;
+    const baseUrl = 'https://villad2.com';
+    const esUrl = `${baseUrl}${path}`;
+    const enUrl = `${baseUrl}${path}?lang=en`;
+
+    ['es', 'en', 'x-default'].forEach(lang => {
+      const old = document.querySelector(`link[hreflang="${lang}"]`);
+      if (old) old.remove();
+    });
+
+    const links = [
+      { lang: 'es', href: esUrl },
+      { lang: 'en', href: enUrl },
+      { lang: 'x-default', href: esUrl }
+    ];
+
+    links.forEach(({ lang, href }) => {
+      const link = document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = lang;
+      link.href = href;
+      document.head.appendChild(link);
+    });
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = esUrl;
+  }, [location.pathname, isAdminRoute]);
 
   return (
     <>
