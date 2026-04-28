@@ -8,6 +8,7 @@ import React, { lazy, Suspense } from "react";
 import { NotFound, ProtectedRoute } from "@/modules/shared/components";
 import { AuthProvider } from "@/modules/shared/context";
 import { LanguageProvider } from "@/modules/client/contexts";
+import { Navigate } from "react-router-dom";
 
 // Code-splitting: cargar páginas bajo demanda
 const Home = lazy(() => import("@/modules/client/pages/Home"));
@@ -111,6 +112,7 @@ const RoutesWrapper = () => {
         <Route path="/politica-de-cookies" element={<CookiePolicy />} />
         <Route path="/aviso-legal" element={<LegalNotice />} />
         <Route path="/preguntas-frecuentes" element={<FAQ />} />
+        <Route path="/contacto" element={<Navigate to="/#contacto" replace />} />
         <Route path="/admin-selector" element={<ProtectedRoute requireAdmin><AdminSelector /></ProtectedRoute>} />
         <Route path="/gestion" element={<ProtectedRoute requireAdmin><GestionHome /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
