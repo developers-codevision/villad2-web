@@ -16,7 +16,7 @@ import type { DateRange } from "react-day-picker";
 export default function Reservations() {
   const [searchParams] = useSearchParams();
   const preselectedRoomId = searchParams.get("room");
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const { rooms, availableRooms, loading: loadingRooms } = useRooms();
   const { prices } = usePrices();
@@ -41,6 +41,40 @@ export default function Reservations() {
       }
     }
   }, [preselectedRoomId, rooms, selectRoom]);
+
+  // Schema para SEO
+  useEffect(() => {
+    const reservationSchema = {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Hostal Boutique Villa D2",
+      "description": language === "es"
+        ? "Sistema de reservas en línea de Villa D2"
+        : "Online reservation system for Villa D2",
+      "url": "https://villad2.com/reservas",
+      "potentialAction": {
+        "@type": "ReserveAction",
+        "name": language === "es" ? "Reservar habitación" : "Book room",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://villad2.com/reservas?room={room_id}",
+          "actionPlatform": [
+            "https://schema.org/DesktopWebPlatform",
+            "https://schema.org/MobileWebPlatform"
+          ]
+        }
+      }
+    };
+
+    let script = document.getElementById('reservations-schema') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'reservations-schema';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(reservationSchema);
+  }, []);
 
   const selectedRoom = rooms.find(r => r.id === formData.roomId);
   const { nights, totalPrice } = reservationSummary(selectedRoom);

@@ -55,22 +55,53 @@
             }
           },
           {
-            "@type": "Hotel",
+            "@type": "LodgingBusiness",
             "@id": "https://villad2.com/#organization",
             "name": "Hostal Boutique Villa D2",
             "image": "https://villad2.com/Foto-portada-no1-editada-scaled.webp",
             "description": "Exclusivo hostal boutique en el corazón del Vedado, La Habana. Disfruta de habitaciones confortables, seguridad 24h y atención personalizada.",
             "url": "https://villad2.com/",
+            "telephone": "+53 78820045",
+            "email": "hostal.villad2@gmail.com",
+            "priceRange": "$$",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Vedado",
-              "addressLocality": "La Habana",
+              "streetAddress": "Calle 37 #14 e/Paseo y Calle 2",
+              "addressLocality": "Vedado",
+              "addressRegion": "La Habana",
               "addressCountry": "CU"
             },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": "23.1252",
+              "longitude": "-82.3904"
+            },
+            "checkinTime": "14:00",
+            "checkoutTime": "12:00",
+            "starRating": {
+              "@type": "Rating",
+              "ratingValue": "3",
+              "bestRating": "5"
+            },
             "sameAs": [
-              "https://www.facebook.com/villad2",
+              "https://www.facebook.com/hostalsolyluna",
+              "https://instagram.com/hostalsolyluna",
               "https://twitter.com/villad2",
               "https://www.youtube.com/@villad2"
+            ],
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                "opens": "00:00",
+                "closes": "23:59"
+              }
+            ],
+            "amenityFeature": [
+              {"@type": "LocationFeatureSpecification", "name": "WiFi", "value": true},
+              {"@type": "LocationFeatureSpecification", "name": "Parking", "value": true},
+              {"@type": "LocationFeatureSpecification", "name": "Security", "value": true},
+              {"@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true}
             ]
           }
         ]

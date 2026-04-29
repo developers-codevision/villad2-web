@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Star } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Input } from "@/modules/shared/components/ui/input";
@@ -8,11 +8,15 @@ import { useToast } from "@/modules/shared/hooks/use-toast";
 import Navbar from "@/modules/shared/components/Navbar";
 import Footer from "@/modules/shared/components/Footer";
 import { reviewsService } from "@/modules/shared/services";
+import { Review, ReviewStatus } from "@/modules/shared/types/api.types";
 import { useLanguage } from "@/modules/client/contexts";
 
 const Reviews = () => {
   const { toast } = useToast();
   const { t } = useLanguage();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ average: 0, total: 0 });
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [title, setTitle] = useState("");
@@ -20,6 +24,63 @@ const Reviews = () => {
   const [stars, setStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Cargar reseñas aprobadas y calcular estadísticas para Schema
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const response = await reviewsService.getAll(ReviewStatus.ACTIVE, 1, 100);
+        setReviews(response.reviews);
+
+        // Calcular promedio
+        const totalStars = response.reviews.reduce((sum, r) => sum + r.stars, 0);
+        const avg = response.reviews.length > 0 ? totalStars / response.reviews.length : 0;
+        setStats({ average: avg, total: response.reviews.length });
+
+        // Injectar Schema AggregateRating
+        const aggregateSchema = {
+          "@context": "https://schema.org",
+          "@type": "LodgingBusiness",
+          "name": "Hostal Boutique Villa D2",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": avg.toFixed(1),
+            "bestRating": "5",
+            "worstRating": "1",
+            "ratingCount": response.reviews.length
+          },
+          "reviews": response.reviews.slice(0, 10).map(r => ({
+            "@type": "Review",
+            "author": {
+              "@type": "Person",
+              "name": r.name
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": r.stars
+            },
+            "reviewBody": r.content.substring(0, 200)
+          }))
+        };
+
+        let script = document.getElementById('reviews-schema') as HTMLScriptElement | null;
+        if (!script) {
+          script = document.createElement('script');
+          script.id = 'reviews-schema';
+          script.type = 'application/ld+json';
+          document.head.appendChild(script);
+        }
+        script.textContent = JSON.stringify(aggregateSchema);
+
+      } catch (error) {
+        console.error("Error loading reviews:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReviews();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

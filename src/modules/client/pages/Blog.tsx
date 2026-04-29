@@ -81,7 +81,34 @@ export default function Blog() {
       linkDefault.href = 'https://villad2.com/blog';
       document.head.appendChild(linkDefault);
     }
-  }, [language, t]);
+
+    // Schema Blog
+    if (posts.length > 0) {
+      const blogSchema = {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": language === "es" ? "Blog de Villa D2" : "Villa D2 Blog",
+        "description": t('blog.subtitle'),
+        "url": "https://villad2.com/blog",
+        "blogPost": posts.slice(0, 10).map(post => ({
+          "@type": "BlogPosting",
+          "headline": post.title,
+          "url": `https://villad2.com/blog/${post.slug}`,
+          "datePublished": post.createdAt,
+          "image": post.image
+        }))
+      };
+
+      let script = document.getElementById('blog-schema') as HTMLScriptElement | null;
+      if (!script) {
+        script = document.createElement('script');
+        script.id = 'blog-schema';
+        script.type = 'application/ld+json';
+        document.head.appendChild(script);
+      }
+      script.textContent = JSON.stringify(blogSchema);
+    }
+  }, [language, t, posts]);
 
   return (
     <div className="min-h-screen bg-[#00c3ff]">

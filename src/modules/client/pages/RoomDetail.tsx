@@ -33,6 +33,47 @@ export default function RoomDetail() {
     }
   }, [room]);
 
+  // Schema para la habitación individual
+  useEffect(() => {
+    if (!room) return;
+
+    const roomSchema = {
+      "@context": "https://schema.org",
+      "@type": "HotelRoom",
+      "name": room.name,
+      "description": parseBilingualText(room.description || "", language)?.substring(0, 500),
+      "url": `https://villad2.com/habitaciones/${room.id}`,
+      "photo": room.gallery?.[0] || room.image,
+      "bedType": "Queen bed",
+      "occupancy": {
+        "@type": "QuantitativeValue",
+        "minValue": 1,
+        "maxValue": room.capacity,
+        "unitCode": "HEAD"
+      },
+      "amenityFeature": room.amenities?.map((a: string) => ({
+        "@type": "LocationFeatureSpecification",
+        "name": a
+      })),
+      "offers": {
+        "@type": "Offer",
+        "price": room.price,
+        "priceCurrency": "CUC",
+        "availability": "https://schema.org/InStock",
+        "validFrom": new Date().toISOString()
+      }
+    };
+
+    let script = document.getElementById('room-schema') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'room-schema';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(roomSchema);
+  }, [room, language]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">

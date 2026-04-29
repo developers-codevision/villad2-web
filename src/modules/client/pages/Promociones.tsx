@@ -10,7 +10,7 @@ import { useLanguage } from "@/modules/client/contexts";
 export default function Promociones() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const loadPromotions = async () => {
@@ -30,6 +30,38 @@ export default function Promociones() {
 
     loadPromotions();
   }, []);
+
+  // Schema para SEO
+  useEffect(() => {
+    if (promotions.length === 0) return;
+
+    const promotionsSchema = {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      "name": language === "es" ? "Promociones de Villa D2" : "Villa D2 Promotions",
+      "description": t("promo.subtitle"),
+      "url": "https://villad2.com/promociones",
+      "itemOffered": promotions.map(promo => ({
+        "@type": "DiscountOffer",
+        "name": promo.title_es || promo.title_en,
+        "description": (promo.description_es || promo.description_en)?.substring(0, 300),
+        "discountPercentage": promo.discount || 0,
+        "price": promo.price,
+        "priceCurrency": "CUC",
+        "validFrom": promo.startDate,
+        "validThrough": promo.endDate
+      }))
+    };
+
+    let script = document.getElementById('promotions-schema') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'promotions-schema';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(promotionsSchema);
+  }, [promotions, language]);
 
   return (
     <div className="min-h-screen bg-background">

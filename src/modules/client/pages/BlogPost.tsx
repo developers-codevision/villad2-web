@@ -57,6 +57,39 @@ export default function BlogPostPage() {
       if (ogUrl) ogUrl.setAttribute('content', `https://villad2.com/blog/${slug}`);
       let canonical = document.querySelector('link[rel="canonical"]');
       if (canonical) canonical.setAttribute('href', `https://villad2.com/blog/${slug}`);
+
+      // Schema BlogPosting
+      const postSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "description": post.description_es || title,
+        "url": `https://villad2.com/blog/${slug}`,
+        "image": post.image,
+        "datePublished": post.createdAt,
+        "dateModified": post.updatedAt,
+        "author": {
+          "@type": "Organization",
+          "name": "Hostal Boutique Villa D2"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Hostal Boutique Villa D2",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://villad2.com/logo.png"
+          }
+        }
+      };
+
+      let script = document.getElementById('blogpost-schema') as HTMLScriptElement | null;
+      if (!script) {
+        script = document.createElement('script');
+        script.id = 'blogpost-schema';
+        script.type = 'application/ld+json';
+        document.head.appendChild(script);
+      }
+      script.textContent = JSON.stringify(postSchema);
     }
   }, [post, loading, slug, title]);
 

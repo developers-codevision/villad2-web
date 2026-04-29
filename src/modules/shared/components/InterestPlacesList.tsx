@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/modules/shared/components/ui/accordion";
 import { interestPlacesData } from "@/modules/shared/data/interestPlaces";
+import { useEffect } from "react";
 
 const categories = [
   { key: "museos", icon: "🏛️" },
@@ -47,6 +48,50 @@ const categoryTitles = {
 export default function InterestPlacesList() {
   const { language } = useLanguage();
   const isEnglish = language === "en";
+
+  // Schema para SEO
+  useEffect(() => {
+    const allPlaces = [
+      ...interestPlacesData.museos,
+      ...interestPlacesData.culturales,
+      ...interestPlacesData.vidaNocturna,
+      ...interestPlacesData.paseos,
+      ...interestPlacesData.gastronomia,
+      ...interestPlacesData.excursiones,
+    ];
+
+    const placesSchema = {
+      "@context": "https://schema.org",
+      "@type": "TouristInformationCenter",
+      "name": isEnglish ? "Places of Interest near Villa D2" : "Lugares de Interés cerca de Villa D2",
+      "description": isEnglish
+        ? "Discover museums, theaters, restaurants and attractions near Villa D2 in Vedado, Havana"
+        : "Descubre museos, teatros, restaurantes y atracciones cerca de Villa D2 en el Vedado, La Habana",
+      "url": "https://villad2.com/lugares-interes",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Calle 37 #14 e/Paseo y Calle 2",
+        "addressLocality": "Vedado",
+        "addressRegion": "La Habana",
+        "addressCountry": "CU"
+      },
+      "nearbyLocation": allPlaces.slice(0, 20).map(place => ({
+        "@type": "TouristAttraction",
+        "name": place.name,
+        "description": isEnglish && place.descriptionEn ? place.descriptionEn : place.description,
+        "url": "https://villad2.com/lugares-interes"
+      }))
+    };
+
+    let script = document.getElementById('places-schema') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'places-schema';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(placesSchema);
+  }, [language]);
 
   return (
     <div className="max-w-6xl mx-auto px-4">

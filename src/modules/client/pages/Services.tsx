@@ -3,9 +3,44 @@ import Footer from "@/modules/shared/components/Footer";
 import { SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/modules/shared/data/hostal";
 import { useLanguage } from "@/modules/client/contexts";
 import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
+import { useEffect } from "react";
 
 export default function Services() {
   const { language, t } = useLanguage();
+
+  // Schema para SEO
+  useEffect(() => {
+    const services = [
+      ...SERVICES_SECURITY.map(s => ({ ...s, category: "security" })),
+      ...SERVICES_INCLUDED.map(s => ({ ...s, category: "included" })),
+      ...SERVICES_ADDITIONAL.map(s => ({ ...s, category: "additional" }))
+    ];
+
+    const servicesSchema = {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "Hostal Boutique Villa D2",
+      "description": language === "es" 
+        ? "Servicios disponibles en Villa D2" 
+        : "Services available at Villa D2",
+      "url": "https://villad2.com/servicios",
+      "amenityFeature": services.map(s => ({
+        "@type": "LocationFeatureSpecification",
+        "name": parseBilingualText(s.name, language),
+        "description": parseBilingualText(s.description, language)?.substring(0, 200),
+        "value": true
+      }))
+    };
+
+    let script = document.getElementById('services-schema') as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'services-schema';
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(servicesSchema);
+  }, [language]);
 
   return (
     <div className="min-h-screen bg-background">
