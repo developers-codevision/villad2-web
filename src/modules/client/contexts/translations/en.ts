@@ -311,4 +311,22 @@ export const en = {
   'blog.articleNotFound': 'Article not found',
   'blog.articleNotFoundDesc': 'The article you are looking for does not exist or has been deleted.',
   'blog.articles': 'articles',
+
+  // Blog Comments
+  'blog.comments.title': 'Comments',
+  'blog.comments.add': 'Write a comment',
+  'blog.comments.formTitle': 'Leave a comment',
+  'blog.comments.name': 'Name',
+  'blog.comments.namePlaceholder': 'Your name',
+  'blog.comments.message': 'Comment',
+  'blog.comments.messagePlaceholder': 'Write your comment here...',
+  'blog.comments.submit': 'Submit',
+  'blog.comments.sending': 'Sending...',
+  'blog.comments.cancel': 'Cancel',
+  'blog.comments.loading': 'Loading comments...',
+  'blog.comments.empty': 'No comments yet. Be the first to comment!',
+  'blog.comments.response': 'Hostal response',
+  'blog.comments.success': 'Comment sent. It will be visible after being approved.',
+  'blog.comments.error': 'Error sending comment. Try again.',
+  'blog.comments.errorEmpty': 'Please fill in all fields.',
 };

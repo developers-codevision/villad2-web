@@ -92,8 +92,8 @@ export default function Blog() {
         "url": "https://villad2.com/blog",
         "blogPost": posts.slice(0, 10).map(post => ({
           "@type": "BlogPosting",
-          "headline": post.title,
-          "url": `https://villad2.com/blog/${post.slug}`,
+          "headline": getTitle(post),
+          "url": `https://villad2.com/blog/${getSlug(post)}`,
           "datePublished": post.createdAt,
           "image": post.image
         }))

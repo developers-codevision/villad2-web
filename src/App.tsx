@@ -38,6 +38,7 @@ const AdminPromociones = lazy(() => import("@/modules/admin/pages/AdminPromocion
 const AdminBlog = lazy(() => import("@/modules/admin/pages/AdminBlog"));
 const BlogEditor = lazy(() => import("@/modules/admin/pages/BlogEditor"));
 const AdminResenas = lazy(() => import("@/modules/admin/pages/AdminResenas"));
+const AdminComentarios = lazy(() => import("@/modules/admin/pages/AdminComentarios"));
 const AdminSettings = lazy(() => import("@/modules/admin/pages/AdminSettings"));
 
 // Client pages
@@ -159,6 +160,7 @@ const RoutesWrapper = () => {
           <Route path="blog/nuevo" element={<BlogEditor />} />
           <Route path="blog/:id" element={<BlogEditor />} />
           <Route path="resenas" element={<AdminResenas />} />
+          <Route path="comentarios" element={<AdminComentarios />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
         <Route path="*" element={<NotFound />} />

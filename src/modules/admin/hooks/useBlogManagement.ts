@@ -103,9 +103,9 @@ export function useBlogManagement() {
   const openEdit = useCallback((post: BlogPost) => {
     setFormState((prev) => ({ ...prev, open: true, editing: post }));
     setFormData({
-      title: post.title,
-      slug: post.slug,
-      content: post.content || '',
+      title: post.title_es,
+      slug: post.slug_es,
+      content: post.content_es || '',
       image: null,
       imagePreview: post.image ? getMediaUrl(post.image) : '',
       status: post.status,

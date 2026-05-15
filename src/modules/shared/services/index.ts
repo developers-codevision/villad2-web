@@ -8,6 +8,7 @@ export { reservationsService } from './reservations.service';
 export { reviewsService } from './reviews.service';
 export { promotionsService } from './promotions.service';
 export { blogService } from './blog.service';
+export { blogCommentsService } from './blog-comments.service';
 export { settingsService } from './settings.service';
 
 

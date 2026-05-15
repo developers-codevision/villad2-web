@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, NavLink, useLocation } from "react-router-dom";
-import { CalendarCheck, BedDouble, Tag, Star, LogOut, ArrowLeft, Menu, X, Settings, FileText } from "lucide-react";
+import { CalendarCheck, BedDouble, Tag, Star, LogOut, ArrowLeft, Menu, X, Settings, FileText, MessageCircle } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { cn } from "@/modules/shared/lib/utils";
 import { useAuth } from "@/modules/shared/context";
@@ -11,6 +11,7 @@ const navItems = [
   { label: "Promociones", to: "/admin/promociones", icon: Tag },
   { label: "Blog", to: "/admin/blog", icon: FileText },
   { label: "Reseñas", to: "/admin/resenas", icon: Star },
+  { label: "Comentarios", to: "/admin/comentarios", icon: MessageCircle },
   { label: "Configuración", to: "/admin/settings", icon: Settings },
 ];
 

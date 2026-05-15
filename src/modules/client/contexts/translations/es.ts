@@ -312,4 +312,22 @@ export const es = {
   'blog.articleNotFound': 'Artículo no encontrado',
   'blog.articleNotFoundDesc': 'El artículo que buscas no existe o ha sido eliminado.',
   'blog.articles': 'artículos',
+
+  // Blog Comments
+  'blog.comments.title': 'Comentarios',
+  'blog.comments.add': 'Escribir comentario',
+  'blog.comments.formTitle': 'Deja tu comentario',
+  'blog.comments.name': 'Nombre',
+  'blog.comments.namePlaceholder': 'Tu nombre',
+  'blog.comments.message': 'Comentario',
+  'blog.comments.messagePlaceholder': 'Escribe tu comentario aquí...',
+  'blog.comments.submit': 'Enviar',
+  'blog.comments.sending': 'Enviando...',
+  'blog.comments.cancel': 'Cancelar',
+  'blog.comments.loading': 'Cargando comentarios...',
+  'blog.comments.empty': 'Aún no hay comentarios. ¡Sé el primero en comentar!',
+  'blog.comments.response': 'Respuesta del hostal',
+  'blog.comments.success': 'Comentario enviado. Será visible tras ser aprobado.',
+  'blog.comments.error': 'Error al enviar el comentario. Intenta de nuevo.',
+  'blog.comments.errorEmpty': 'Por favor completa todos los campos.',
 };

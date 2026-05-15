@@ -42,8 +42,14 @@ export const blogService = {
     params.append('page', '1');
     params.append('limit', '1000');
 
-    const res = await apiClient.get<{ blogs: any[] }>(`/blog?${params.toString()}`);
-    return res.blogs.map(mapApiBlogToPost);
+    // Try authenticated first (admin can see hidden posts), fall back to public
+    try {
+      const res = await authenticatedApiClient.get<{ blogs: any[] }>(`/blog?${params.toString()}`);
+      return res.blogs.map(mapApiBlogToPost);
+    } catch {
+      const res = await apiClient.get<{ blogs: any[] }>(`/blog?${params.toString()}`);
+      return res.blogs.map(mapApiBlogToPost);
+    }
   },
 
   async getVisible(): Promise<BlogPost[]> {
@@ -66,13 +72,25 @@ export const blogService = {
   async getByIdOrSlug(idOrSlug: string): Promise<BlogPost> {
     // If numeric, fetch by id
     const isNumeric = /^[0-9]+$/.test(idOrSlug);
-    let apiRes: any;
-    if (isNumeric) {
-      apiRes = await apiClient.get<any>(`/blog/${idOrSlug}`);
-    } else {
-      apiRes = await apiClient.get<any>(`/blog/slug/${encodeURIComponent(idOrSlug)}`);
+
+    // Try public first (works for visible posts), fall back to authenticated (hidden posts for admin)
+    try {
+      if (isNumeric) {
+        const apiRes = await apiClient.get<any>(`/blog/${idOrSlug}`);
+        return mapApiBlogToPost(apiRes);
+      } else {
+        const apiRes = await apiClient.get<any>(`/blog/slug/${encodeURIComponent(idOrSlug)}`);
+        return mapApiBlogToPost(apiRes);
+      }
+    } catch {
+      if (isNumeric) {
+        const apiRes = await authenticatedApiClient.get<any>(`/blog/${idOrSlug}`);
+        return mapApiBlogToPost(apiRes);
+      } else {
+        const apiRes = await authenticatedApiClient.get<any>(`/blog/slug/${encodeURIComponent(idOrSlug)}`);
+        return mapApiBlogToPost(apiRes);
+      }
     }
-    return mapApiBlogToPost(apiRes);
   },
 
   // Admin methods (use authenticated client)

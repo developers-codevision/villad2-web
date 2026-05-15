@@ -47,3 +47,37 @@ export interface UpdateBlogPostDto {
   status?: BlogPostStatus;
   publishedAt?: string;
 }
+
+// ============================================
+// BLOG COMMENT INTERFACES
+// ============================================
+
+export enum BlogCommentStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export interface BlogComment {
+  id: number;
+  postId: number;
+  postTitle?: string;
+  name: string;
+  content: string;
+  response?: string;
+  status: BlogCommentStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBlogCommentDto {
+  postId: number;
+  name: string;
+  content: string;
+}
+
+export interface UpdateBlogCommentDto {
+  name?: string;
+  content?: string;
+  response?: string;
+  status?: BlogCommentStatus;
+}

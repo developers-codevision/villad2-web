@@ -9,6 +9,7 @@ import { getMediaUrl } from "@/modules/shared/services";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useLanguage } from "@/modules/client/contexts";
+import { BlogComments } from "@/modules/client/components/blog";
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -186,6 +187,8 @@ export default function BlogPostPage() {
             className="prose prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: content }}
           />
+
+          {post && <BlogComments postId={post.id} />}
         </article>
       </main>
 
