@@ -11,7 +11,7 @@ export default function WhatsAppFloatingButton() {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 group"
+      className="fixed bottom-24 sm:bottom-6 right-6 z-50 flex flex-col items-end gap-2 group"
       aria-label="Contactar por WhatsApp"
     >
       {/* Tooltip bubble */}
