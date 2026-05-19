@@ -1,10 +1,11 @@
 interface SocialLinksProps {
   facebookUrl: string;
+  instagramUrl: string;
   youtubeUrl: string;
   whatsappUrl: string;
 }
 
-export default function SocialLinks({ facebookUrl, youtubeUrl, whatsappUrl }: SocialLinksProps) {
+export default function SocialLinks({ facebookUrl, instagramUrl, youtubeUrl, whatsappUrl }: SocialLinksProps) {
   return (
     <div className="flex items-center gap-3">
       <a href={facebookUrl} target="_blank" rel="me noopener noreferrer" aria-label="Facebook">
@@ -18,6 +19,17 @@ export default function SocialLinks({ facebookUrl, youtubeUrl, whatsappUrl }: So
           className="w-8 h-8 hover:opacity-80 transition-opacity"
         />
         {/* Facebook iconos creados por Freepik - Flaticon */}
+      </a>
+      <a href={instagramUrl} target="_blank" rel="me noopener noreferrer" aria-label="Instagram">
+        <img
+          src="/instagram.png"
+          alt="Instagram"
+          width={32}
+          height={32}
+          loading="lazy"
+          decoding="async"
+          className="w-8 h-8 hover:opacity-80 transition-opacity"
+        />
       </a>
       {/* 
       <a href={twitterUrl} target="_blank" rel="me noopener noreferrer" aria-label="X (Twitter)">

@@ -32,22 +32,33 @@ export default function Navbar() {
   <header className={`fixed top-0 left-0 right-0 z-50 ${location.pathname === '/blog' ? 'bg-white border-b border-border' : 'bg-background/90 backdrop-blur-md border-b border-border'}`}>
   <nav className="container mx-auto flex items-center h-16 px-4">
 
-   {/* Logo — solo mobile */}
-   <Link to="/" className="desk:hidden">
-    <img
-     src={logo}
-     alt={HOSTAL.name}
-     width={160}
-     height={40}
-     decoding="async"
-     className="h-10 w-auto"
+   {/* Mobile: logo | redes | toggle */}
+   <div className="desk:hidden flex w-full items-center justify-between">
+    <Link to="/">
+     <img
+      src={logo}
+      alt={HOSTAL.name}
+      width={160}
+      height={40}
+      decoding="async"
+      className="h-10 w-auto"
+     />
+    </Link>
+    <SocialLinks
+     facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
+     instagramUrl="https://www.instagram.com/hotel_boutique_villad2/"
+     youtubeUrl="https://youtube.com/villad2"
+     whatsappUrl="https://wa.me/5350970588"
     />
-   </Link>
+    <button onClick={() => setOpen(!open)} aria-label="Menú">
+     {open ? <X size={24} /> : <Menu size={24} />}
+    </button>
+   </div>
 
    {/* Desktop: grid 3 columnas iguales */}
    <div className="hidden desk:grid desk:grid-cols-[1fr_auto_1fr] desk:items-center desk:w-full">
-    {/* Columna izquierda — vacía (contrapeso) */}
-    <div />
+     {/* Columna izquierda — vacía (contrapeso) */}
+     <div />
 
     {/* Columna centro — links */}
 <ul className="flex items-center justify-center p-6 gap-8">
@@ -72,12 +83,12 @@ export default function Navbar() {
     <div className="flex items-center justify-end gap-6">
      {/* Cambiado w-40 por w-max para que los iconos mantengan su forma circular */}
      <div className="flex items-center justify-center w-max border-r border-border pr-4 mr-2 shrink-0">
-       <SocialLinks
-        facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
-        twitterUrl="https://x.com/villad2"
-        youtubeUrl="https://youtube.com/villad2"
-        whatsappUrl="https://wa.me/5350970588"
-       />
+        <SocialLinks
+         facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
+         instagramUrl="https://www.instagram.com/hotel_boutique_villad2/"
+         youtubeUrl="https://youtube.com/villad2"
+         whatsappUrl="https://wa.me/5350970588"
+        />
      </div>
      <Link to="/reservas" className="shrink-0">
       <Button className="font-semibold">{t("nav.bookNow")}</Button>
@@ -92,11 +103,6 @@ export default function Navbar() {
      </button>
     </div>
    </div>
-
-   {/* Mobile toggle */}
-   <button className="desk:hidden ml-auto" onClick={() => setOpen(!open)} aria-label="Menú">
-    {open ? <X size={24} /> : <Menu size={24} />}
-   </button>
   </nav>
 
    {/* Mobile menu */}
@@ -134,13 +140,6 @@ export default function Navbar() {
         <span className="text-sm font-medium">{language === 'es' ? 'Español' : 'English'}</span>
        </button>
       </li>
-<li className="flex justify-center pt-5 mt-3 border-t border-border">
-        <SocialLinks
-         facebookUrl="https://www.facebook.com/people/Hostal-Villa-D2/61557501643727/"
-         youtubeUrl="https://youtube.com/@villad2"
-         whatsappUrl="https://wa.me/5350970588"
-        />
-       </li>
      </ul>
     </div>
    )}
