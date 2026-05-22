@@ -299,7 +299,7 @@ export const en = {
   'reservation.pageSubtitle': 'Select the room, dates and complete your details.',
 
   // Blog
-  'blog.title': 'Our Blog',
+  'blog.title': 'VillaD2 Blog',
   'blog.subtitle': 'Discover tips, experiences and advice about the area.',
   'blog.readMore': 'Read more',
   'blog.noArticles': 'No articles',

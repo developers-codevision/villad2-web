@@ -344,7 +344,7 @@ const Index = () => {
             <div className="h-px w-12 bg-primary/40" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            {language === 'es' ? 'Nuestro Blog' : 'Our Blog'}
+            {language === 'es' ? 'Blog VillaD2' : 'VillaD2 Blog'}
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
             {t('blog.subtitle')}
