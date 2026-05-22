@@ -300,7 +300,7 @@ export const es = {
   'reservation.pageSubtitle': 'Selecciona la habitación, fechas y completa tus datos.',
 
   // Blog
-  'blog.title': 'Blog VillaD2',
+  'blog.title': 'Blog de Villa D2',
   'blog.subtitle': 'Descubre consejos, experiencias y consejos sobre la zona.',
   'blog.readMore': 'Leer más',
   'blog.noArticles': 'Sin artículos',
