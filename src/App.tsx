@@ -1,7 +1,7 @@
 import { Toaster } from "@/modules/shared/components/ui/toaster";
 import { Toaster as Sonner } from "@/modules/shared/components/ui/sonner";
 import { TooltipProvider } from "@/modules/shared/components/ui/tooltip";
-{/* import WhatsAppFloatingButton from "@/modules/shared/components/WhatsAppFloatingButton"; */}
+import WhatsAppFloatingButton from "@/modules/shared/components/WhatsAppFloatingButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import React, { lazy, Suspense, useEffect } from "react";
@@ -165,7 +165,7 @@ const RoutesWrapper = () => {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {/* {!isAdminRoute && <WhatsAppFloatingButton />} */}
+      {!isAdminRoute && <WhatsAppFloatingButton />}
     </>
   );
 };
