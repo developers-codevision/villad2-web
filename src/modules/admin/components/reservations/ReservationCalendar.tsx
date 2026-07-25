@@ -3,12 +3,8 @@
 import {useState, useRef, useEffect} from 'react';
 import {
     format,
-    startOfMonth,
-    endOfMonth,
     eachDayOfInterval,
     isToday,
-    addMonths,
-    subMonths,
     addDays,
     subDays,
     parseISO,
@@ -40,7 +36,7 @@ interface ReservationCalendarProps {
     occupiedDates?: string[];
 }
 
-type ViewMode = '7d' | '14d' | 'month';
+type ViewMode = '7d' | '14d' | '30d';
 
 const STATUS_BAR_COLORS: Record<ReservationStatus, string> = {
     [ReservationStatus.PENDING]: 'bg-yellow-400 border-yellow-500 text-yellow-900',
@@ -56,7 +52,7 @@ const LABEL_WIDTH = 160;
 const VIEW_OPTIONS: { value: ViewMode; label: string }[] = [
     {value: '7d', label: '7 días'},
     {value: '14d', label: '14 días'},
-    {value: 'month', label: 'Mes'},
+    {value: '30d', label: 'Mes'},
 ];
 
 type DayCellRole = 'checkin' | 'checkout' | 'middle' | 'single';
@@ -123,8 +119,8 @@ export function ReservationCalendar({
                                         reservations,
                                         onReservationClick,
                                     }: ReservationCalendarProps) {
-    const [viewMode, setViewMode] = useState<ViewMode>('month');
-    const [anchorDate, setAnchorDate] = useState<Date>(startOfMonth(new Date()));
+    const [viewMode, setViewMode] = useState<ViewMode>('30d');
+    const [anchorDate, setAnchorDate] = useState<Date>(startOfDay(new Date()));
     const scrollRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(0);
 
@@ -139,18 +135,10 @@ export function ReservationCalendar({
         return () => ro.disconnect();
     }, []);
 
-    const today = new Date();
-    const rangeStart =
-        viewMode === 'month' &&
-        anchorDate.getMonth() === today.getMonth() &&
-        anchorDate.getFullYear() === today.getFullYear()
-            ? startOfDay(today)
-            : viewMode === 'month'
-                ? startOfMonth(anchorDate)
-                : startOfDay(anchorDate);
+    const rangeStart = startOfDay(anchorDate);
     const rangeEnd =
-        viewMode === 'month'
-            ? endOfMonth(anchorDate)
+        viewMode === '30d'
+            ? addDays(anchorDate, 29)
             : viewMode === '14d'
                 ? addDays(anchorDate, 13)
                 : addDays(anchorDate, 6);
@@ -163,28 +151,24 @@ export function ReservationCalendar({
             : MIN_DAY_WIDTH;
 
     const goNext = () => {
-        if (viewMode === 'month') setAnchorDate((d) => startOfMonth(addMonths(d, 1)));
+        if (viewMode === '30d') setAnchorDate((d) => addDays(d, 30));
         else if (viewMode === '14d') setAnchorDate((d) => addDays(d, 14));
         else setAnchorDate((d) => addDays(d, 7));
     };
     const goPrev = () => {
-        if (viewMode === 'month') setAnchorDate((d) => startOfMonth(subMonths(d, 1)));
+        if (viewMode === '30d') setAnchorDate((d) => subDays(d, 30));
         else if (viewMode === '14d') setAnchorDate((d) => subDays(d, 14));
         else setAnchorDate((d) => subDays(d, 7));
     };
     const goToToday = () => {
-        const today = new Date();
-        setAnchorDate(viewMode === 'month' ? startOfMonth(today) : startOfDay(today));
+        setAnchorDate(startOfDay(new Date()));
     };
 
-    const rangeLabel =
-        viewMode === 'month'
-            ? format(rangeStart, 'MMMM yyyy', {locale: es})
-            : `${format(rangeStart, 'd MMM', {locale: es})} – ${format(rangeEnd, 'd MMM yyyy', {locale: es})}`;
+    const rangeLabel = `${format(rangeStart, 'd MMM', {locale: es})} – ${format(rangeEnd, 'd MMM yyyy', {locale: es})}`;
 
     const handleViewModeChange = (mode: ViewMode) => {
         const today = new Date();
-        setAnchorDate(mode === 'month' ? startOfMonth(today) : startOfDay(today));
+        setAnchorDate(startOfDay(today));
         setViewMode(mode);
     };
 
