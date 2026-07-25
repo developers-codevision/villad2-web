@@ -139,8 +139,15 @@ export function ReservationCalendar({
         return () => ro.disconnect();
     }, []);
 
+    const today = new Date();
     const rangeStart =
-        viewMode === 'month' ? startOfMonth(anchorDate) : startOfDay(anchorDate);
+        viewMode === 'month' &&
+        anchorDate.getMonth() === today.getMonth() &&
+        anchorDate.getFullYear() === today.getFullYear()
+            ? startOfDay(today)
+            : viewMode === 'month'
+                ? startOfMonth(anchorDate)
+                : startOfDay(anchorDate);
     const rangeEnd =
         viewMode === 'month'
             ? endOfMonth(anchorDate)
