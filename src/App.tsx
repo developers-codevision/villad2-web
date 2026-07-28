@@ -37,6 +37,8 @@ const AdminHabitaciones = lazy(() => import("@/modules/admin/pages/AdminHabitaci
 const AdminPromociones = lazy(() => import("@/modules/admin/pages/AdminPromociones"));
 const AdminBlog = lazy(() => import("@/modules/admin/pages/AdminBlog"));
 const BlogEditor = lazy(() => import("@/modules/admin/pages/BlogEditor"));
+const AdminMenus = lazy(() => import("@/modules/admin/pages/AdminMenus"));
+const MenuEditor = lazy(() => import("@/modules/admin/pages/MenuEditor"));
 const AdminResenas = lazy(() => import("@/modules/admin/pages/AdminResenas"));
 const AdminComentarios = lazy(() => import("@/modules/admin/pages/AdminComentarios"));
 const AdminSettings = lazy(() => import("@/modules/admin/pages/AdminSettings"));
@@ -162,6 +164,9 @@ const RoutesWrapper = () => {
           <Route path="resenas" element={<AdminResenas />} />
           <Route path="comentarios" element={<AdminComentarios />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="menus" element={<AdminMenus />} />
+          <Route path="menus/nuevo" element={<MenuEditor />} />
+          <Route path="menus/:id" element={<MenuEditor />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

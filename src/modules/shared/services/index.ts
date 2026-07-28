@@ -10,5 +10,6 @@ export { promotionsService } from './promotions.service';
 export { blogService } from './blog.service';
 export { blogCommentsService } from './blog-comments.service';
 export { settingsService } from './settings.service';
+export { menuService } from './menu.service';
 
 
