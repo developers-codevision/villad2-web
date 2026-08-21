@@ -1,6 +1,6 @@
 // Admin Reservations Hook - Business logic for reservation management
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { ReservationStatus } from '@/modules/shared/types/api.types';
 import { reservationsService } from '@/modules/shared/services';
@@ -59,6 +59,16 @@ export function useReservationManagement() {
 
   // Availability
   const { occupiedDates } = useAvailability(formData.roomId);
+
+  // Cuando se edita una reserva, sus propias fechas no deben contarse como
+  // ocupadas: solo las fechas que chocan con OTRAS reservas bloquean el calendario.
+  const dialogOccupiedDates = useMemo(() => {
+    const editing = formState.editing;
+    if (!editing || !editing.checkInDate || !editing.checkOutDate) return occupiedDates;
+    const from = editing.checkInDate.slice(0, 10);
+    const to = editing.checkOutDate.slice(0, 10);
+    return occupiedDates.filter((d) => d < from || d > to);
+  }, [occupiedDates, formState.editing]);
 
   // ============================================
   // COMPUTED VALUES
@@ -357,6 +367,7 @@ export function useReservationManagement() {
     formData,
     filterState,
     occupiedDates,
+    dialogOccupiedDates,
 
     // Computed
     canSubmit,
