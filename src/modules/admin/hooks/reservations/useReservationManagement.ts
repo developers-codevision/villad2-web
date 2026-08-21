@@ -205,7 +205,7 @@ export function useReservationManagement() {
    */
   const saveReservation = useCallback(async () => {
     // Validate form
-    const validation = validateReservationForm(formData, 'admin'); // Pass admin explicitly to match types
+    const validation = validateReservationForm(formData, 'admin', !!formState.editing); // Pass admin explicitly to match types
     if (!validation.valid) {
       const hasPhoneFormatError = validation.errors.some(error =>
         error.includes('formato internacional válido') || error.includes('+51 987 654 321')

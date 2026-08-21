@@ -45,7 +45,8 @@ function isPhoneNumber(phone: string): boolean {
  */
 export function validateReservationForm(
   formData: ReservationFormDataBase,
-  context: 'admin' | 'client' = 'admin'
+  context: 'admin' | 'client' = 'admin',
+  isEditing: boolean = false
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
@@ -94,7 +95,7 @@ export function validateReservationForm(
       errors.push('La fecha de salida debe ser posterior a la de entrada');
     }
 
-    if (formData.checkIn < new Date(new Date().setHours(0, 0, 0, 0))) {
+    if (!isEditing && formData.checkIn < new Date(new Date().setHours(0, 0, 0, 0))) {
       errors.push('La fecha de entrada no puede ser en el pasado');
     }
   }
@@ -137,7 +138,8 @@ export function validateClientReservationForm(
  * Required: roomId + guestFirstName only
  */
 export function validateAdminReservationForm(
-  formData: ReservationFormDataBase
+  formData: ReservationFormDataBase,
+  isEditing: boolean = false
 ): { valid: boolean; errors: string[] } {
-  return validateReservationForm(formData, 'admin');
+  return validateReservationForm(formData, 'admin', isEditing);
 }
