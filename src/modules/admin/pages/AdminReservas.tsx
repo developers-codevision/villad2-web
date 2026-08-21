@@ -40,6 +40,7 @@ export default function AdminReservas() {
     formData,
     filterState,
     occupiedDates,
+    dialogOccupiedDates,
     loadReservations,
     openCreate,
     openEdit,
@@ -177,7 +178,7 @@ export default function AdminReservas() {
         saving={formState.saving}
         formData={formData}
         availableRooms={rooms}
-        occupiedDates={occupiedDates}
+        occupiedDates={dialogOccupiedDates}
         onClose={closeDialog}
         onSave={saveReservation}
         onFormChange={updateFormField}

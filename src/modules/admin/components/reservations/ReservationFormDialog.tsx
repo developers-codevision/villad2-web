@@ -56,6 +56,17 @@ export function ReservationFormDialog({
   // Booking mode: 'range' = multi-night, 'single' = same-day by hours
   const [bookingMode, setBookingMode] = useState<BookingMode>('range');
 
+  // Cuando se edita, las fechas ya ocupadas por la propia reserva no deben
+  // bloquear la reposición del rango en el calendario.
+  const ownReservationDates = new Set<string>();
+  if (isEditing && formData.checkIn && formData.checkOut) {
+    const from = format(formData.checkIn, 'yyyy-MM-dd');
+    const to = format(formData.checkOut, 'yyyy-MM-dd');
+    occupiedDates.forEach((d) => {
+      if (d >= from && d <= to) ownReservationDates.add(d);
+    });
+  }
+
   // Auto-detect mode from existing reservation data when editing
   useEffect(() => {
     if (open && isEditing && formData.checkIn && formData.checkOut) {
@@ -197,8 +208,10 @@ export function ReservationFormDialog({
                   numberOfMonths={2}
                   disabled={(d) =>
                     !selectedRoom ||
-                    d < new Date(new Date().setHours(0, 0, 0, 0)) ||
-                    (!!selectedRoom && occupiedDates.includes(format(d, 'yyyy-MM-dd')))
+                    (isEditing ? false : d < new Date(new Date().setHours(0, 0, 0, 0))) ||
+                    (!!selectedRoom &&
+                      occupiedDates.includes(format(d, 'yyyy-MM-dd')) &&
+                      !ownReservationDates.has(format(d, 'yyyy-MM-dd')))
                   }
                   locale={es}
                   className="pointer-events-auto"
@@ -247,7 +260,7 @@ export function ReservationFormDialog({
                   }}
                   disabled={(d) =>
                     !selectedRoom ||
-                    d < new Date(new Date().setHours(0, 0, 0, 0))
+                    (isEditing ? false : d < new Date(new Date().setHours(0, 0, 0, 0)))
                   }
                   locale={es}
                   className="pointer-events-auto"
