@@ -3,24 +3,28 @@ import { CalendarCheck, BedDouble, Tag, Star, LogOut, ArrowLeft, Menu, X, Settin
 import { Button } from "@/modules/shared/components/ui/button";
 import { cn } from "@/modules/shared/lib/utils";
 import { useAuth } from "@/modules/shared/context";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-const navItems = [
-  { label: "Reservas Pendientes", to: "/admin", icon: CalendarCheck },
-  { label: "Habitaciones", to: "/admin/habitaciones", icon: BedDouble },
-  { label: "Promociones", to: "/admin/promociones", icon: Tag },
-  { label: "Blog", to: "/admin/blog", icon: FileText },
-  { label: "Menús", to: "/admin/menus", icon: ClipboardList },
-  { label: "Reseñas", to: "/admin/resenas", icon: Star },
-  { label: "Comentarios", to: "/admin/comentarios", icon: MessageCircle },
-  { label: "Configuración", to: "/admin/settings", icon: Settings },
+const navItemsAll = [
+  { label: "Reservas Pendientes", to: "/admin", icon: CalendarCheck, roles: ['admin', 'comercial'] },
+  { label: "Habitaciones", to: "/admin/habitaciones", icon: BedDouble, roles: ['admin'] },
+  { label: "Promociones", to: "/admin/promociones", icon: Tag, roles: ['admin'] },
+  { label: "Blog", to: "/admin/blog", icon: FileText, roles: ['admin'] },
+  { label: "Menús", to: "/admin/menus", icon: ClipboardList, roles: ['admin'] },
+  { label: "Reseñas", to: "/admin/resenas", icon: Star, roles: ['admin'] },
+  { label: "Comentarios", to: "/admin/comentarios", icon: MessageCircle, roles: ['admin'] },
+  { label: "Configuración", to: "/admin/settings", icon: Settings, roles: ['admin'] },
 ];
 
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, user } = useAuth();
+  const { logout, user, hasRole } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navItems = useMemo(() =>
+    navItemsAll.filter((item) => item.roles.some((r) => hasRole(r))),
+  [hasRole]);
 
   const handleLogout = async () => {
     await logout();

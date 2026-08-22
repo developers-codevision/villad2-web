@@ -19,11 +19,11 @@ function tempId(): number {
 }
 
 function emptyProduct(): MenuProduct {
-  return { name: '', description: null, price: 0, active: true, featured: false };
+  return { name: '', description: null, price: null, active: true, featured: false, order: 0 };
 }
 
 function emptyCategory(): MenuCategory {
-  return { name: '', description: null, active: true, order: 0, products: [] };
+  return { name: '', description: null, price: null, active: true, order: 0, products: [] };
 }
 
 function emptySubtitle(): MenuSubtitle {
@@ -94,7 +94,7 @@ export function useMenuEditor(menuId?: number) {
   const addProduct = useCallback((catIndex: number) => {
     setFormData((prev) => {
       const cats = [...prev.categories];
-      const products = [...cats[catIndex].products, emptyProduct()];
+      const products = [...cats[catIndex].products, { ...emptyProduct(), order: cats[catIndex].products.length }];
       cats[catIndex] = { ...cats[catIndex], products };
       return { ...prev, categories: cats };
     });
@@ -178,15 +178,17 @@ export function useMenuEditor(menuId?: number) {
           ...(cat.id ? { id: cat.id } : {}),
           name: cat.name,
           description: cat.description || null,
+          price: cat.price || null,
           active: cat.active,
           order: cat.order,
           products: cat.products.map((prod) => ({
             ...(prod.id ? { id: prod.id } : {}),
             name: prod.name,
             description: prod.description || null,
-            price: prod.price,
+            price: prod.price || null,
             active: prod.active,
             featured: prod.featured,
+            order: prod.order,
           })),
         })),
         subtitulos: formData.subtitulos.map((sub) => ({

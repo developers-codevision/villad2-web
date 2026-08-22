@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Plus, Trash2, Star } from "lucide-react";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Input } from "@/modules/shared/components/ui/input";
 import { Switch } from "@/modules/shared/components/ui/switch";
@@ -19,6 +19,8 @@ export default function MenuEditor() {
     addSubtitle, removeSubtitle, updateSubtitle,
     save,
   } = useMenuEditor(Number(id) || undefined);
+
+  const menuLocked = !formData.active;
 
   if (loading) {
     return (
@@ -52,6 +54,7 @@ export default function MenuEditor() {
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
               placeholder="Ej: Desayunos"
+              disabled={menuLocked}
             />
           </div>
 
@@ -62,6 +65,7 @@ export default function MenuEditor() {
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Breve descripción del menú"
+              disabled={menuLocked}
             />
           </div>
 
@@ -72,29 +76,17 @@ export default function MenuEditor() {
               value={formData.schedule}
               onChange={(e) => handleChange('schedule', e.target.value)}
               placeholder="Ej: 7:30 am a 10 am"
+              disabled={menuLocked}
             />
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="order">Orden</Label>
-              <Input
-                id="order"
-                type="number"
-                min={0}
-                value={formData.order}
-                onChange={(e) => handleChange('order', Number(e.target.value))}
-                className="w-20"
-              />
-            </div>
-            <div className="flex items-center gap-2 pt-6">
-              <Switch
-                id="active"
-                checked={formData.active}
-                onCheckedChange={(v) => handleChange('active', v)}
-              />
-              <Label htmlFor="active">Activo</Label>
-            </div>
+          <div className="flex items-center gap-2 pt-2">
+            <Switch
+              id="active"
+              checked={formData.active}
+              onCheckedChange={(v) => handleChange('active', v)}
+            />
+            <Label htmlFor="active">Activo</Label>
           </div>
         </section>
 
@@ -102,7 +94,7 @@ export default function MenuEditor() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Categorías</h2>
-            <Button size="sm" variant="outline" onClick={addCategory}>
+            <Button size="sm" variant="outline" onClick={addCategory} disabled={menuLocked}>
               <Plus className="h-4 w-4 mr-1" /> Agregar categoría
             </Button>
           </div>
@@ -118,6 +110,7 @@ export default function MenuEditor() {
               key={cat.id ?? `cat-${catIdx}`}
               category={cat}
               catIdx={catIdx}
+              menuLocked={menuLocked}
               onRemove={() => removeCategory(catIdx)}
               onChange={(field, value) => updateCategory(catIdx, field, value)}
               onAddProduct={() => addProduct(catIdx)}
@@ -131,7 +124,7 @@ export default function MenuEditor() {
         <section className="bg-card border rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Subtítulos</h2>
-            <Button size="sm" variant="outline" onClick={addSubtitle}>
+            <Button size="sm" variant="outline" onClick={addSubtitle} disabled={menuLocked}>
               <Plus className="h-4 w-4 mr-1" /> Añadir
             </Button>
           </div>
@@ -150,14 +143,7 @@ export default function MenuEditor() {
                   onChange={(e) => updateSubtitle(idx, 'text', e.target.value)}
                   placeholder="Texto del subtítulo"
                   className="flex-1"
-                />
-                <Input
-                  type="number"
-                  min={0}
-                  value={sub.order}
-                  onChange={(e) => updateSubtitle(idx, 'order', Number(e.target.value))}
-                  className="w-16"
-                  placeholder="Ord"
+                  disabled={menuLocked}
                 />
                 <Button size="icon" variant="ghost" onClick={() => removeSubtitle(idx)}>
                   <Trash2 className="h-4 w-4 text-destructive" />
@@ -172,44 +158,54 @@ export default function MenuEditor() {
 }
 
 function CategoryCard({
-  category, catIdx, onRemove, onChange, onAddProduct, onRemoveProduct, onUpdateProduct,
+  category, catIdx, menuLocked, onRemove, onChange, onAddProduct, onRemoveProduct, onUpdateProduct,
 }: {
   category: MenuCategory;
   catIdx: number;
+  menuLocked: boolean;
   onRemove: () => void;
   onChange: (field: keyof MenuCategory, value: unknown) => void;
   onAddProduct: () => void;
   onRemoveProduct: (prodIdx: number) => void;
   onUpdateProduct: (prodIdx: number, field: keyof MenuProduct, value: unknown) => void;
 }) {
+  const contentLocked = menuLocked || !category.active;
+
   return (
     <div className="bg-card border rounded-xl p-5 space-y-4">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="space-y-1 sm:col-span-2">
-            <Label className="text-xs">Nombre</Label>
-            <Input
-              value={category.name}
-              onChange={(e) => onChange('name', e.target.value)}
-              placeholder="Nombre de la categoría"
-            />
-          </div>
-          <div className="space-y-1">
-            <Label className="text-xs">Orden</Label>
-            <Input
-              type="number"
-              min={0}
-              value={category.order}
-              onChange={(e) => onChange('order', Number(e.target.value))}
-            />
+        <div className="flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">Nombre</Label>
+              <Input
+                value={category.name}
+                onChange={(e) => onChange('name', e.target.value)}
+                placeholder="Nombre de la categoría"
+                disabled={contentLocked}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Precio ($) - opcional</Label>
+              <Input
+                type="number"
+                step="0.01"
+                min={0}
+                value={category.price ?? ''}
+                onChange={(e) => onChange('price', e.target.value === '' ? null : Number(e.target.value))}
+                placeholder="Sin precio"
+                disabled={contentLocked}
+              />
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2 pt-5">
           <Switch
             checked={category.active}
             onCheckedChange={(v) => onChange('active', v)}
+            disabled={menuLocked}
           />
-          <Button size="icon" variant="ghost" onClick={onRemove}>
+          <Button size="icon" variant="ghost" onClick={onRemove} disabled={contentLocked}>
             <Trash2 className="h-4 w-4 text-destructive" />
           </Button>
         </div>
@@ -221,7 +217,7 @@ function CategoryCard({
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Productos ({category.products.length})
           </span>
-          <Button size="sm" variant="ghost" onClick={onAddProduct}>
+          <Button size="sm" variant="ghost" onClick={onAddProduct} disabled={contentLocked}>
             <Plus className="h-3 w-3 mr-1" /> Agregar producto
           </Button>
         </div>
@@ -232,7 +228,9 @@ function CategoryCard({
           </p>
         )}
 
-        {category.products.map((prod, prodIdx) => (
+        {category.products.map((prod, prodIdx) => {
+          const productLocked = contentLocked || !prod.active;
+          return (
           <div key={prod.id ?? `prod-${prodIdx}`} className="bg-muted/30 rounded-lg p-3 space-y-2">
             <div className="flex items-start gap-2">
               <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -243,6 +241,7 @@ function CategoryCard({
                     onChange={(e) => onUpdateProduct(prodIdx, 'name', e.target.value)}
                     placeholder="Español"
                     className="text-sm"
+                    disabled={productLocked}
                   />
                 </div>
                 <div>
@@ -252,10 +251,11 @@ function CategoryCard({
                     onChange={(e) => onUpdateProduct(prodIdx, 'description', e.target.value || null)}
                     placeholder="Opcional"
                     className="text-sm"
+                    disabled={productLocked}
                   />
                 </div>
               </div>
-              <Button size="icon" variant="ghost" className="shrink-0 mt-5" onClick={() => onRemoveProduct(prodIdx)}>
+              <Button size="icon" variant="ghost" className="shrink-0 mt-5" onClick={() => onRemoveProduct(prodIdx)} disabled={productLocked}>
                 <Trash2 className="h-3.5 w-3.5 text-destructive" />
               </Button>
             </div>
@@ -269,25 +269,21 @@ function CategoryCard({
                   value={prod.price}
                   onChange={(e) => onUpdateProduct(prodIdx, 'price', Number(e.target.value))}
                   className="text-sm"
+                  disabled={productLocked}
                 />
-              </div>
-              <div className="flex items-center gap-1 pt-5">
-                <Switch
-                  checked={prod.featured}
-                  onCheckedChange={(v) => onUpdateProduct(prodIdx, 'featured', v)}
-                />
-                <Star className={`h-3.5 w-3.5 ${prod.featured ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
               </div>
               <div className="flex items-center gap-1 pt-5">
                 <Switch
                   checked={prod.active}
                   onCheckedChange={(v) => onUpdateProduct(prodIdx, 'active', v)}
+                  disabled={contentLocked}
                 />
                 <span className="text-xs text-muted-foreground">Activo</span>
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

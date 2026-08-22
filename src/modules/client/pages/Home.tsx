@@ -372,7 +372,7 @@ const Index = () => {
                   </h3>
                   {language === 'es' ? latestPost.description_es : latestPost.description_en ? (
                     <p className="text-muted-foreground text-xs mb-3 line-clamp-2">
-                      {language === 'es' ? latestPost.description_es : latestPost.description_en}
+                      {language === 'es' ? lcdatestPost.description_es : latestPost.description_en}
                     </p>
                   ) : null}
                   <div className="flex items-center gap-2">

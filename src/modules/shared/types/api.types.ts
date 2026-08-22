@@ -21,6 +21,7 @@ export enum RoomStatus {
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
+  COMERCIAL = 'comercial',
 }
 
 export enum ReservationStatus {

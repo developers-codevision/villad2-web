@@ -152,9 +152,9 @@ const RoutesWrapper = () => {
         <Route path="/aviso-legal" element={<LegalNotice />} />
         <Route path="/preguntas-frecuentes" element={<FAQ />} />
         <Route path="/contacto" element={<Navigate to="/#contacto" replace />} />
-        <Route path="/admin-selector" element={<ProtectedRoute requireAdmin><AdminSelector /></ProtectedRoute>} />
-        <Route path="/gestion" element={<ProtectedRoute requireAdmin><GestionHome /></ProtectedRoute>} />
-        <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminLayout /></ProtectedRoute>}>
+        <Route path="/admin-selector" element={<ProtectedRoute allowedRoles={['admin']}><AdminSelector /></ProtectedRoute>} />
+        <Route path="/gestion" element={<ProtectedRoute allowedRoles={['admin']}><GestionHome /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'comercial']}><AdminLayout /></ProtectedRoute>}>
           <Route index element={<AdminReservas />} />
           <Route path="habitaciones" element={<AdminHabitaciones />} />
           <Route path="promociones" element={<AdminPromociones />} />

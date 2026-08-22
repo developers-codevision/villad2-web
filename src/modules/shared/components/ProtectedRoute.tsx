@@ -5,12 +5,13 @@ import { useAuth } from '../context';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireAdmin?: boolean;
+  allowedRoles?: string[];
 }
 
-export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
-  const { isAuthenticated, isAdmin, isLoading } = useAuth();
+export function ProtectedRoute({ children, requireAdmin = false, allowedRoles }: ProtectedRouteProps) {
+  const { isAuthenticated, isAdmin, isLoading, hasRole } = useAuth();
+  const roles = allowedRoles || (requireAdmin ? ['admin'] : undefined);
 
-  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -26,7 +27,7 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && !isAdmin) {
+  if (roles && !roles.some((r) => hasRole(r))) {
     return <Navigate to="/" replace />;
   }
 

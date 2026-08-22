@@ -8,6 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLoading: boolean;
+  hasRole: (role: string) => boolean;
   login: (credentials: LoginDto) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -71,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isAuthenticated = !!user && authService.isAuthenticated();
   const isAdmin = user?.roles?.includes('admin') || false;
+  const hasRole = useCallback((role: string) => user?.roles?.includes(role) || false, [user]);
 
   return (
     <AuthContext.Provider
@@ -79,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated,
         isAdmin,
         isLoading,
+        hasRole,
         login,
         logout,
         refreshUser,

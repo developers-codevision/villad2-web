@@ -44,9 +44,7 @@ export default function AdminMenus() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
                   <TableHead>Horario</TableHead>
-                  <TableHead>Orden</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
@@ -55,11 +53,7 @@ export default function AdminMenus() {
                 {menus.map((menu) => (
                   <TableRow key={menu.id}>
                     <TableCell className="font-medium">{menu.name}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {menu.description || '-'}
-                    </TableCell>
                     <TableCell className="text-sm">{menu.schedule || '-'}</TableCell>
-                    <TableCell className="text-sm">{menu.order}</TableCell>
                     <TableCell>
                       <Button
                         size="sm"

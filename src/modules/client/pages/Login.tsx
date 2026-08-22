@@ -14,19 +14,19 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login, isAuthenticated, isAdmin, isLoading } = useAuth();
+  const { login, isAuthenticated, isAdmin, isLoading, hasRole } = useAuth();
   const { t } = useLanguage();
 
   useEffect(() => {
     if (isLoading || !isAuthenticated) return;
 
-    if (isAdmin) {
-      navigate("/admin-selector", { replace: true });
+    if (isAdmin || hasRole('comercial')) {
+      navigate("/admin", { replace: true });
       return;
     }
 
     navigate("/", { replace: true });
-  }, [isAuthenticated, isAdmin, isLoading, navigate]);
+  }, [isAuthenticated, isAdmin, isLoading, navigate, hasRole]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

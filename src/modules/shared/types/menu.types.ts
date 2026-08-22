@@ -11,15 +11,17 @@ export interface MenuProduct {
   id?: number;
   name: string;
   description: string | null;
-  price: number;
+  price: number | null;
   active: boolean;
   featured: boolean;
+  order: number;
 }
 
 export interface MenuCategory {
   id?: number;
   name: string;
   description: string | null;
+  price: number | null;
   active: boolean;
   order: number;
   menuId?: number;
