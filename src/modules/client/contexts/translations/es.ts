@@ -112,6 +112,7 @@ export const es = {
   // Home Page
   'home.heroTitle': 'Hostal Boutique',
   'home.bookNow': 'Reservar Ahora',
+  'home.viewMenu': 'Ver Carta',
   'home.servicesTitle': 'Servicios Villa D2',
   'home.servicesSubtitle': 'Desde seguridad 24/7 hasta servicios premium, tenemos todo lo que necesitas para una estancia perfecta.',
   'home.viewAllServices': 'Ver Todos los Servicios',

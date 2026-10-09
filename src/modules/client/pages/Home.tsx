@@ -151,12 +151,17 @@ const Index = () => {
       <DescriptionSection />
 
       {/* Botón de reservar (movido aquí desde el hero) */}
-      <div className="flex justify-center pb-12 bg-background">
+      <div className="flex flex-wrap items-center justify-center gap-4 pb-12 bg-background px-4">
         <Link to="/reservas">
           <Button size="lg" className="text-lg px-10 py-6 font-bold shadow-xl">
             {t("home.bookNow")}
           </Button>
         </Link>
+        <a href="https://menu.villad2.com" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="lg" className="text-lg px-10 py-6 font-bold shadow-xl border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+            {t("home.viewMenu")}
+          </Button>
+        </a>
       </div>
 
       {/* Reviews */}
