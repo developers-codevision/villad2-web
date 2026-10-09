@@ -113,6 +113,7 @@ export const en = {
   // Home Page
   'home.heroTitle': 'Boutique Hostal',
   'home.bookNow': 'Book Now',
+  'home.viewMenu': 'View Menu',
   'home.servicesTitle': 'Villa D2 Services',
   'home.servicesSubtitle': 'From 24/7 security to premium services, we have everything you need for a perfect stay.',
   'home.viewAllServices': 'View All Services',
