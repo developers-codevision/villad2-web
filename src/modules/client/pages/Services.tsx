@@ -4,6 +4,7 @@ import { SERVICES_SECURITY, SERVICES_INCLUDED, SERVICES_ADDITIONAL } from "@/mod
 import { useLanguage } from "@/modules/client/contexts";
 import { parseBilingualText } from "@/modules/client/utils/bilingualHelpers";
 import { useEffect } from "react";
+import { Button } from "@/modules/shared/components/ui/button";
 
 export default function Services() {
   const { language, t } = useLanguage();
@@ -88,7 +89,7 @@ export default function Services() {
 
           {/* Additional */}
           <h2 className="text-2xl font-bold mb-6">{t("services.additional")}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {SERVICES_ADDITIONAL.map((s) => (
               <div key={s.name} className="bg-card rounded-lg p-6 flex items-start gap-4 shadow-sm hover:shadow-lg transition-shadow border border-border">
                 <div className="bg-[#00c3ff]/10 rounded-full p-3 shrink-0">
@@ -100,6 +101,15 @@ export default function Services() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Carta digital */}
+          <div className="text-center">
+            <a href="https://menu.villad2.com" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="font-semibold">
+                {t("services.viewMenus")}
+              </Button>
+            </a>
           </div>
         </div>
       </main>
