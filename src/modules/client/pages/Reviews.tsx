@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send, Star } from "lucide-react";
 import { Button } from "@/modules/shared/components/ui/button";
 import { Input } from "@/modules/shared/components/ui/input";
@@ -24,6 +24,7 @@ const Reviews = () => {
   const [stars, setStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionInProgress = useRef(false);
 
   // Cargar reseñas aprobadas y calcular estadísticas para Schema
   useEffect(() => {
@@ -85,6 +86,10 @@ const Reviews = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // State updates are asynchronous; the ref closes the small window in
+    // which two rapid clicks could send the same review twice.
+    if (submissionInProgress.current) return;
+
     if (!name.trim() || !content.trim() || stars === 0) {
       toast({
         title: t("reviews.requiredFields"),
@@ -103,6 +108,7 @@ const Reviews = () => {
       return;
     }
 
+    submissionInProgress.current = true;
     setIsSubmitting(true);
 
     try {
@@ -128,10 +134,12 @@ const Reviews = () => {
       console.error("Error submitting review:", error);
       toast({
         title: t("reviews.errorTitle"),
-        description: t("reviews.errorDesc"),
+        description:
+          error instanceof Error ? error.message : t("reviews.errorDesc"),
         variant: "destructive",
       });
     } finally {
+      submissionInProgress.current = false;
       setIsSubmitting(false);
     }
   };

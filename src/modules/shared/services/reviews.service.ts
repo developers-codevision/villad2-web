@@ -52,11 +52,9 @@ export const reviewsService = {
    * Create a new review (public)
    */
   async create(dto: CreateReviewDto): Promise<Review> {
-    // Asegurar que las nuevas reseñas comienzan como INACTIVE
-    return apiClient.post<Review>('/reviews', {
-      ...dto,
-      status: ReviewStatus.INACTIVE,
-    });
+    // El servidor asigna siempre INACTIVE y descarta cualquier intento del
+    // cliente de publicar o responder una reseña directamente.
+    return apiClient.post<Review>('/reviews', dto);
   },
 
   /**

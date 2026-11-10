@@ -25,7 +25,8 @@ async function parseError(response: Response): Promise<never> {
     const message = Array.isArray(error.message)
       ? error.message[0]
       : error.message || 'Error en la solicitud';
-    throw new Error(message);
+    const reference = error.requestId ? ` (Referencia: ${error.requestId})` : '';
+    throw new Error(`${message}${reference}`);
   } catch (e) {
     if (e instanceof Error && e.message !== 'Error en la solicitud') {
       throw e;

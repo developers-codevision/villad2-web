@@ -243,12 +243,10 @@ export interface Review {
 
 export interface CreateReviewDto {
   name: string;
-  title:string;
+  title: string;
   country: string;
   content: string;
   stars: number;
-  response?: string;
-  status?: ReviewStatus;
 }
 
 export interface UpdateReviewDto {
@@ -339,7 +337,12 @@ export interface UpdateSettingsDto {
 export interface ApiError {
   statusCode: number;
   message: string | string[];
-  error: string;
+  error?: string;
+  code?: string;
+  details?: unknown;
+  operation?: string;
+  retryable?: boolean;
+  requestId?: string;
 }
 
 export interface OccupiedRange {
